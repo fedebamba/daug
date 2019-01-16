@@ -19,7 +19,7 @@ import utils
 
 # PARAMETER PART................
 
-esname = "exp_umb_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
+esname = "3_exp_umb_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 just100 = True
 
 learning_rate = 0.005
