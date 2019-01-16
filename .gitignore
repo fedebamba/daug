@@ -1,0 +1,6 @@
+/res
+/cifar
+/venv
+/models
+
+*.csv
