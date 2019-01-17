@@ -20,6 +20,8 @@ def generate_weak_labels(net, cds, indices, howmany, train_indices, n=5):
 
     normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
 
+    print(indices)
+
     randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
     dataloaders = [tud.DataLoader(cds.dataset, batch_size=500, shuffle=False, num_workers=4,
                                   sampler=customcifar.CustomSampler(randomized_list)) for i in range(n)]

@@ -83,13 +83,13 @@ def new_net():
 
 
 def single_train_pass(cd):
-    print("Epoch: " + str(i))
     trainloader = cd.get_train_loader()
     validationloader = cd.get_validation_loader()
 
     net = new_net()
     best_net = net.clone()
     for i in range(num_of_epochs):
+        print("Epoch: " + str(i))
         net.train(i, trainloader)
         isbest, acc = net.validate(i, validationloader)
         print("Accuracy so far: {0:.2f}".format(acc))
