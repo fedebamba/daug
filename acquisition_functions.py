@@ -7,7 +7,6 @@ import numpy
 def entropy(net_out):
     sm = F.softmax(net_out)
     logsm = T.log(sm)
-    print(logsm.size())
     return -T.sum(sm * logsm, 1)
 
 
