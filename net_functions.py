@@ -166,7 +166,7 @@ class NetTrainer():
 
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
-        distance_weight = 1e-6
+        distance_weight = 1
         varratio_weight = 1
 
         self.net.eval()
@@ -212,6 +212,8 @@ class NetTrainer():
                 S = torch.cat((S, o), 0)
                 normalized_confidence[0] = torch.cat((normalized_confidence[0], predictions.reshape(len(predictions))), 0)
                 print("\r S: {0} ".format(S.size()), end="")
+            normalized_confidence[0] = normalized_confidence[0] / torch.max(normalized_confidence[0], -1)[0]
+
             print("")
             S = (torch.sum(S, 2)) / n
             N = (torch.sum(N, 2)) / n
