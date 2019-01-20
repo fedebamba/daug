@@ -465,7 +465,7 @@ class NetTrainer():
 
 
 
-    def train_semisupervised(self, epoch, _train_loader, original_labels):
+    def train_semisupervised(self, epoch, _train_loader, original_labels=0):
         self.net.train()
         train_loss = 0
         correct = 0

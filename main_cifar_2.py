@@ -89,7 +89,7 @@ def single_train_pass(cd):
     for i in range(num_of_epochs):
         print("Epoch: " + str(i))
         # net.train_semisupervised(i, trainloader)
-        net.train(i, trainloader)
+        net.train_semisupervised(i, trainloader)
 
         isbest, acc = net.validate(i, validationloader)
         print("Accuracy so far: {0:.2f}".format(acc))
