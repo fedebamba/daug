@@ -57,9 +57,10 @@ def generate_weak_labels(net, cds, indices, train_indices, n=5):
 #                o = torch.cat((o, out), 2)
                 predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
 
-            normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), torch.Tensor(
+            normalized_confidence[0] = torch.cat((normalized_confidence[0], torch.Tensor(
                 acquisition_functions.confidence(predictions.transpose(0,1), details=True)).cpu() / n), 0).cpu()
 
-            normalized_confidence[0] = normalized_confidence[0].max(1)
+            # normalized_confidence[0] =
+            print(normalized_confidence[0].max(1))
             print(normalized_confidence)
 

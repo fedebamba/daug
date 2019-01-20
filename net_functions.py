@@ -599,11 +599,9 @@ class NetTrainerSemiSupervised(NetTrainer):
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
-
             # debug
             for el in targets:
                 elementsperclass[el.item()] += 1
-
 
             if printiter % 5 == 0 :
                 print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
