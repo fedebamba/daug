@@ -74,7 +74,7 @@ def new_net():
     net = netter.CustomResNet18()
     net = net.to("cuda:0")
 
-    criterion = semi_supervised.SemiSupervisedLoss()
+    criterion =  semi_supervised.SemiSupervisedLoss()
     optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
 
     return nf.NetTrainer(net=net, criterion=criterion, optimizer=optimizer)

@@ -489,7 +489,7 @@ class NetTrainer():
 
             self.optimizer.zero_grad()
             outputs = self.net(inputs)[0]
-            loss = self.criterion(outputs, targets, torch.Tensor([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] ).to("cuda:0"))
+            loss = self.criterion(outputs, targets, tf_labels.to("cuda:0"))
 
             print(loss)
 
