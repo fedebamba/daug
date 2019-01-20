@@ -584,8 +584,6 @@ class NetTrainerSemiSupervised(NetTrainer):
             # need tf tensor
             tf_labels = torch.Tensor([1 if x in original_label_indexes else 0 for x in index ])
 
-            print(tf_labels)
-
             self.optimizer.zero_grad()
             outputs = self.net(inputs)[0]
             loss = self.criterion_train(outputs, targets, tf_labels.to("cuda:0"))
