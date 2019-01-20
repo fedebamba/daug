@@ -36,14 +36,14 @@ class SemiSupervisedLoss:
 def generate_weak_labels(net, cds, indices, train_indices, n=5):
     net.eval()
 
-    normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
+    normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().to("cuda:0"), torch.Tensor().long()]
     randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
     dataloaders = [tud.DataLoader(cds.dataset, batch_size=500, shuffle=False, num_workers=4,
                                   sampler=customcifar.CustomSampler(randomized_list)) for i in range(n)]
 
     with torch.no_grad():
         for batch_index, element in enumerate(zip(*dataloaders)):  # unlabelled samples
-            normalized_confidence[1] = torch.cat((normalized_confidence[1], element[0][2]), 0)
+            normalized_confidence[2] = torch.cat((normalized_confidence[2], element[0][2]), 0)
 
             els = [x for x in element]
             o = torch.Tensor().to("cuda:0")
@@ -60,7 +60,7 @@ def generate_weak_labels(net, cds, indices, train_indices, n=5):
             normalized_confidence[0] = torch.cat((normalized_confidence[0], torch.Tensor(
                 acquisition_functions.confidence(predictions.transpose(0,1), details=True)).cpu() / n), 0).cpu()
 
-            # normalized_confidence[0] =
-            print(normalized_confidence[0].max(1))
-            print(normalized_confidence)
+        normalized_confidence[0] = normalized_confidence[0].max(1)[0]
+        normalized_confidence[1] = normalized_confidence[0].max(1)[1]
+        print(normalized_confidence)
 
