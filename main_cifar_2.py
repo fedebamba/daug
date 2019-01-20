@@ -80,7 +80,7 @@ def new_net():
     return nf.NetTrainer(net=net, criterion=criterion, optimizer=optimizer)
 
 
-def single_train_pass(cd):
+def single_train_pass(cd, ol):
     trainloader = cd.get_train_loader()
     validationloader = cd.get_validation_loader()
 
@@ -89,7 +89,7 @@ def single_train_pass(cd):
     for i in range(num_of_epochs):
         print("Epoch: " + str(i))
         # net.train_semisupervised(i, trainloader)
-        net.train_semisupervised(i, trainloader)
+        net.train_semisupervised(i, trainloader, ol)
 
         isbest, acc = net.validate(i, validationloader)
         print("Accuracy so far: {0:.2f}".format(acc))
@@ -114,22 +114,25 @@ ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd
 
 print(len(cd.train_indices))
 
-net = single_train_pass(cd)
+net = single_train_pass(cd, [])
 
 print("\n\t  TEST:")
-best_acc =  net.test(0, cd.get_test_loader())
+best_acc = net.test(0, cd.get_test_loader())
 print("Test accuracy: {0:.2f}".format(best_acc))
+
+original_labels = copy.deepcopy(cd.train_indices)
 
 for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
     ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
-    cd.add_to_train(ind)
+    # cd.add_to_train(ind)
     print(len(cd.train_indices))
 
     # train the control network
-    net_control = single_train_pass(cd)
+    net_control = single_train_pass(cd, original_labels)
 
     # get the weak labels with semi_supervised.generate_weak_labels
     semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
+    
 
     # train the control network
 
