@@ -58,7 +58,7 @@ def generate_weak_labels(net, cds, indices, train_indices, n=5):
                 predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
 
             normalized_confidence[0] = torch.cat((normalized_confidence[0], torch.Tensor(
-                acquisition_functions.confidence(predictions.transpose(0,1), details=True)).cpu() / n), 0).cpu()
+                acquisition_functions.confidence(predictions.transpose(0,1).to("cuda:0"), details=True)).cpu() / n), 0).cpu()
 
         normalized_confidence[0] = normalized_confidence[0].max(1)[0]
         normalized_confidence[1] = normalized_confidence[0].max(1)[1]
