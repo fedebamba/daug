@@ -562,7 +562,7 @@ class NetTrainer():
 
 class NetTrainerSemiSupervised(NetTrainer):
     def __init__(self, net, criterion, optimizer, starting_max_acc=0, criterion_train=None):
-        super.__init__(net, criterion, optimizer, starting_max_acc)
+        super().__init__(net, criterion, optimizer, starting_max_acc)
         self.criterion_train = criterion_train
 
     def train_semisupervised(self, epoch, _train_loader, original_label_indexes):
