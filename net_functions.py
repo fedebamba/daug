@@ -463,7 +463,107 @@ class NetTrainer():
             "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
 
+        def test(self, epoch, _test_loader, filename='res'):
+            self.net.eval()
+            test_loss = 0
+            correct = 0
 
+            accuracy_per_class = [[0, 0] for x in range(10)]
+
+            total = 0
+            printiter = 0
+            b_i = 0
+            with torch.no_grad():
+                for batch_index, (inputs, targets, index) in enumerate(_test_loader):
+                    inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
+                    outputs = self.net(inputs)[0]
+                    loss = self.criterion(outputs, targets)
+
+                    test_loss += loss.item()
+                    _, predicted = outputs.max(1)
+                    total += targets.size(0)
+                    correct += predicted.eq(targets).sum().item()
+
+                    for e1, e2 in zip(predicted, targets):
+                        if e1.item() == e2.item():
+                            accuracy_per_class[e1.item()][0] += 1
+                        accuracy_per_class[e2.item()][1] += 1
+
+                    if printiter % 5 == 0:
+                        print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                            test_loss / (batch_index + 1), 100. * correct / total, correct, total), end='')
+                    printiter += 1
+                    b_i = batch_index
+
+            print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                test_loss / (b_i + 1), 100. * correct / total, correct, total))
+
+            if filename is not None:
+                with open(filename + "_per_class.csv", "a") as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow([accuracy_per_class[i][0] for i in range(len(accuracy_per_class))])
+
+            for el in range(len(accuracy_per_class)):
+                print("CLASS: {0} - Acc: {1:.3f} ({2}/{3})".format(el,
+                                                                   accuracy_per_class[el][0] / accuracy_per_class[el][
+                                                                       1], accuracy_per_class[el][0],
+                                                                   accuracy_per_class[el][1]))
+            return 100. * correct / total
+
+        def clone(self):
+            return NetTrainer(net=copy.deepcopy(self.net), optimizer=self.optimizer, criterion=self.criterion,
+                              starting_max_acc=self.max_val_acc)
+
+        def validate(self, epoch, _validation_loader):
+            self.net.eval()
+            validation_loss = 0
+            correct = 0
+            total = 0
+            printiter = 0
+            b_i = 0
+
+            elementsperclass = [0] * 10
+
+            with torch.no_grad():
+                for batch_index, (inputs, targets, index) in enumerate(_validation_loader):
+                    inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
+                    outputs = self.net(inputs)[0]
+                    loss = self.criterion(outputs, targets)
+
+                    validation_loss += loss.item()
+                    _, predicted = outputs.max(1)
+                    total += targets.size(0)
+                    correct += predicted.eq(targets).sum().item()
+
+                    for el in targets:
+                        elementsperclass[el.item()] += 1
+
+                    if printiter % 5 == 0:
+                        print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                            validation_loss / (batch_index + 1), 100. * correct / total, correct, total),
+                                                      elementsperclass), end='')
+                    printiter += 1
+                    b_i += 1
+            print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                validation_loss / (b_i + 1), 100. * correct / total, correct, total), elementsperclass))
+
+            if (100. * correct / total) > self.max_val_acc:
+                print("Accuracy is improved! (from: {0:.2f})".format(self.max_val_acc))
+                self.max_val_acc = 100. * correct / total
+                return True, self.max_val_acc
+            else:
+                print("Max Acc still: {0:.2f}".format(self.max_val_acc))
+                return False, 100. * correct / total
+
+        def reset_acc(self):
+            self.max_val_acc = 0
+            return self
+
+
+class NetTrainerSemiSupervised(NetTrainer):
+    def __init__(self, net, criterion, optimizer, starting_max_acc=0, criterion_train=None):
+        super.__init__(net, criterion, optimizer, starting_max_acc)
+        self.criterion_train = criterion_train
 
     def train_semisupervised(self, epoch, _train_loader, original_label_indexes):
         self.net.train()
@@ -489,7 +589,7 @@ class NetTrainer():
 
             self.optimizer.zero_grad()
             outputs = self.net(inputs)[0]
-            loss = self.criterion(outputs, targets, tf_labels.to("cuda:0"))
+            loss = self.criterion_train(outputs, targets, tf_labels.to("cuda:0"))
 
             print(loss)
 
@@ -518,98 +618,3 @@ class NetTrainer():
             "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
 
-
-
-
-    def test(self, epoch, _test_loader, filename='res'):
-        self.net.eval()
-        test_loss = 0
-        correct = 0
-
-        accuracy_per_class = [[0,0] for x in range(10)]
-
-        total = 0
-        printiter = 0
-        b_i = 0
-        with torch.no_grad():
-            for batch_index, (inputs, targets, index) in enumerate(_test_loader):
-                inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
-                outputs = self.net(inputs)[0]
-                loss = self.criterion(outputs, targets)
-
-                test_loss += loss.item()
-                _, predicted = outputs.max(1)
-                total += targets.size(0)
-                correct += predicted.eq(targets).sum().item()
-
-                for e1, e2 in zip(predicted, targets):
-                    if e1.item() == e2.item():
-                        accuracy_per_class[e1.item()][0] += 1
-                    accuracy_per_class[e2.item()][1] += 1
-
-                if printiter % 5 == 0:
-                    print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
-                    test_loss / (batch_index + 1), 100. * correct / total, correct, total), end='')
-                printiter += 1
-                b_i = batch_index
-
-
-        print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
-            test_loss / (b_i + 1), 100. * correct / total, correct, total))
-
-        if filename is not None:
-            with open(filename + "_per_class.csv", "a") as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow([accuracy_per_class[i][0] for i in range(len(accuracy_per_class))])
-
-        for el in range(len(accuracy_per_class)):
-            print("CLASS: {0} - Acc: {1:.3f} ({2}/{3})".format(el, accuracy_per_class[el][0] / accuracy_per_class[el][1], accuracy_per_class[el][0], accuracy_per_class[el][1]))
-        return 100. * correct / total
-
-    def clone(self):
-        return NetTrainer(net=copy.deepcopy(self.net), optimizer=self.optimizer, criterion=self.criterion, starting_max_acc=self.max_val_acc)
-
-    def validate(self, epoch, _validation_loader):
-        self.net.eval()
-        validation_loss = 0
-        correct = 0
-        total = 0
-        printiter= 0
-        b_i = 0
-
-        elementsperclass = [0] * 10
-
-        with torch.no_grad():
-            for batch_index, (inputs, targets, index) in enumerate(_validation_loader):
-                inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
-                outputs = self.net(inputs)[0]
-                loss = self.criterion(outputs, targets)
-
-                validation_loss += loss.item()
-                _, predicted = outputs.max(1)
-                total += targets.size(0)
-                correct += predicted.eq(targets).sum().item()
-
-                for el in targets:
-                    elementsperclass[el.item()] += 1
-
-                if printiter % 5 == 0:
-                    print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
-                        validation_loss / (batch_index + 1), 100. * correct / total, correct, total),elementsperclass ), end='')
-                printiter += 1
-                b_i += 1
-        print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
-            validation_loss / (b_i + 1), 100. * correct / total, correct, total), elementsperclass))
-
-
-        if (100. * correct / total) > self.max_val_acc :
-            print("Accuracy is improved! (from: {0:.2f})".format(self.max_val_acc))
-            self.max_val_acc = 100. * correct / total
-            return True, self.max_val_acc
-        else:
-            print("Max Acc still: {0:.2f}".format(self.max_val_acc))
-            return False, 100. * correct / total
-
-    def reset_acc(self):
-        self.max_val_acc = 0
-        return self

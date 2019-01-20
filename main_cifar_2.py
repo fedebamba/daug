@@ -70,21 +70,22 @@ class CompleteDataset:
                               sampler=customcifar.CustomRandomSampler([x for x in range(len(self.testset))]))
 
 
-def new_net():
+def new_net_semisupervised():
     net = netter.CustomResNet18()
     net = net.to("cuda:0")
 
-    criterion =  semi_supervised.SemiSupervisedLoss()
+    criterion_train = semi_supervised.SemiSupervisedLoss()
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
 
-    return nf.NetTrainer(net=net, criterion=criterion, optimizer=optimizer)
+    return nf.NetTrainerSemiSupervised(net=net, criterion=criterion, optimizer=optimizer, criterion_train= criterion_train)
 
 
 def single_train_pass(cd, ol):
     trainloader = cd.get_train_loader()
     validationloader = cd.get_validation_loader()
 
-    net = new_net()
+    net = new_net_semisupervised()
     best_net = net.clone()
     for i in range(num_of_epochs):
         print("Epoch: " + str(i))
