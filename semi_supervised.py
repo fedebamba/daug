@@ -14,8 +14,6 @@ import customcifar
 import acquisition_functions
 
 
-
-
 class SemiSupervisedLoss:
     def __init__(self, alpha=1):
         self.alpha = alpha

@@ -465,7 +465,7 @@ class NetTrainer():
 
 
 
-    def train_semisupervised(self, epoch, _train_loader, ):
+    def train_semisupervised(self, epoch, _train_loader, original_labels):
         self.net.train()
         train_loss = 0
         correct = 0
@@ -479,6 +479,12 @@ class NetTrainer():
 
         for batch_index, (inputs, targets, index) in enumerate(_train_loader):
             inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
+
+            print("index" + str(index))
+
+            # need tf tensor
+            tf_labels = torch.Tensor([1])
+
 
             self.optimizer.zero_grad()
             outputs = self.net(inputs)[0]
