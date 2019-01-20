@@ -74,7 +74,7 @@ def new_net():
     net = netter.CustomResNet18()
     net = net.to("cuda:0")
 
-    criterion = nn.CrossEntropyLoss() #)  semi_supervised.SemiSupervisedLoss()
+    criterion = semi_supervised.SemiSupervisedLoss()
     optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
 
     return nf.NetTrainer(net=net, criterion=criterion, optimizer=optimizer)
@@ -132,7 +132,7 @@ for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
 
     # get the weak labels with semi_supervised.generate_weak_labels
     semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
-    
+
 
     # train the control network
 
