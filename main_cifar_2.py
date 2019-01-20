@@ -122,10 +122,12 @@ best_acc = net.test(0, cd.get_test_loader())
 print("Test accuracy: {0:.2f}".format(best_acc))
 
 original_labels = copy.deepcopy(cd.train_indices)
+print(original_labels)
 
 for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
     ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
-    # cd.add_to_train(ind)
+
+    cd.add_to_train(ind)
     print(len(cd.train_indices))
 
     # train the control network

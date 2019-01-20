@@ -22,12 +22,7 @@ class SemiSupervisedLoss:
 
     def __call__(self, values, labels, tf, confidence=None ):
         t = self.strong_label_loss(values, labels) * tf
-
-
         t2 = self.weak_label_loss(values, labels) * (1-tf)
-
-
-
         return torch.sum(t + (self.alpha * t2))
 
         # t = self.strong_label()

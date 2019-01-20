@@ -12,9 +12,9 @@ import time
 import customcifar
 import acquisition_functions
 
-
 import matplotlib
 import matplotlib.pyplot as plt
+
 
 class NetTrainer():
     def __init__(self, net, criterion, optimizer, starting_max_acc=0):
@@ -580,7 +580,6 @@ class NetTrainerSemiSupervised(NetTrainer):
         for batch_index, (inputs, targets, index) in enumerate(_train_loader):
             inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
 
-            print("index" + str(index))
 
             # need tf tensor
             tf_labels = torch.Tensor([1 if x in original_label_indexes else 0 for x in index ])
