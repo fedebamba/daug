@@ -25,8 +25,6 @@ iteration_step = .1
 learning_rate = 0.001
 num_of_epochs = 2
 
-
-
 transform = trans.Compose([
         trans.RandomRotation(5),
         trans.RandomCrop(26),
@@ -34,7 +32,6 @@ transform = trans.Compose([
         utils.Gauss(0, 0.05),
         trans.ToTensor()
     ])
-
 
 class CompleteDataset:
     def __init__(self):
