@@ -166,7 +166,7 @@ class NetTrainer():
 
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
-        distance_weight = 1
+        distance_weight = 1e-6
         varratio_weight = 1
 
         self.net.eval()

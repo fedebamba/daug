@@ -27,7 +27,7 @@ max_number_of_epochs_before_changing_lr = 5
 lr_factor = 1.5
 
 epochs_first_step = 50  # 50
-epochs_second_step = 50
+epochs_second_step = 100
 
 train_batch_size = 32
 
@@ -43,19 +43,19 @@ tslp = int((train_set_length * train_set_percentage) / 100)
 
 
 traintrans_01 = trans.Compose([
-        #trans.RandomRotation(5),
-        #trans.RandomCrop(26),
-        trans.Resize((32, 32)),
-        #utils.Gauss(0, 0.05),
+        # trans.RandomRotation(5),
+        # trans.RandomCrop(26),
+        # trans.Resize((32, 32)),
+        # utils.Gauss(0, 0.05),
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
     # trans.RandomCrop(28),
-    #trans.RandomCrop(24),
-    #trans.RandomRotation(5),
+    # trans.RandomCrop(24),
+    # trans.RandomRotation(5),
     # utils.Gauss(0, 0.02),
     # trans.RandomHorizontalFlip(.5),
-    trans.Resize((32, 32)),
+    # trans.Resize((32, 32)),
     trans.ToTensor()
 ])
 
