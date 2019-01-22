@@ -14,6 +14,7 @@ import prova_torch_resnet as netter
 import customcifar
 import net_functions as nf
 import semi_supervised
+import utils
 
 num_of_classes = 10
 val_percentage = .2
@@ -22,15 +23,15 @@ initial_percentage = .3
 iteration_step = .1
 
 learning_rate = 0.001
-num_of_epochs = 10
+num_of_epochs = 2
 
 
 
 transform = trans.Compose([
-        # trans.RandomRotation(5),
-        # trans.RandomCrop(26),
-        # trans.Resize((32, 32)),
-        # utils.Gauss(0, 0.05),
+        trans.RandomRotation(5),
+        trans.RandomCrop(26),
+        trans.Resize((32, 32)),
+        utils.Gauss(0, 0.05),
         trans.ToTensor()
     ])
 
@@ -76,7 +77,7 @@ def new_net():
     net = netter.CustomResNet18()
     net = net.to("cuda:0")
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss() #)  semi_supervised.SemiSupervisedLoss()
     optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
 
     return nf.NetTrainer(net=net, criterion=criterion, optimizer=optimizer)
@@ -90,7 +91,9 @@ def single_train_pass(cd):
     best_net = net.clone()
     for i in range(num_of_epochs):
         print("Epoch: " + str(i))
+        # net.train_semisupervised(i, trainloader)
         net.train(i, trainloader)
+
         isbest, acc = net.validate(i, validationloader)
         print("Accuracy so far: {0:.2f}".format(acc))
 
@@ -120,17 +123,19 @@ print("\n\t  TEST:")
 best_acc =  net.test(0, cd.get_test_loader())
 print("Test accuracy: {0:.2f}".format(best_acc))
 
-
-for iteration_index in numpy.arange(initial_percentage, 1, iteration_step):
+for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
     ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
     cd.add_to_train(ind)
     print(len(cd.train_indices))
 
+    # train the control network
+    net_control = single_train_pass(cd)
+
     # get the weak labels with semi_supervised.generate_weak_labels
-    semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=[x for x in cd.remaining_indices if x not in cd.train_indices], howmany=1000, train_indices=[])
+    semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
 
     # train the control network
-    net = single_train_pass(cd)
+
 
     # train the semi supervised learning network
     # todo

@@ -452,14 +452,67 @@ class NetTrainer():
             for el in targets:
                 elementsperclass[el.item()] += 1
 
+
             if printiter % 5 == 0 :
                 print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
 
+            b_i += 1
             printiter+= 1
 
         print("\r{0:<60} {1} ".format(
             "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
+
+
+
+    def train_semisupervised(self, epoch, _train_loader, ):
+        self.net.train()
+        train_loss = 0
+        correct = 0
+        total = 0
+
+        printiter = 0
+        b_i = 0
+
+        # debug
+        elementsperclass = [0] * 10
+
+        for batch_index, (inputs, targets, index) in enumerate(_train_loader):
+            inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
+
+            self.optimizer.zero_grad()
+            outputs = self.net(inputs)[0]
+            loss = self.criterion(outputs, targets, torch.Tensor([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] ).to("cuda:0"))
+
+            print(loss)
+
+            loss.backward()
+            self.optimizer.step()
+
+            train_loss += loss.item()
+            _, predicted = outputs.max(1)
+
+            total += targets.size(0)
+            correct += predicted.eq(targets).sum().item()
+
+
+            # debug
+            for el in targets:
+                elementsperclass[el.item()] += 1
+
+
+            if printiter % 5 == 0 :
+                print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
+
+            b_i += 1
+            printiter+= 1
+
+        print("\r{0:<60} {1} ".format(
+            "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
+                                                                correct, total), elementsperclass))
+
+
+
 
     def test(self, epoch, _test_loader, filename='res'):
         self.net.eval()
