@@ -23,7 +23,7 @@ initial_percentage = .3
 iteration_step = .1
 
 learning_rate = 0.001
-num_of_epochs = 10
+num_of_epochs = 25
 
 transform = trans.Compose([
         trans.RandomRotation(5),
