@@ -12,9 +12,9 @@ import time
 import customcifar
 import acquisition_functions
 
-
 import matplotlib
 import matplotlib.pyplot as plt
+
 
 class NetTrainer():
     def __init__(self, net, criterion, optimizer, starting_max_acc=0):
@@ -459,72 +459,21 @@ class NetTrainer():
 
 
             if printiter % 5 == 0 :
-                print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
+                print("\r{0:<65} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
 
             b_i += 1
             printiter+= 1
 
-        print("\r{0:<60} {1} ".format(
-            "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
+        print("\r{0:<65} {1} ".format(
+            "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
-
-
-
-    def train_semisupervised(self, epoch, _train_loader, ):
-        self.net.train()
-        train_loss = 0
-        correct = 0
-        total = 0
-
-        printiter = 0
-        b_i = 0
-
-        # debug
-        elementsperclass = [0] * 10
-
-        for batch_index, (inputs, targets, index) in enumerate(_train_loader):
-            inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
-
-            self.optimizer.zero_grad()
-            outputs = self.net(inputs)[0]
-            loss = self.criterion(outputs, targets, torch.Tensor([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] ).to("cuda:0"))
-
-            print(loss)
-
-            loss.backward()
-            self.optimizer.step()
-
-            train_loss += loss.item()
-            _, predicted = outputs.max(1)
-
-            total += targets.size(0)
-            correct += predicted.eq(targets).sum().item()
-
-
-            # debug
-            for el in targets:
-                elementsperclass[el.item()] += 1
-
-
-            if printiter % 5 == 0 :
-                print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
-
-            b_i += 1
-            printiter+= 1
-
-        print("\r{0:<60} {1} ".format(
-            "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
-                                                                correct, total), elementsperclass))
-
-
-
 
     def test(self, epoch, _test_loader, filename='res'):
         self.net.eval()
         test_loss = 0
         correct = 0
 
-        accuracy_per_class = [[0,0] for x in range(10)]
+        accuracy_per_class = [[0, 0] for x in range(10)]
 
         total = 0
         printiter = 0
@@ -547,10 +496,9 @@ class NetTrainer():
 
                 if printiter % 5 == 0:
                     print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
-                    test_loss / (batch_index + 1), 100. * correct / total, correct, total), end='')
+                        test_loss / (batch_index + 1), 100. * correct / total, correct, total), end='')
                 printiter += 1
                 b_i = batch_index
-
 
         print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
             test_loss / (b_i + 1), 100. * correct / total, correct, total))
@@ -561,18 +509,22 @@ class NetTrainer():
                 writer.writerow([accuracy_per_class[i][0] for i in range(len(accuracy_per_class))])
 
         for el in range(len(accuracy_per_class)):
-            print("CLASS: {0} - Acc: {1:.3f} ({2}/{3})".format(el, accuracy_per_class[el][0] / accuracy_per_class[el][1], accuracy_per_class[el][0], accuracy_per_class[el][1]))
+            print("CLASS: {0} - Acc: {1:.3f} ({2}/{3})".format(el,
+                                                               accuracy_per_class[el][0] / accuracy_per_class[el][
+                                                                   1], accuracy_per_class[el][0],
+                                                               accuracy_per_class[el][1]))
         return 100. * correct / total
 
     def clone(self):
-        return NetTrainer(net=copy.deepcopy(self.net), optimizer=self.optimizer, criterion=self.criterion, starting_max_acc=self.max_val_acc)
+        return NetTrainer(net=copy.deepcopy(self.net), optimizer=self.optimizer, criterion=self.criterion,
+                          starting_max_acc=self.max_val_acc)
 
     def validate(self, epoch, _validation_loader):
         self.net.eval()
         validation_loss = 0
         correct = 0
         total = 0
-        printiter= 0
+        printiter = 0
         b_i = 0
 
         elementsperclass = [0] * 10
@@ -592,15 +544,15 @@ class NetTrainer():
                     elementsperclass[el.item()] += 1
 
                 if printiter % 5 == 0:
-                    print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
-                        validation_loss / (batch_index + 1), 100. * correct / total, correct, total),elementsperclass ), end='')
+                    print("\r{0:<65} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                        validation_loss / (batch_index + 1), 100. * correct / total, correct, total),
+                                                  elementsperclass), end='')
                 printiter += 1
                 b_i += 1
-        print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+        print("\r{0:<65} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
             validation_loss / (b_i + 1), 100. * correct / total, correct, total), elementsperclass))
 
-
-        if (100. * correct / total) > self.max_val_acc :
+        if (100. * correct / total) > self.max_val_acc:
             print("Accuracy is improved! (from: {0:.2f})".format(self.max_val_acc))
             self.max_val_acc = 100. * correct / total
             return True, self.max_val_acc
@@ -611,3 +563,59 @@ class NetTrainer():
     def reset_acc(self):
         self.max_val_acc = 0
         return self
+
+
+class NetTrainerSemiSupervised(NetTrainer):
+    def __init__(self, net, criterion, optimizer, starting_max_acc=0, criterion_train=None):
+        super().__init__(net, criterion, optimizer, starting_max_acc)
+        self.criterion_train = criterion_train
+
+    def train_semisupervised(self, epoch, _train_loader, original_label_indexes, cv, st):
+        self.net.train()
+        train_loss = 0
+        correct = 0
+        guesses_correct = 0
+        total = 0
+
+        printiter = 0
+        b_i = 0
+
+        # debug
+        elementsperclass = [0] * 10
+
+        for batch_index, (inputs, targets, index) in enumerate(_train_loader):
+            inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
+
+            # create label vectors fo semi supervised
+            tf_labels = torch.Tensor([1 if x in original_label_indexes else 0 for x in index ])
+            confidence_vector = [cv[x] for x in index]
+            labels_vector = torch.Tensor([st[x] for x in index]).long().to("cuda:0")
+
+            self.optimizer.zero_grad()
+            outputs = self.net(inputs)[0]
+            loss = self.criterion_train(outputs, targets, labels_vector, tf_labels.to("cuda:0"), confidence_vector)
+
+            loss.backward()
+            self.optimizer.step()
+
+            train_loss += loss.item()
+            _, predicted = outputs.max(1)
+
+            total += targets.size(0)
+            correct += predicted.eq(targets).sum().item()
+            guesses_correct += len([x for x in range(len(targets)) if targets[x] == labels_vector[x]])
+
+            # debug
+            for el in targets:
+                elementsperclass[el.item()] += 1
+
+            if printiter % 5 == 0 :
+                print("\r{0:<65} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |\t Guess.Acc: {4:.3f}".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total, 100. * guesses_correct / total), elementsperclass), end='')
+
+            b_i += 1
+            printiter+= 1
+
+        print("\r{0:<65} {1} ".format(
+            "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |\t Guess.Acc: {4:.3f}".format(train_loss / (b_i + 1), 100. * correct / total,
+                                                                correct, total, 100. * guesses_correct / total), elementsperclass))
+
