@@ -156,7 +156,7 @@ for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
 
 
     # get the weak labels with semi_supervised.generate_weak_labels
-    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
+    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[], n=10)
     confidence = semi_supervised.generate_cv(len(cd.dataset), original_labels, [new_labels_generator[2], new_labels_generator[0]])
     semi_target = semi_supervised.generate_semi_target(len(cd.dataset), [new_labels_generator[2], new_labels_generator[1]])
 
