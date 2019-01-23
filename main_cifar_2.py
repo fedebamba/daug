@@ -23,7 +23,7 @@ initial_percentage = .3
 iteration_step = .1
 
 learning_rate = 0.001
-num_of_epochs = 2
+num_of_epochs = 10
 
 transform = trans.Compose([
         trans.RandomRotation(5),
@@ -139,16 +139,20 @@ original_labels = copy.deepcopy(cd.train_indices)
 
 # net = single_train_pass_semi(cd, original_labels, [0 for x in range(len(cd.dataset))], [0 for x in range(len(cd.dataset))])
 net = single_train_pass(cd) # Supervised training
-
+net_control = net.clone()
 
 print("\n\t  TEST:")
 best_acc = net.test(0, cd.get_test_loader())
 print("Test accuracy: {0:.2f}".format(best_acc))
 
+with open("res/semi_supervised.csv", "w+") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Iter","Els","Control", "Semi"])
 
-for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
+for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
+    # get new elements for the training set
     ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
-
+    cd.add_to_train(ind)
 
 
     # get the weak labels with semi_supervised.generate_weak_labels
@@ -156,24 +160,18 @@ for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
     confidence = semi_supervised.generate_cv(len(cd.dataset), original_labels, [new_labels_generator[2], new_labels_generator[0]])
     semi_target = semi_supervised.generate_semi_target(len(cd.dataset), [new_labels_generator[2], new_labels_generator[1]])
 
-    print(semi_target)
-
-
-    cd.add_to_train(ind)
-
-    # train the control network
-    net_control = single_train_pass_semi(cd, original_labels, confidence, semi_target)
-
-
-
-
-
-    # train the control network
-
+    # train and test the control network
+    print("\nTrain Control Network")
+    net_control = single_train_pass(cd)
+    print("\tTest: ")
+    best_acc_control = net_control.test(0, cd.get_test_loader())
 
     # train the semi supervised learning network
-    # todo
+    print("\nTrain Semi-supervised Network")
+    net = single_train_pass_semi(cd, original_labels, confidence, semi_target)
+    print("\tTest: ")
+    best_acc = net.test(0, cd.get_test_loader())
 
-
-
-
+    with open("res/Semi_supervised.csv", "a+") as file:
+        writer = csv.writer(file)
+        writer.writerow(iteration_step*100, len(cd.train_indices), best_acc_control, best_acc)

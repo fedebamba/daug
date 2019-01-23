@@ -454,13 +454,13 @@ class NetTrainer():
 
 
             if printiter % 5 == 0 :
-                print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
+                print("\r{0:<65} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
 
             b_i += 1
             printiter+= 1
 
-        print("\r{0:<60} {1} ".format(
-            "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
+        print("\r{0:<65} {1} ".format(
+            "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
 
     def test(self, epoch, _test_loader, filename='res'):
@@ -539,12 +539,12 @@ class NetTrainer():
                     elementsperclass[el.item()] += 1
 
                 if printiter % 5 == 0:
-                    print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                    print("\r{0:<65} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
                         validation_loss / (batch_index + 1), 100. * correct / total, correct, total),
                                                   elementsperclass), end='')
                 printiter += 1
                 b_i += 1
-        print("\r{0:<60} {1} ".format('\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+        print("\r{0:<65} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
             validation_loss / (b_i + 1), 100. * correct / total, correct, total), elementsperclass))
 
         if (100. * correct / total) > self.max_val_acc:
@@ -569,6 +569,7 @@ class NetTrainerSemiSupervised(NetTrainer):
         self.net.train()
         train_loss = 0
         correct = 0
+        guesses_correct = 0
         total = 0
 
         printiter = 0
@@ -597,18 +598,19 @@ class NetTrainerSemiSupervised(NetTrainer):
 
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
+            guesses_correct += len([x for x in range(len(targets)) if targets[x] == labels_vector[x]])
 
             # debug
             for el in targets:
                 elementsperclass[el.item()] += 1
 
             if printiter % 5 == 0 :
-                print("\r{0:<60} {1} ".format("\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
+                print("\r{0:<65} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |\t Guess.Acc: {4:.3f}".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total, 100. * guesses_correct / total), elementsperclass), end='')
 
             b_i += 1
             printiter+= 1
 
-        print("\r{0:<60} {1} ".format(
-            "\t Loss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
-                                                                correct, total), elementsperclass))
+        print("\r{0:<65} {1} ".format(
+            "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |\t Guess.Acc: {4:.3f}".format(train_loss / (b_i + 1), 100. * correct / total,
+                                                                correct, total, 100. * guesses_correct / total), elementsperclass))
 

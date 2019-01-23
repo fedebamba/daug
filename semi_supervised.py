@@ -21,9 +21,6 @@ class SemiSupervisedLoss:
         self.weak_label_loss = nn.CrossEntropyLoss(reduce=False)
 
     def __call__(self, values, labels, semi_labels, tf, confidence=None ):
-        print(labels)
-        print(semi_labels)
-
         t = self.strong_label_loss(values, labels) * tf
         t2 = self.weak_label_loss(values, semi_labels) * (1-tf) * torch.Tensor(confidence).to("cuda:0")
         return torch.mean(t + (self.alpha * t2))
