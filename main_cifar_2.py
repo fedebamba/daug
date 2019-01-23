@@ -26,7 +26,7 @@ learning_rate = 0.001
 num_of_epochs = 25
 
 transform = trans.Compose([
-        trans.RandomRotation(5),
+        # trans.RandomRotation(5),
         trans.RandomCrop(26),
         trans.Resize((32, 32)),
         utils.Gauss(0, 0.05),
@@ -156,7 +156,7 @@ for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
 
 
     # get the weak labels with semi_supervised.generate_weak_labels
-    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
+    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[], n=10)
     confidence = semi_supervised.generate_cv(len(cd.dataset), original_labels, [new_labels_generator[2], new_labels_generator[0]])
     semi_target = semi_supervised.generate_semi_target(len(cd.dataset), [new_labels_generator[2], new_labels_generator[1]])
 
