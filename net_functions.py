@@ -180,12 +180,17 @@ class NetTrainer():
                                        sampler=customcifar.CustomRandomSampler(train_indices)) for i in range(n)]
         dataloaders = [tud.DataLoader(ds._train_val_set, batch_size=500, shuffle=False, num_workers=4,
                                       sampler=customcifar.CustomSampler(randomized_list)) for i in range(n)]
+
         with torch.no_grad():
             for batch_index, element in enumerate(zip(*trainloaders)):  # labelled samples
                 els = [x for x in element]
                 o = torch.Tensor().to("cuda:0")
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
+
+                    print(self.net(input[0])[0].size())
+                    print(self.net(input[0])[1].size())
+
                     o = torch.cat((o, self.net(input[0])[1].reshape(len(input[0]), 512, 1)), 2)
                 N = torch.cat((N, o), 0)
                 print("\r N: {0} ".format(N.size()), end="")
