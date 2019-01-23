@@ -174,4 +174,4 @@ for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
 
     with open("res/Semi_supervised.csv", "a+") as file:
         writer = csv.writer(file)
-        writer.writerow(iteration_step*100, len(cd.train_indices), best_acc_control, best_acc)
+        writer.writerow([iteration_step*100, len(cd.train_indices), best_acc_control, best_acc])
