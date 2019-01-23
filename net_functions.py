@@ -187,7 +187,6 @@ class NetTrainer():
                 o = torch.Tensor().to("cuda:0")
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
-
                     o = torch.cat((o, self.net(input[0])[1].reshape(len(input[0]), 512, 1)), 2)
                 N = torch.cat((N, o), 0)
                 print("\r N: {0} ".format(N.size()), end="")
@@ -197,15 +196,24 @@ class NetTrainer():
                 normalized_confidence[1] = torch.cat((normalized_confidence[1], element[0][2]), 0)
 
                 els = [x for x in element]
+                o = torch.Tensor().to("cuda:0")
                 predictions = torch.Tensor().to("cuda:0")
 
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
                     output = self.net(input[0])
+
+                    print(self.net(input[0])[0].size())
+                    print(self.net(input[0])[1].size())
+
+                    out = output[1].reshape(len(input[0]), 512, 1)
+
+                    o = torch.cat((o, out), 2)
                     predictions = torch.cat((predictions, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
 
-                    print("Output : " + str(output[0].size()))
+                    print("Output : " + str(output[0].size()) + "  " + str(output[0]))
                     print(predictions.size())
+
                 S = torch.cat((S, o), 0)
                 normalized_confidence[0] = torch.cat((normalized_confidence[0], predictions.reshape(len(predictions))), 0)
                 print("\r S: {0} ".format(S.size()), end="")
