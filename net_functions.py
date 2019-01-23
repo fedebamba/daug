@@ -619,3 +619,4 @@ class NetTrainerSemiSupervised(NetTrainer):
             "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |  Guess.Acc: {4:.3f}".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total, 100. * guesses_correct / total), elementsperclass))
 
+        return 100. * guesses_correct / total

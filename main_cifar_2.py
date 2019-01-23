@@ -25,6 +25,8 @@ iteration_step = .1
 learning_rate = 0.001
 num_of_epochs = 25
 
+filename = "semi_supervised_75.csv"
+
 transform = trans.Compose([
         trans.RandomRotation(5),
         trans.RandomCrop(26),
@@ -32,6 +34,8 @@ transform = trans.Compose([
         utils.Gauss(0, 0.05),
         trans.ToTensor()
     ])
+
+
 
 class CompleteDataset:
     def __init__(self):
@@ -105,11 +109,13 @@ def single_train_pass_semi(cd, ol, cv, st):
     trainloader = cd.get_train_loader()
     validationloader = cd.get_validation_loader()
 
+    guess_acc = 0
+
     net = new_net_semisupervised()
     best_net = net.clone()
     for i in range(num_of_epochs):
         print("Epoch: " + str(i))
-        net.train_semisupervised(i, trainloader, ol, cv, st)
+        guess_acc = net.train_semisupervised(i, trainloader, ol, cv, st)
 
         isbest, acc = net.validate(i, validationloader)
         print("Accuracy so far: {0:.2f}".format(acc))
@@ -117,7 +123,7 @@ def single_train_pass_semi(cd, ol, cv, st):
         if isbest:
             best_net = net.clone()
 
-    return best_net
+    return best_net, guess_acc
 
 
 
@@ -145,9 +151,9 @@ print("\n\t  TEST:")
 best_acc = net.test(0, cd.get_test_loader())
 print("Test accuracy: {0:.2f}".format(best_acc))
 
-with open("res/semi_supervised.csv", "w+") as file:
+with open("res/" + filename, "w+") as file:
     writer = csv.writer(file)
-    writer.writerow(["Iter","Els","Control", "Semi"])
+    writer.writerow(["Iter","Els","Control", "Semi", "Guess"])
 
 for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
     # get new elements for the training set
@@ -168,10 +174,10 @@ for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
 
     # train the semi supervised learning network
     print("\nTrain Semi-supervised Network")
-    net = single_train_pass_semi(cd, original_labels, confidence, semi_target)
+    net, guess_acc = single_train_pass_semi(cd, original_labels, confidence, semi_target)
     print("\tTest: ")
     best_acc = net.test(0, cd.get_test_loader())
 
-    with open("res/semi_supervised.csv", "a+") as file:
+    with open("res/" + filename, "a+") as file:
         writer = csv.writer(file)
-        writer.writerow([initial_percentage*100, len(cd.train_indices), best_acc_control, best_acc])
+        writer.writerow([initial_percentage*100, len(cd.train_indices), best_acc_control, best_acc, guess_acc])
