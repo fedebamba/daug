@@ -26,7 +26,7 @@ learning_rate = 0.001
 num_of_epochs = 25
 
 transform = trans.Compose([
-        trans.RandomRotation(5),
+        # trans.RandomRotation(5),
         trans.RandomCrop(26),
         trans.Resize((32, 32)),
         utils.Gauss(0, 0.05),
