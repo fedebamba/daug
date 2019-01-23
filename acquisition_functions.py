@@ -25,7 +25,6 @@ def confidence(vector, num_of_classes=10, details=False):
         return [max([(len([i[v] for i in vector if i[v] == j])) for j in range(num_of_classes)]) for v in range(len(vector[0]))]
     else:
         res = [[(len([i[v] for i in vector if i[v] == j])) for j in range(num_of_classes)] for v in range(len(vector[0]))]
-        print(res)
         return res
 
 

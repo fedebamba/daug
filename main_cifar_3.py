@@ -46,7 +46,7 @@ traintrans_01 = trans.Compose([
         #trans.RandomRotation(5),
         #trans.RandomCrop(26),
         trans.Resize((32, 32)),
-        #utils.Gauss(0, 0.05),
+        #utils.Gauss(0, 0.1),
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([

@@ -565,7 +565,7 @@ class NetTrainerSemiSupervised(NetTrainer):
         super().__init__(net, criterion, optimizer, starting_max_acc)
         self.criterion_train = criterion_train
 
-    def train_semisupervised(self, epoch, _train_loader, original_label_indexes):
+    def train_semisupervised(self, epoch, _train_loader, original_label_indexes, cv, st):
         self.net.train()
         train_loss = 0
         correct = 0
@@ -580,15 +580,14 @@ class NetTrainerSemiSupervised(NetTrainer):
         for batch_index, (inputs, targets, index) in enumerate(_train_loader):
             inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
 
-
-            # need tf tensor
+            # create label vectors fo semi supervised
             tf_labels = torch.Tensor([1 if x in original_label_indexes else 0 for x in index ])
+            confidence_vector = [cv[x] for x in index]
+            labels_vector = torch.Tensor([st[x] for x in index]).long().to("cuda:0")
 
             self.optimizer.zero_grad()
             outputs = self.net(inputs)[0]
-            loss = self.criterion_train(outputs, targets, tf_labels.to("cuda:0"))
-
-            print(loss)
+            loss = self.criterion_train(outputs, targets, labels_vector, tf_labels.to("cuda:0"), confidence_vector)
 
             loss.backward()
             self.optimizer.step()

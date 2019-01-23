@@ -81,7 +81,7 @@ def new_net_semisupervised():
     return nf.NetTrainerSemiSupervised(net=net, criterion=criterion, optimizer=optimizer, criterion_train= criterion_train)
 
 
-def single_train_pass(cd, ol):
+def single_train_pass(cd):
     trainloader = cd.get_train_loader()
     validationloader = cd.get_validation_loader()
 
@@ -90,7 +90,26 @@ def single_train_pass(cd, ol):
     for i in range(num_of_epochs):
         print("Epoch: " + str(i))
         # net.train_semisupervised(i, trainloader)
-        net.train_semisupervised(i, trainloader, ol)
+        net.train(i, trainloader)
+
+        isbest, acc = net.validate(i, validationloader)
+        print("Accuracy so far: {0:.2f}".format(acc))
+
+        if isbest:
+            best_net = net.clone()
+
+    return best_net
+
+
+def single_train_pass_semi(cd, ol, cv, st):
+    trainloader = cd.get_train_loader()
+    validationloader = cd.get_validation_loader()
+
+    net = new_net_semisupervised()
+    best_net = net.clone()
+    for i in range(num_of_epochs):
+        print("Epoch: " + str(i))
+        net.train_semisupervised(i, trainloader, ol, cv, st)
 
         isbest, acc = net.validate(i, validationloader)
         print("Accuracy so far: {0:.2f}".format(acc))
@@ -115,26 +134,38 @@ ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd
 
 print(len(cd.train_indices))
 
-net = single_train_pass(cd, [])
+# ground truth
+original_labels = copy.deepcopy(cd.train_indices)
+
+# net = single_train_pass_semi(cd, original_labels, [0 for x in range(len(cd.dataset))], [0 for x in range(len(cd.dataset))])
+net = single_train_pass(cd) # Supervised training
+
 
 print("\n\t  TEST:")
 best_acc = net.test(0, cd.get_test_loader())
 print("Test accuracy: {0:.2f}".format(best_acc))
 
-original_labels = copy.deepcopy(cd.train_indices)
-print(original_labels)
 
 for iteration_index in numpy.arange(initial_percentage, .5, iteration_step):
     ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
 
-    cd.add_to_train(ind)
-    print(len(cd.train_indices))
 
-    # train the control network
-    net_control = single_train_pass(cd, original_labels)
 
     # get the weak labels with semi_supervised.generate_weak_labels
-    semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
+    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[])
+    confidence = semi_supervised.generate_cv(len(cd.dataset), original_labels, [new_labels_generator[2], new_labels_generator[0]])
+    semi_target = semi_supervised.generate_semi_target(len(cd.dataset), [new_labels_generator[2], new_labels_generator[1]])
+
+    print(semi_target)
+
+
+    cd.add_to_train(ind)
+
+    # train the control network
+    net_control = single_train_pass_semi(cd, original_labels, confidence, semi_target)
+
+
+
 
 
     # train the control network
