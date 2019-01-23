@@ -459,12 +459,12 @@ class NetTrainer():
 
 
             if printiter % 5 == 0 :
-                print("\r{0:<65} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
+                print("\r{0:<70} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total), elementsperclass), end='')
 
             b_i += 1
             printiter+= 1
 
-        print("\r{0:<65} {1} ".format(
+        print("\r{0:<70} {1} ".format(
             "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
 
@@ -495,12 +495,12 @@ class NetTrainer():
                     accuracy_per_class[e2.item()][1] += 1
 
                 if printiter % 5 == 0:
-                    print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                    print('\rTest: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
                         test_loss / (batch_index + 1), 100. * correct / total, correct, total), end='')
                 printiter += 1
                 b_i = batch_index
 
-        print('\r Test: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+        print('\rTest: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
             test_loss / (b_i + 1), 100. * correct / total, correct, total))
 
         if filename is not None:
@@ -544,20 +544,20 @@ class NetTrainer():
                     elementsperclass[el.item()] += 1
 
                 if printiter % 5 == 0:
-                    print("\r{0:<65} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+                    print("\r{0:<70} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
                         validation_loss / (batch_index + 1), 100. * correct / total, correct, total),
                                                   elementsperclass), end='')
                 printiter += 1
                 b_i += 1
-        print("\r{0:<65} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
+        print("\r{0:<70} {1} ".format('\t\tValidation: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
             validation_loss / (b_i + 1), 100. * correct / total, correct, total), elementsperclass))
 
         if (100. * correct / total) > self.max_val_acc:
-            print("Accuracy is improved! (from: {0:.2f})".format(self.max_val_acc))
+            print("\t\t\tAccuracy is improved! (from: {0:.2f})".format(self.max_val_acc))
             self.max_val_acc = 100. * correct / total
             return True, self.max_val_acc
         else:
-            print("Max Acc still: {0:.2f}".format(self.max_val_acc))
+            print("\t\t\tMax Acc still: {0:.2f}".format(self.max_val_acc))
             return False, 100. * correct / total
 
     def reset_acc(self):
@@ -610,12 +610,12 @@ class NetTrainerSemiSupervised(NetTrainer):
                 elementsperclass[el.item()] += 1
 
             if printiter % 5 == 0 :
-                print("\r{0:<65} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |\t Guess.Acc: {4:.3f}".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total, 100. * guesses_correct / total), elementsperclass), end='')
+                print("\r{0:<70} {1} ".format("\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |  Guess.Acc: {4:.3f}".format(train_loss / (batch_index + 1), 100. * correct / total, correct, total, 100. * guesses_correct / total), elementsperclass), end='')
 
             b_i += 1
             printiter+= 1
 
-        print("\r{0:<65} {1} ".format(
-            "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |\t Guess.Acc: {4:.3f}".format(train_loss / (b_i + 1), 100. * correct / total,
+        print("\r{0:<70} {1} ".format(
+            "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) |  Guess.Acc: {4:.3f}".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total, 100. * guesses_correct / total), elementsperclass))
 

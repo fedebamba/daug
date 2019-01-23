@@ -26,7 +26,7 @@ learning_rate = 0.001
 num_of_epochs = 25
 
 transform = trans.Compose([
-        # trans.RandomRotation(5),
+        trans.RandomRotation(5),
         trans.RandomCrop(26),
         trans.Resize((32, 32)),
         utils.Gauss(0, 0.05),
@@ -74,7 +74,7 @@ def new_net_semisupervised():
     net = netter.CustomResNet18()
     net = net.to("cuda:0")
 
-    criterion_train = semi_supervised.SemiSupervisedLoss()
+    criterion_train = semi_supervised.SemiSupervisedLoss(alpha=.5)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9, weight_decay=1e-4)
 
