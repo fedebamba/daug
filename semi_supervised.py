@@ -75,5 +75,6 @@ def generate_weak_labels(net, cds, indices, train_indices, n=5):
         c_max = c_max.max(1)
         normalized_confidence[0] = c_max[0]
         normalized_confidence[1] = c_max[1]
-        return torch.Tensor(normalized_confidence)
+
+        return torch.cat(normalized_confidence, 1)
 
