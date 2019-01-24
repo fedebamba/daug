@@ -207,8 +207,6 @@ class NetTrainer():
 
                     o = torch.cat((o, out), 2)
                     predictions = torch.cat((predictions, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
-                    print(predictions.size())
-
                 S = torch.cat((S, o), 0)
                 predictions = torch.mean(predictions, 1)
 

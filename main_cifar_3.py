@@ -44,10 +44,10 @@ tslp = int((train_set_length * train_set_percentage) / 100)
 
 
 traintrans_01 = trans.Compose([
-        # trans.RandomRotation(5),
-        # trans.RandomCrop(26),
-        # trans.Resize((32, 32)),
-        # utils.Gauss(0, 0.05),
+        trans.RandomRotation(5),
+        trans.RandomCrop(26),
+        trans.Resize((32, 32)),
+        utils.Gauss(0, 0.05),
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
@@ -62,7 +62,7 @@ class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, transform_test=None ):
         self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1)
 
-        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform_test)  # 10000
+        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform)  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
 

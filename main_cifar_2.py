@@ -24,7 +24,7 @@ initial_percentage = .3
 iteration_step = .1
 
 learning_rate = 0.001
-num_of_epochs = 2
+num_of_epochs = 1
 
 filename = "semi_supervised_75.csv"
 
