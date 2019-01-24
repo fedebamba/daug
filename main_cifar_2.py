@@ -164,7 +164,7 @@ for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
     #       ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
     new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=[x for x in cd.remaining_indices if x not in cd.train_indices], train_indices=[], n=10)
 
-    ind=new_labels_generator[:int(len(cd.remaining_indices)*iteration_step)]
+    ind=new_labels_generator[2][:int(len(cd.remaining_indices)*iteration_step)]
     cd.add_to_train(ind)
 
 
