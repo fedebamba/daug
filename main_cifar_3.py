@@ -179,7 +179,7 @@ def a_single_experiment(esname, esnumber):
         # active_indices = active_net.bestofn(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
         active_indices = active_net.distance_and_entropy  (dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active)
+                                                     el_for_active, n=5)
 
 
 
