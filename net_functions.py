@@ -210,7 +210,7 @@ class NetTrainer():
                     print(predictions.size())
 
                 S = torch.cat((S, o), 0)
-                normalized_confidence[0] = torch.cat((normalized_confidence[0], predictions.reshape(len(predictions))), 0)
+                normalized_confidence[0] = torch.cat((normalized_confidence[0], predictions.reshape(len(predictions))), 1)
                 print("\r S: {0} ".format(S.size()), end="")
             normalized_confidence[0] = normalized_confidence[0] / torch.max(normalized_confidence[0], -1)[0]
 
