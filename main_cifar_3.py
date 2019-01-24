@@ -5,6 +5,7 @@ import torch.utils.data as tud
 
 import torchvision.transforms as trans
 
+import sys
 import numpy
 import copy
 import csv
@@ -19,7 +20,7 @@ import utils
 
 # PARAMETER PART................
 
-esname = "3_exp_umb_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
+esname = "3_exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 just100 = True
 
 learning_rate = 0.005
@@ -50,20 +51,18 @@ traintrans_01 = trans.Compose([
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
-    # trans.RandomCrop(28),
-    # trans.RandomCrop(24),
-    # trans.RandomRotation(5),
-    # utils.Gauss(0, 0.02),
-    # trans.RandomHorizontalFlip(.5),
-    # trans.Resize((32, 32)),
+    trans.RandomRotation(5),
+    trans.RandomCrop(26),
+    trans.Resize((32, 32)),
+    utils.Gauss(0, 0.05),
     trans.ToTensor()
 ])
 
 class CifarLoader():
-    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True ):
+    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, transform_test=None ):
         self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1)
 
-        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform)  # 10000
+        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform_test)  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
 
@@ -162,9 +161,8 @@ def a_single_experiment(esname, esnumber):
     net_trainer = new_network()
 
     # Dataset def
-    dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+    dataset = CifarLoader(transform=traintrans_01, transform_test=traintrans_02, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
 
-    # augmented_dataset = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True,   transform=traintrans_02, provided_indices=[[x for x in itertools.chain(dataset.validation_indices, dataset.train_indices)], dataset.validation_indices])
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
     write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
@@ -252,6 +250,10 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
 
 
 # MAIN.....................................................
+
+if len(sys.argv) > 1:
+    print("Starting " + str(sys.argv[1]))
+    esname = "3_" + str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 
 if not just100:
     for i in range(3):

@@ -9,6 +9,7 @@ import numpy
 import copy
 import csv
 import datetime
+import sys
 
 import prova_torch_resnet as netter
 import customcifar
@@ -97,7 +98,7 @@ def single_train_pass(cd):
         net.train(i, trainloader)
 
         isbest, acc = net.validate(i, validationloader)
-        print("Accuracy so far: {0:.2f}".format(acc))
+        print("\tAccuracy so far: {0:.2f}".format(acc))
 
         if isbest:
             best_net = net.clone()
@@ -130,6 +131,11 @@ def single_train_pass_semi(cd, ol, cv, st):
 # ====================================================================== #
 # ---------------------------------------------------------------------- #
 # ====================================================================== #
+
+
+if len(sys.argv) > 1:
+    print("Starting " + str(sys.argv[1]))
+    filename = str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M")) + ".csv"
 
 
 
