@@ -24,7 +24,7 @@ initial_percentage = .3
 iteration_step = .1
 
 learning_rate = 0.001
-num_of_epochs = 25
+num_of_epochs = 2
 
 filename = "semi_supervised_75.csv"
 
@@ -138,7 +138,6 @@ if len(sys.argv) > 1:
     filename = str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M")) + ".csv"
 
 
-
 cd = CompleteDataset()
 
 ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*.1)]
@@ -149,7 +148,6 @@ print(len(cd.train_indices))
 # ground truth
 original_labels = copy.deepcopy(cd.train_indices)
 
-# net = single_train_pass_semi(cd, original_labels, [0 for x in range(len(cd.dataset))], [0 for x in range(len(cd.dataset))])
 net = single_train_pass(cd) # Supervised training
 net_control = net.clone()
 
@@ -163,12 +161,15 @@ with open("res/" + filename, "w+") as file:
 
 for iteration_index in numpy.arange(initial_percentage, .9, iteration_step):
     # get new elements for the training set
-    ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
+    #       ind = [x for x in cd.remaining_indices if x not in cd.train_indices][:int(len(cd.remaining_indices)*iteration_step)] # active learning methods here?
+    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=[x for x in cd.remaining_indices if x not in cd.train_indices], train_indices=[], n=10)
+    print(new_labels_generator.size())
+
     cd.add_to_train(ind)
 
 
     # get the weak labels with semi_supervised.generate_weak_labels
-    new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[], n=10)
+    #      new_labels_generator = semi_supervised.generate_weak_labels(net=net.net, cds=cd, indices=ind, train_indices=[], n=10)
     confidence = semi_supervised.generate_cv(len(cd.dataset), original_labels, [new_labels_generator[2], new_labels_generator[0]])
     semi_target = semi_supervised.generate_semi_target(len(cd.dataset), [new_labels_generator[2], new_labels_generator[1]])
 
