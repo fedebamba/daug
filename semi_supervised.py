@@ -76,7 +76,7 @@ def generate_weak_labels(net, cds, indices, train_indices, n=5):
         normalized_confidence[0] = c_max[0]
         normalized_confidence[1] = c_max[1]
 
-        normalized_confidence[0], sorted_indexes = torch.sort(normalized_confidence[0])
+        normalized_confidence[0], sorted_indexes = torch.sort(normalized_confidence[0], descending=True)
         normalized_confidence[1] = normalized_confidence[1][sorted_indexes.long().cpu()]
         normalized_confidence[2] = normalized_confidence[2][sorted_indexes.long().cpu()]
 
