@@ -29,7 +29,6 @@ class CustomCIFAR10(torchvision.datasets.CIFAR10):
 
 
 class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
-
     def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None):
         super().__init__(root=root,
                          train=train,
@@ -74,7 +73,6 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
     def __getitem__(self, index):
         (img, target) = super().__getitem__(index)
         return img, target, index
-
 
     def __len__(self):
         return super().__len__()

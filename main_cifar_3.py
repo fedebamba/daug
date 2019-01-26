@@ -59,7 +59,7 @@ traintrans_02 = trans.Compose([
 ])
 
 class CifarLoader():
-    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, transform_test=None ):
+    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True):
         self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1)
 
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform)  # 10000
@@ -161,7 +161,7 @@ def a_single_experiment(esname, esnumber):
     net_trainer = new_network()
 
     # Dataset def
-    dataset = CifarLoader(transform=traintrans_01, transform_test=traintrans_02, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+    dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
@@ -172,14 +172,9 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        # active_indices = active_net.ed(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
-        # active_indices = active_net.entropy(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
-
-        # active_indices = active_net.greedy_k_centers(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp, dataset.select_for_train(el_for_active))
-        # active_indices = active_net.bestofn(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
         active_indices = active_net.distance_and_entropy  (dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=5)
+                                                     el_for_active, n=1)
 
 
 
