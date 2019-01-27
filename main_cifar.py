@@ -5,6 +5,7 @@ import torch.utils.data as tud
 
 import torchvision.transforms as trans
 
+import sys
 import numpy
 import copy
 import csv
@@ -19,15 +20,15 @@ import utils
 
 # PARAMETER PART................
 
-esname = "exp_umb_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
+esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 just100 = True
 
 learning_rate = 0.005
 max_number_of_epochs_before_changing_lr = 5
-lr_factor = 1.5
+lr_factor = 3
 
 epochs_first_step = 50  # 50
-epochs_second_step = 50
+epochs_second_step = 100
 
 train_batch_size = 32
 
@@ -50,17 +51,15 @@ traintrans_01 = trans.Compose([
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
-    # trans.RandomCrop(28),
-    trans.RandomCrop(24),
-    trans.RandomRotation(5),
-    # utils.Gauss(0, 0.02),
-    # trans.RandomHorizontalFlip(.5),
+    # trans.RandomRotation(5),
+    # trans.RandomCrop(26),
     trans.Resize((32, 32)),
+    # utils.Gauss(0, 0.05),
     trans.ToTensor()
 ])
 
 class CifarLoader():
-    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True ):
+    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True):
         self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1)
 
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform)  # 10000
@@ -77,7 +76,7 @@ class CifarLoader():
                 self.already_selected_indices = numpy.random.choice(self.train_indices, size=tslp*first_time_multiplier, replace=False).tolist()
         else:
                 lenel = [int(tslp/10) + (1 if i < tslp % int(tslp/10) else 0) for i in range(10)]
-                self.already_selected_indices = [x for i in range(10) for x in numpy.random.choice([xx for xx in self._train_val_set.el_for_class[i] if xx not in self.validation_indices], size=lenel[i], replace=False).tolist()]        
+                self.already_selected_indices = [x for i in range(10) for x in numpy.random.choice([xx for xx in self._train_val_set.el_for_class[i] if xx not in self.validation_indices], size=lenel[i], replace=False).tolist()]
 
         print("Selected: {}".format([len([x for x in self.already_selected_indices if x in self._train_val_set.el_for_class[i]]) for i in range(10)]))
 
@@ -88,6 +87,18 @@ class CifarLoader():
         self._v = tud.DataLoader(self._train_val_set, batch_size=100, shuffle=False, num_workers=2,
                                           sampler=customcifar.CustomRandomSampler(self.validation_indices))
         self._t = torch.utils.data.DataLoader(self._test_set, batch_size=100, shuffle=False, num_workers=2, sampler=customcifar.CustomSampler([x for x in range(len((self._test_set)))]))
+
+    def clone(self, t):
+        other = CifarLoader()
+        other._train_val_set = self._train_val_set.clone(t)
+        other._test_set=self._test_set
+        other.validation_indices= self.validation_indices
+        other.train_indices = self.train_indices
+        other.already_selected_indices=self.already_selected_indices
+        other._train= self._train
+        other._v = self._v
+        other._t = self._t
+        return other
 
     def all_train(self, otherDS=None, excluded=[]):
         if otherDS is None:
@@ -163,8 +174,8 @@ def a_single_experiment(esname, esnumber):
 
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+    dataset_for_active = dataset.clone(traintrans_02)
 
-    # augmented_dataset = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True,   transform=traintrans_02, provided_indices=[[x for x in itertools.chain(dataset.validation_indices, dataset.train_indices)], dataset.validation_indices])
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
     write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
@@ -174,16 +185,9 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        # active_indices = active_net.ed(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
-        # active_indices = active_net.entropy(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
-
-        # active_indices = active_net.greedy_k_centers(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp, dataset.select_for_train(el_for_active))
-        # active_indices = active_net.bestofn(dataset, [x for x in dataset.train_indices if x not in el_for_active], tslp)
-        active_indices = active_net.distance_and_varratio  (dataset,
+        active_indices = active_net.distance_and_varratio(dataset_for_active,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active)
-
-
+                                                     el_for_active, n=5)
 
 
         normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False )
@@ -252,6 +256,10 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
 
 
 # MAIN.....................................................
+
+if len(sys.argv) > 1:
+    print("Starting " + str(sys.argv[1]))
+    esname = "3_" + str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 
 if not just100:
     for i in range(3):
