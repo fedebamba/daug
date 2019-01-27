@@ -78,8 +78,9 @@ class NetTrainer():
             return [el[1] for el in sorlist[:howmany]]
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5):
-        distance_weight = 1e-5
+        distance_weight = 1
         varratio_weight = 1
+        entropy_weight = 1
 
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
@@ -109,6 +110,7 @@ class NetTrainer():
                 els = [x for x in element]
                 o = torch.Tensor().to("cuda:0")
                 predictions = torch.Tensor().long()
+                ps = torch.Tensor()
 
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
@@ -117,9 +119,12 @@ class NetTrainer():
 
                     o = torch.cat((o, out), 2)
                     predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
+                    ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
 
-                normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), 1 - torch.Tensor(
-                    acquisition_functions.confidence(predictions.transpose(0,1))).cpu() / n), 0).cpu()
+                varratio = (1 - (torch.Tensor(acquisition_functions.confidence(predictions.transpose(0,1))).cpu() / n)) * varratio_weight
+                entropy = torch.mean(ps, 1) * entropy_weight
+
+                normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio + entropy ), 0).cpu()
 
                 S = torch.cat((S, o), 0)
                 print("\r S: {0} ".format(S.size()), end="")
@@ -140,7 +145,7 @@ class NetTrainer():
             normalizing_factor = torch.max(mindist, -1)[0]
             print("NF : " + str(normalizing_factor))
 
-            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) # devo calcolare la confidenza ancora
+            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_confidence[0].to("cuda:0")) # devo calcolare la confidenza ancora
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
@@ -166,7 +171,7 @@ class NetTrainer():
 
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
-        distance_weight = 1
+        distance_weight = 1e-6
         varratio_weight = 1
 
         self.net.eval()
