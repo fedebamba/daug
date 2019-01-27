@@ -51,10 +51,10 @@ traintrans_01 = trans.Compose([
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
-    trans.RandomRotation(5),
-    trans.RandomCrop(26),
+    # trans.RandomRotation(5),
+    # trans.RandomCrop(26),
     trans.Resize((32, 32)),
-    utils.Gauss(0, 0.05),
+    # utils.Gauss(0, 0.05),
     trans.ToTensor()
 ])
 
@@ -87,6 +87,18 @@ class CifarLoader():
         self._v = tud.DataLoader(self._train_val_set, batch_size=100, shuffle=False, num_workers=2,
                                           sampler=customcifar.CustomRandomSampler(self.validation_indices))
         self._t = torch.utils.data.DataLoader(self._test_set, batch_size=100, shuffle=False, num_workers=2, sampler=customcifar.CustomSampler([x for x in range(len((self._test_set)))]))
+
+    def clone(self, t):
+        other = CifarLoader()
+        other._train_val_set = self._train_val_set.clone(t)
+        other._test_set=self._test_set
+        other.validation_indices= self.validation_indices
+        other.train_indices = self.train_indices
+        other.already_selected_indices=self.already_selected_indices
+        other._train= self._train
+        other._v = self._v
+        other._t = self._t
+        return other
 
     def all_train(self, otherDS=None, excluded=[]):
         if otherDS is None:
@@ -162,6 +174,7 @@ def a_single_experiment(esname, esnumber):
 
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+    dataset_for_active = dataset.clone(traintrans_02)
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
@@ -172,11 +185,9 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        active_indices = active_net.distance_and_entropy  (dataset,
+        active_indices = active_net.distance_and_entropy  (dataset_for_active,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
                                                      el_for_active, n=1)
-
-
 
 
         normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False )

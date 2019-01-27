@@ -70,6 +70,13 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
             print('Train data ' + str(len(self.train_data)))
 
+    def clone(self, t):
+        other = UnbalancedCIFAR10(root=self.root, train=self.train, transform=t, target_transform=self.target_transform, download=False)
+        other._val_indices= self._val_indices
+        other.indices=self.indices
+        other.el_for_class=self.el_for_class
+        return other
+
     def __getitem__(self, index):
         (img, target) = super().__getitem__(index)
         return img, target, index
