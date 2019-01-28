@@ -104,6 +104,8 @@ class NetTrainer():
                 print("\r N: {0} ".format(N.size()), end="")
             print("")
 
+
+            normalized_entropy = torch.Tensor().to("cuda:0")
             for batch_index, element in enumerate(zip(*dataloaders)):  # unlabelled samples
                 normalized_confidence[1] = torch.cat((normalized_confidence[1], element[0][2]), 0)
 
@@ -121,10 +123,10 @@ class NetTrainer():
                     predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
                     ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
 
-                varratio = (1 - (torch.Tensor(acquisition_functions.confidence(predictions.transpose(0,1))).cpu() / n)) * varratio_weight
-                entropy = (torch.mean(ps, 1) * entropy_weight).cpu()
+                varratio = (1 - (torch.Tensor(acquisition_functions.confidence(predictions.transpose(0,1))).cpu() / n))
 
-                normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio + entropy ), 0).cpu()
+                normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
+                normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
 
                 S = torch.cat((S, o), 0)
                 print("\r S: {0} ".format(S.size()), end="")
@@ -145,7 +147,8 @@ class NetTrainer():
             normalizing_factor = torch.max(mindist, -1)[0]
             print("NF : " + str(normalizing_factor))
 
-            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_confidence[0].to("cuda:0")) # devo calcolare la confidenza ancora
+            normalized_entropy /= torch.max(normalized_entropy, -1)[0]
+            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_entropy * entropy_weight) + ((normalized_confidence[0].to("cuda:0") * varratio_weight)) # devo calcolare la confidenza ancora
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
