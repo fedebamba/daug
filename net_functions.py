@@ -79,8 +79,8 @@ class NetTrainer():
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5):
         distance_weight = 1
-        varratio_weight = .75
-        entropy_weight = .75
+        varratio_weight = 1
+        entropy_weight = 1
 
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
@@ -148,7 +148,12 @@ class NetTrainer():
             print("NF : " + str(normalizing_factor))
 
             normalized_entropy = (normalized_entropy / torch.max(normalized_entropy, -1)[0]).cpu()
-            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_entropy * entropy_weight) + ((normalized_confidence[0].to("cuda:0") * varratio_weight)) # devo calcolare la confidenza ancora
+
+            a_term = (distance_weight * (mindist / normalizing_factor)) + (normalized_entropy * entropy_weight)
+            b_term = (distance_weight * (mindist / normalizing_factor)) + ((normalized_confidence[0].to("cuda:0") * varratio_weight))
+            mindist_confidence = torch.max(a_term, b_term)
+
+            # mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_entropy * entropy_weight) + ((normalized_confidence[0].to("cuda:0") * varratio_weight)) # devo calcolare la confidenza ancora
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
