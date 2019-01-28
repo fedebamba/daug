@@ -110,7 +110,7 @@ class NetTrainer():
                 els = [x for x in element]
                 o = torch.Tensor().to("cuda:0")
                 predictions = torch.Tensor().long()
-                ps = torch.Tensor()
+                ps = torch.Tensor().to("cuda:0")
 
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
@@ -122,7 +122,7 @@ class NetTrainer():
                     ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
 
                 varratio = (1 - (torch.Tensor(acquisition_functions.confidence(predictions.transpose(0,1))).cpu() / n)) * varratio_weight
-                entropy = torch.mean(ps, 1) * entropy_weight
+                entropy = (torch.mean(ps, 1) * entropy_weight).cpu()
 
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio + entropy ), 0).cpu()
 

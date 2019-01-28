@@ -51,10 +51,10 @@ traintrans_01 = trans.Compose([
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
-    # trans.RandomRotation(5),
-    # trans.RandomCrop(26),
+    trans.RandomRotation(5),
+    trans.RandomCrop(26),
     trans.Resize((32, 32)),
-    # utils.Gauss(0, 0.05),
+    utils.Gauss(0, 0.05),
     trans.ToTensor()
 ])
 
@@ -174,7 +174,7 @@ def a_single_experiment(esname, esnumber):
 
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
-    dataset_for_active = dataset.clone(traintrans_02)
+    # dataset_for_active = dataset.clone(traintrans_02)
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
@@ -185,7 +185,7 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        active_indices = active_net.distance_and_varratio(dataset_for_active,
+        active_indices = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
                                                      el_for_active, n=5)
 
