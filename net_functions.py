@@ -149,11 +149,11 @@ class NetTrainer():
 
             normalized_entropy = (normalized_entropy / torch.max(normalized_entropy, -1)[0])
 
-            a_term = (distance_weight * (mindist / normalizing_factor)) + (normalized_entropy * entropy_weight)
-            b_term = (distance_weight * (mindist / normalizing_factor)) + ((normalized_confidence[0].to("cuda:0") * varratio_weight))
-            mindist_confidence = torch.max(a_term, b_term)
+            # a_term = (distance_weight * (mindist / normalizing_factor)) + (normalized_entropy * entropy_weight)
+            # b_term = (distance_weight * (mindist / normalizing_factor)) + ((normalized_confidence[0].to("cuda:0") * varratio_weight))
+            # mindist_confidence = torch.max(a_term, b_term)
 
-            # mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_entropy * entropy_weight) + ((normalized_confidence[0].to("cuda:0") * varratio_weight)) # devo calcolare la confidenza ancora
+            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (normalized_entropy * entropy_weight) + ((normalized_confidence[0].to("cuda:0") * varratio_weight)) # devo calcolare la confidenza ancora
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
