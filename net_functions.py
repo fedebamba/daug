@@ -79,8 +79,8 @@ class NetTrainer():
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5):
         distance_weight = 1
-        varratio_weight = 1
-        entropy_weight = 1
+        varratio_weight = .5
+        entropy_weight = .5
 
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
