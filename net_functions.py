@@ -163,7 +163,7 @@ class NetTrainer():
             for i in range(howmany):
                 #  maxx = torch.max(mindist, -1)[1]
                 maxx = torch.max(mindist_confidence, -1)[1]
-                print("Max: {0:.3f} = ({1:.3f} * {3}) + ({2:.3f} * {4})".format(mindist_confidence[maxx], mindist[maxx]/normalizing_factor, normalized_confidence[0][maxx], distance_weight, varratio_weight))
+                print("Max: {0:.3f} = ({1:.3f} * {3}) + ({2:.3f} * {4}) + (({5:.3f} * {6}))".format(mindist_confidence[maxx], mindist[maxx]/normalizing_factor, normalized_confidence[0][maxx], distance_weight, varratio_weight, normalized_entropy, entropy_weight))
 
                 if erlist_indexes[maxx].item() in new_N:
                     print("Error: Duplicate")
