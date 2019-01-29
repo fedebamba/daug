@@ -79,8 +79,8 @@ class NetTrainer():
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1):
         varratio_weight = .5
-        entropy_weight = .2 * iter
-        distance_weight = varratio_weight + entropy_weight
+        entropy_weight = .5
+        distance_weight = 1
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
 

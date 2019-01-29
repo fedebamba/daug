@@ -20,7 +20,7 @@ import utils
 
 # PARAMETER PART................
 
-esname = "3_exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
+esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 just100 = True
 
 learning_rate = 0.005
@@ -32,14 +32,14 @@ epochs_second_step = 100
 
 train_batch_size = 32
 
-total_train_data = 27500
+total_train_data = 50000
 train_val_ratio = .9
 train_set_percentage = 5
 
 first_time_multiplier = 1
 until_slice_number = 8
 
-train_set_length = int(total_train_data-2000)  # total length of training set data
+train_set_length = int(total_train_data-10000)  # total length of training set data
 tslp = int((train_set_length * train_set_percentage) / 100)
 
 
@@ -51,18 +51,18 @@ traintrans_01 = trans.Compose([
         trans.ToTensor()
     ])
 traintrans_02 = trans.Compose([
-    # trans.RandomRotation(5),
-    # trans.RandomCrop(26),
+    trans.RandomRotation(5),
+    trans.RandomCrop(26),
     trans.Resize((32, 32)),
-    # utils.Gauss(0, 0.05),
+    utils.Gauss(0, 0.05),
     trans.ToTensor()
 ])
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1)
-
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=1)
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform)  # 10000
+
 
         self.validation_indices = self._train_val_set._val_indices
 
@@ -174,7 +174,7 @@ def a_single_experiment(esname, esnumber):
 
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
-    dataset_for_active = dataset.clone(traintrans_02)
+    # dataset_for_active = dataset.clone(traintrans_02)
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
@@ -185,12 +185,12 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        active_indices = active_net.distance_and_entropy  (dataset_for_active,
+        active_indices = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=1)
+                                                     el_for_active, n=5, iter=i)
 
 
-        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False )
+        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
         if len(active_indices) < tslp :
             active_indices.extend([x for x in normal_indices if x not in active_indices and x not in el_for_active and len(active_indices) < tslp])
 
