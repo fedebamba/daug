@@ -82,7 +82,7 @@ class NetTrainer():
         entropy_weight = .2 * iter
         distance_weight = varratio_weight + entropy_weight
 
-        print("Choosing els... {0}".format(" " if iter != 1 else "iter: {0}".format(iter)))
+        print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
 
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
@@ -163,7 +163,7 @@ class NetTrainer():
             for i in range(howmany):
                 #  maxx = torch.max(mindist, -1)[1]
                 maxx = torch.max(mindist_confidence, -1)[1]
-                print("Max: {0:.3f} = ({1:.3f} * {3}) + ({2:.3f} * {4}) + (({5:.3f} * {6}))".format(mindist_confidence[maxx], mindist[maxx]/normalizing_factor, normalized_confidence[0][maxx], distance_weight, varratio_weight, normalized_entropy, entropy_weight))
+                print("Max: {0:.3f} = ({1:.3f} * {3}) + ({2:.3f} * {4}) + (({5:.3f} * {6}))".format(mindist_confidence[maxx], mindist[maxx]/normalizing_factor, normalized_confidence[0][maxx], distance_weight, varratio_weight, normalized_entropy[maxx], entropy_weight))
 
                 if erlist_indexes[maxx].item() in new_N:
                     print("Error: Duplicate")
