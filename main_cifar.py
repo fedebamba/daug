@@ -187,10 +187,10 @@ def a_single_experiment(esname, esnumber):
     for i in range(first_time_multiplier, until_slice_number):
         active_indices = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=10)
+                                                     el_for_active, n=10, iter=i)
 
 
-        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False, iter=i)
+        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
         if len(active_indices) < tslp :
             active_indices.extend([x for x in normal_indices if x not in active_indices and x not in el_for_active and len(active_indices) < tslp])
 
