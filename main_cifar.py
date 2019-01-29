@@ -57,20 +57,22 @@ traintrans_02 = trans.Compose([
     utils.Gauss(0, 0.05),
     trans.ToTensor()
 ])
+test_transform = trans.Compose([
+    trans.ToTensor()
+])
+
+
+
 
 class CifarLoader():
-    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True):
+    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
         self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1)
-
-        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=transform)  # 10000
+        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform)  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
-
         self.train_indices = [x for x in self._train_val_set.indices if x not in self.validation_indices]
 
         print([len([x for x in self.train_indices if x in self._train_val_set.el_for_class[i] ]) for i in range(10)])
-
-
 
         if unbal:
                 self.already_selected_indices = numpy.random.choice(self.train_indices, size=tslp*first_time_multiplier, replace=False).tolist()
@@ -173,7 +175,7 @@ def a_single_experiment(esname, esnumber):
     net_trainer = new_network()
 
     # Dataset def
-    dataset = CifarLoader(transform=traintrans_01, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+    dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
     # dataset_for_active = dataset.clone(traintrans_02)
 
     el_for_active = [x for x in dataset.already_selected_indices]
