@@ -190,7 +190,7 @@ def a_single_experiment(esname, esnumber):
                                                      el_for_active, n=10)
 
 
-        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False )
+        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False, iter=i)
         if len(active_indices) < tslp :
             active_indices.extend([x for x in normal_indices if x not in active_indices and x not in el_for_active and len(active_indices) < tslp])
 

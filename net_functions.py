@@ -77,10 +77,12 @@ class NetTrainer():
 
             return [el[1] for el in sorlist[:howmany]]
 
-    def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5):
-        distance_weight = 1
+    def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1):
         varratio_weight = .5
-        entropy_weight = .5
+        entropy_weight = .2 * iter
+        distance_weight = varratio_weight + entropy_weight
+
+        print("Choosing els... {0}".format(" " if iter != 1 else "iter: {0}".format(iter)))
 
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
