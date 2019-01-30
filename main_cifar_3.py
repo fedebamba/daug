@@ -64,9 +64,8 @@ test_transform = trans.Compose([
 
 class CifarLoader():
     def __init__(self, transform=None, test_transform=None, first_time_multiplier=1, name=None, unbal=True):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=1)
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=1, valels=1000)
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform)  # 10000
-
 
         self.validation_indices = self._train_val_set._val_indices
 
