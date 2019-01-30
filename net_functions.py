@@ -485,6 +485,8 @@ class NetTrainer():
         correct = 0
 
         accuracy_per_class = [[0, 0] for x in range(10)]
+        confusion_matrix=[[0 for x in range(10)] for y in range(10)]
+
         if prior is not None:
             prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))])
             print("Prior : {0}".format(prior) )
@@ -510,6 +512,7 @@ class NetTrainer():
                     if e1.item() == e2.item():
                         accuracy_per_class[e1.item()][0] += 1
                     accuracy_per_class[e2.item()][1] += 1
+                    confusion_matrix[e2.item()][e1.item] += 1
 
                 if printiter % 5 == 0:
                     print('\rTest: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
@@ -523,7 +526,11 @@ class NetTrainer():
         if filename is not None:
             with open(filename + "_per_class.csv", "a") as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([accuracy_per_class[i][0] for i in range(len(accuracy_per_class))])
+                writer.writerow([accuracy_per_class[i][0] / 10 for i in range(len(accuracy_per_class))])
+            with open(filename + "_confusion_matrix.csv", "w+") as csvfile:
+                writer = csv.writer(csvfile)
+                for line in confusion_matrix:
+                    writer.writerow(line)
 
         for el in range(len(accuracy_per_class)):
             print("CLASS: {0} - Acc: {1:.3f} ({2}/{3})".format(el,
