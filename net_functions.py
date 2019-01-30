@@ -488,7 +488,7 @@ class NetTrainer():
         confusion_matrix=[[0 for x in range(10)] for y in range(10)]
 
         if prior is not None:
-            prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))])
+            prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))]).to("cuda:0")
             print("Prior : {0}".format(prior) )
 
         total = 0
@@ -503,7 +503,7 @@ class NetTrainer():
                 test_loss += loss.item()
 
                 if prior is not None:
-                    outputs = torch.nn.Softmax(outputs) / prior
+                    outputs = torch.nn.Softmax()(outputs) / prior
                 _, predicted = outputs.max(1)
                 total += targets.size(0)
                 correct += predicted.eq(targets).sum().item()
