@@ -477,13 +477,17 @@ class NetTrainer():
         print("\r{0:<70} {1} ".format(
             "\t\tLoss: {0:.3f} | Acc: {1:.3f} ({2}/{3}) ".format(train_loss / (b_i + 1), 100. * correct / total,
                                                                 correct, total), elementsperclass))
+        return elementsperclass
 
-    def test(self, epoch, _test_loader, filename='res'):
+    def test(self, epoch, _test_loader, filename='res', prior=None):
         self.net.eval()
         test_loss = 0
         correct = 0
 
         accuracy_per_class = [[0, 0] for x in range(10)]
+        if prior is not None:
+            prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))])
+            print("Prior : {0}".format(prior) )
 
         total = 0
         printiter = 0
@@ -495,6 +499,9 @@ class NetTrainer():
                 loss = self.criterion(outputs, targets)
 
                 test_loss += loss.item()
+
+                if prior is not None:
+                    outputs = torch.nn.Softmax(outputs) / prior
                 _, predicted = outputs.max(1)
                 total += targets.size(0)
                 correct += predicted.eq(targets).sum().item()
@@ -529,7 +536,7 @@ class NetTrainer():
         return NetTrainer(net=copy.deepcopy(self.net), optimizer=self.optimizer, criterion=self.criterion,
                           starting_max_acc=self.max_val_acc)
 
-    def validate(self, epoch, _validation_loader):
+    def validate(self, epoch, _validation_loader, prior=None):
         self.net.eval()
         validation_loss = 0
         correct = 0
@@ -538,6 +545,9 @@ class NetTrainer():
         b_i = 0
 
         elementsperclass = [0] * 10
+        if prior is not None:
+            prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))])
+            print("Prior : {0}".format(prior) )
 
         with torch.no_grad():
             for batch_index, (inputs, targets, index) in enumerate(_validation_loader):
@@ -546,6 +556,9 @@ class NetTrainer():
                 loss = self.criterion(outputs, targets)
 
                 validation_loss += loss.item()
+
+                if prior is not None:
+                    outputs = torch.nn.Softmax(outputs) / prior
                 _, predicted = outputs.max(1)
                 total += targets.size(0)
                 correct += predicted.eq(targets).sum().item()

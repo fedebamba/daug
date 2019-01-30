@@ -227,10 +227,11 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
 
     for i in range(num_of_epochs):
         print("\n\t  TRAIN:  {0} - lr: {1:.5f}, chances: {2}".format(i, actual_lr, max_number_of_epochs_before_changing_lr - num_of_no_improvement) )
+        elementsperclass = []
         if indices is None:
-            network.train(i, dataset.train())
+            elementsperclass = network.train(i, dataset.train())
         else:
-            network.train(i, dataset.select_for_train(indices))
+            elementsperclass = network.train(i, dataset.select_for_train(indices))
         print("\t  VALIDATION:   " + str(i))
         isbest, acc = network.validate(i, dataset.validate())
         # print("Accuracy so far: {0:.2f}".format(acc))
