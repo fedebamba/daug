@@ -189,7 +189,7 @@ def a_single_experiment(esname, esnumber):
     for i in range(first_time_multiplier, until_slice_number):
         active_indices = active_net.distance_and_entropy(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=1)
+                                                     el_for_active, n=5)
 
 
         normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
