@@ -187,7 +187,7 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        active_indices = active_net.distance_and_entropy(dataset,
+        active_indices = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
                                                      el_for_active, n=5)
 
@@ -225,6 +225,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
     actual_lr = learning_rate
 
     elementsperclass = []
+    targetprior = [1 if x in dataset._test_set.full_classes else .1 for x in range(10)]
     for i in range(num_of_epochs):
         print("\n\t  TRAIN:  {0} - lr: {1:.5f}, chances: {2}".format(i, actual_lr, max_number_of_epochs_before_changing_lr - num_of_no_improvement) )
         if indices is None:
@@ -232,7 +233,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
         else:
             elementsperclass = network.train(i, dataset.select_for_train(indices))
         print("\t  VALIDATION:   " + str(i))
-        isbest, acc = network.validate(i, dataset.validate(), prior=None) # prior=elementsperclass)
+        isbest, acc = network.validate(i, dataset.validate(), prior=elementsperclass, targetprior=targetprior)
         # print("Accuracy so far: {0:.2f}".format(acc))
         if isbest:
             best_network = network.clone()
@@ -251,7 +252,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
                     print("LR After: " + str(param_group['lr']))
 
     print("\n\t  TEST:")
-    best_acc = network.test(0, dataset.test(), name, prior=None) # prior=elementsperclass)
+    best_acc = network.test(0, dataset.test(), name, prior=elementsperclass, targetprior=targetprior)
     print("Test accuracy: {0:.2f}".format(best_acc))
 
     return best_network, best_acc
