@@ -225,7 +225,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
     actual_lr = learning_rate
 
     elementsperclass = []
-    targetprior = [1 if x in dataset._test_set.full_classes else .1 for x in range(10)]
+    targetprior = torch.Tensor([1 if x in dataset._test_set.full_classes else .1 for x in range(10)]).to("cuda:0")
     for i in range(num_of_epochs):
         print("\n\t  TRAIN:  {0} - lr: {1:.5f}, chances: {2}".format(i, actual_lr, max_number_of_epochs_before_changing_lr - num_of_no_improvement) )
         if indices is None:
