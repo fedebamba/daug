@@ -90,6 +90,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                 if i not in full_classes:
                     el_for_class[i] = el_for_class[i][:int(len(el_for_class[i]) * percentage)]
             print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
+            self.indices = [x for el in el_for_class for x in el]
 
     def clone(self, t):
         other = UnbalancedCIFAR10(root=self.root, train=self.train, transform=t, target_transform=self.target_transform, download=False)
