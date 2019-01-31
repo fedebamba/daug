@@ -181,7 +181,7 @@ class NetTrainer():
 
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
-        distance_weight = 1
+        distance_weight = 1e-6
         varratio_weight = 1
 
         self.net.eval()
@@ -512,7 +512,7 @@ class NetTrainer():
                     if e1.item() == e2.item():
                         accuracy_per_class[e1.item()][0] += 1
                     accuracy_per_class[e2.item()][1] += 1
-                    confusion_matrix[e2.item()][e1.item] += 1
+                    confusion_matrix[e2.item()][e1.item()] += 1
 
                 if printiter % 5 == 0:
                     print('\rTest: Loss: %.3f | Acc: %.3f%% (%d/%d) ' % (
