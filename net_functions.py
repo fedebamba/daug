@@ -78,8 +78,8 @@ class NetTrainer():
             return [el[1] for el in sorlist[:howmany]]
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1):
-        varratio_weight = .5
-        entropy_weight = .5
+        varratio_weight = 1
+        entropy_weight = 0
         distance_weight = 1
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
@@ -181,7 +181,7 @@ class NetTrainer():
 
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
-        distance_weight = 1e-6
+        distance_weight = 1
         varratio_weight = 1
 
         self.net.eval()
@@ -479,7 +479,7 @@ class NetTrainer():
                                                                 correct, total), elementsperclass))
         return elementsperclass
 
-    def test(self, epoch, _test_loader, filename='res', prior=None):
+    def test(self, epoch, _test_loader, filename='res', prior=None, targetprior=None):
         self.net.eval()
         test_loss = 0
         correct = 0
@@ -489,7 +489,11 @@ class NetTrainer():
 
         if prior is not None:
             prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))]).to("cuda:0")
+            if targetprior is not None:
+                prior /= targetprior
             print("Prior : {0}".format(prior) )
+
+
 
         total = 0
         printiter = 0
@@ -543,7 +547,7 @@ class NetTrainer():
         return NetTrainer(net=copy.deepcopy(self.net), optimizer=self.optimizer, criterion=self.criterion,
                           starting_max_acc=self.max_val_acc)
 
-    def validate(self, epoch, _validation_loader, prior=None):
+    def validate(self, epoch, _validation_loader, prior=None, targetprior=None):
         self.net.eval()
         validation_loss = 0
         correct = 0
@@ -554,8 +558,9 @@ class NetTrainer():
         elementsperclass = [0] * 10
         if prior is not None:
             prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))]).to("cuda:0")
+            if targetprior is not None:
+                prior /= targetprior
             print("Prior : {0}".format(prior) )
-
         with torch.no_grad():
             for batch_index, (inputs, targets, index) in enumerate(_validation_loader):
                 inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")

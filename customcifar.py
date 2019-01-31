@@ -29,7 +29,7 @@ class CustomCIFAR10(torchvision.datasets.CIFAR10):
 
 
 class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
-    def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None):
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False):
         super().__init__(root=root,
                          train=train,
                          transform=transform,
@@ -40,9 +40,11 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                 self._val_indices = provided_indices[1]
                 self.indices = provided_indices[0]
                 self.el_for_class = None
-                # self.train_data = self.train_data[self.indices]
+
             else:
-                full_classes = numpy.random.choice([x for x in range(10)], size=num_full_classes,replace=False)
+                if full_classes is None:
+                    full_classes = numpy.random.choice([x for x in range(10)], size=num_full_classes,replace=False)
+                self.full_classes = full_classes
                 el_for_class = [[] for x in range(10)]
                 data_loader = tud.DataLoader(self, batch_size=100, shuffle=False, num_workers=2,
                                              sampler=CustomSampler([x for x in range(len(self.train_data))]))
@@ -57,7 +59,11 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
                 print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
 
-                self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, valels, False)]
+                if type(valels) is int:
+                    self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, valels, False)]
+                elif type(valels) is float:
+                    self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, int(len(el) * valels), False)]
+
                 self.indices = [x for el in el_for_class for x in el]
                 self.el_for_class = el_for_class
 
@@ -67,8 +73,23 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                         writer = csv.writer(csvfile)
                         writer.writerow(["100 %" if x in full_classes else "{0} %".format(int(percentage * 100)) for x in range(10)])
 
-
             print('Train data ' + str(len(self.train_data)))
+        elif unbal_test:
+            print("Creating unbalanced test set......")
+            self.full_classes = full_classes
+
+            el_for_class = [[] for x in range(10)]
+            data_loader = tud.DataLoader(self, batch_size=100, shuffle=False, num_workers=2,
+                                         sampler=CustomSampler([x for x in range(len(self.test_data))]))
+
+            for batch_index, (input, target, i) in enumerate(data_loader):
+                for x in range(len(input)):
+                    el_for_class[target[x].item()].append(i[x].item())
+
+            for i in range(len(el_for_class)):
+                if i not in full_classes:
+                    el_for_class[i] = el_for_class[i][:int(len(el_for_class[i]) * percentage)]
+            print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
 
     def clone(self, t):
         other = UnbalancedCIFAR10(root=self.root, train=self.train, transform=t, target_transform=self.target_transform, download=False)
