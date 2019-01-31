@@ -232,7 +232,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
         else:
             elementsperclass = network.train(i, dataset.select_for_train(indices))
         print("\t  VALIDATION:   " + str(i))
-        isbest, acc = network.validate(i, dataset.validate(), prior=elementsperclass)
+        isbest, acc = network.validate(i, dataset.validate(), prior=None) # prior=elementsperclass)
         # print("Accuracy so far: {0:.2f}".format(acc))
         if isbest:
             best_network = network.clone()
@@ -251,7 +251,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
                     print("LR After: " + str(param_group['lr']))
 
     print("\n\t  TEST:")
-    best_acc = network.test(0, dataset.test(), name, prior=elementsperclass)
+    best_acc = network.test(0, dataset.test(), name, prior=None) # prior=elementsperclass)
     print("Test accuracy: {0:.2f}".format(best_acc))
 
     return best_network, best_acc
