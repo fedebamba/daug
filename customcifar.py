@@ -35,6 +35,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                          transform=transform,
                          target_transform=target_transform,
                          download=download)
+        self.indices=None
         if train:
             if provided_indices is not None:
                 self._val_indices = provided_indices[1]
