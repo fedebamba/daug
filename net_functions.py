@@ -104,7 +104,6 @@ class NetTrainer():
                     for i in input[1]:
                         density_estimation[i.item()] += 1
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
-                    print(input[1])
                     o = torch.cat((o, self.net(input[0])[1].reshape(len(input[0]), 512, 1)), 2)
                 N = torch.cat((N, o), 0)
                 print("\r N: {0} ".format(N.size()), end="")
@@ -128,9 +127,13 @@ class NetTrainer():
                     predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
                     ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
 
-                varratio = (1 - (torch.Tensor(acquisition_functions.confidence(predictions.transpose(0,1))).cpu() / n))
-                print(acquisition_functions.confidence(predictions.transpose(0,1), details=True))
+                conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
 
+                for el in conf[0]:
+                    for e in range(len(el)):
+                        density_estimation[e] += el[e]
+                print("Estimated Density: " + str(density_estimation))
+                varratio = (1 - (torch.Tensor(conf[1]).cpu() / n))
                 normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
 
