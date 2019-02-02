@@ -39,7 +39,7 @@ train_set_percentage = 5
 first_time_multiplier = 1
 until_slice_number = 8
 
-train_set_length = int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
+train_set_length = int(total_train_data-2000) # int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
 tslp = int((train_set_length * train_set_percentage) / 100)
 
 
@@ -66,8 +66,8 @@ test_transform = trans.Compose([
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1, valels=.1)
-        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=True)  # 10000
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1, valels=int(200))
+        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=False)  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
         self.train_indices = [x for x in self._train_val_set.indices if x not in self.validation_indices]
@@ -225,7 +225,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
     actual_lr = learning_rate
 
     elementsperclass = []
-    targetprior = torch.Tensor([1 if x in dataset._test_set.full_classes else .1 for x in range(10)]).to("cuda:0")
+    targetprior = torch.Tensor([1] * 10).to("cuda:0")   # torch.Tensor([1 if x in dataset._test_set.full_classes else .1 for x in range(10)]).to("cuda:0")
     for i in range(num_of_epochs):
         print("\n\t  TRAIN:  {0} - lr: {1:.5f}, chances: {2}".format(i, actual_lr, max_number_of_epochs_before_changing_lr - num_of_no_improvement) )
         if indices is None:
