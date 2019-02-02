@@ -130,8 +130,8 @@ class NetTrainer():
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
 
                 for el in conf[0]:
-                    for e in range(len(el)/n)
-                        density_estimation[e] += (el[e] )
+                    for e in range(len(el)):
+                        density_estimation[e] += (el[e] /n )
                 print("Estimated Density: " + str(density_estimation))
                 varratio = (1 - (torch.Tensor(conf[1]).cpu() / n))
                 normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
