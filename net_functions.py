@@ -87,7 +87,7 @@ class NetTrainer():
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
         S = torch.Tensor().to("cuda:0")  # unlabelled
-        density_estimation = [0] + 10
+        density_estimation = [0] * 10
         normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
 
         randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
