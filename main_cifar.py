@@ -117,7 +117,11 @@ class CifarLoader():
         return tud.DataLoader(self._train_val_set, batch_size=100, shuffle=False, num_workers=2,
                                     sampler=customcifar.CustomRandomSampler(self.validation_indices))
     def test(self):
-        return  torch.utils.data.DataLoader(self._test_set, batch_size=100, shuffle=False, num_workers=2, sampler=customcifar.CustomRandomSampler(self._test_set.indices))
+        if self._test_set.indices is not None:
+            return torch.utils.data.DataLoader(self._test_set, batch_size=100, shuffle=False, num_workers=2, sampler=customcifar.CustomRandomSampler(self._test_set.indices))
+        else:
+            return torch.utils.data.DataLoader(self._test_set, batch_size=100, shuffle=False, num_workers=2)
+
 
     def select_for_train(self, indices):
         self.already_selected_indices.extend(indices)
