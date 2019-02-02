@@ -101,6 +101,7 @@ class NetTrainer():
                 o = torch.Tensor().to("cuda:0")
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
+                    print(input[1])
                     o = torch.cat((o, self.net(input[0])[1].reshape(len(input[0]), 512, 1)), 2)
                 N = torch.cat((N, o), 0)
                 print("\r N: {0} ".format(N.size()), end="")
