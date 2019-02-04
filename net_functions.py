@@ -183,8 +183,7 @@ class NetTrainer():
                 newdists = torch.sqrt(newdists)
                 mindist = torch.min(mindist, newdists)
                 mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0"))
-            return new_N
-
+            return new_N, [x / sum(density_estimation) for x in density_estimation]
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
         distance_weight = 1
@@ -565,8 +564,8 @@ class NetTrainer():
         if prior is not None:
             prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))]).to("cuda:0")
             if targetprior is not None:
+                print("Prior : {0}".format(["{0:.2f}  ({1:.2f} / {2:.2f})".format(prior[i] / targetprior[i], prior[i], targetprior[i]) for i in range(len(prior))]))
                 prior /= targetprior
-            print("Prior : {0}".format(prior) )
         with torch.no_grad():
             for batch_index, (inputs, targets, index) in enumerate(_validation_loader):
                 inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
