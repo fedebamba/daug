@@ -78,8 +78,8 @@ class NetTrainer():
             return [el[1] for el in sorlist[:howmany]]
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1):
-        varratio_weight = 0
-        entropy_weight = 1
+        varratio_weight = 1
+        entropy_weight = 0
         distance_weight = 1
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
