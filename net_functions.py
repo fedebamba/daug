@@ -81,6 +81,7 @@ class NetTrainer():
         varratio_weight = 1
         entropy_weight = 0
         distance_weight = 1
+        hard=True
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
 
@@ -129,9 +130,16 @@ class NetTrainer():
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
 
-                for el in conf[0]:
-                    for e in range(len(el)):
-                        density_estimation[e] += (el[e] /n )
+                if hard:
+                    for el in conf[0]:
+                        for e in range(len(el)):
+                            density_estimation[e] += (el[e] /n )
+                else:
+                    mostprobableel = torch.max(torch.Tensor(conf[0]), 1)[1]
+                    print(len(mostprobableel))
+                    for x in range(len(mostprobableel)):
+                        density_estimation[mostprobableel[x]] += 1
+
                 print("Estimated Density: " + str(density_estimation))
                 varratio = (1 - (torch.Tensor(conf[1]).cpu() / n))
                 normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
