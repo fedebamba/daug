@@ -191,7 +191,7 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        active_indices = active_net.distance_and_varratio(dataset,
+        active_indices, density_estimator = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
                                                      el_for_active, n=5)
 
@@ -208,7 +208,7 @@ def a_single_experiment(esname, esnumber):
         print("NORMAL:")
         best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,
                                                         dataset=dataset, indices=el_for_normal,
-                                                        name="res/results_{0}_{1}_nor".format(esname, esnumber))
+                                                        name="res/results_{0}_{1}_nor".format(esname, esnumber), test_distro=density_estimator)
         print("ACTIVE:")
         best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber))
         print("Iter: {0} | Active: {1:.2f}  -  Normal: {2:.2f}".format(i, best_act_acc, best_nor_acc))
@@ -221,7 +221,7 @@ def a_single_experiment(esname, esnumber):
             writer.writerow([i+1, best_act_acc, best_nor_acc, best_act_acc-best_nor_acc])
 
 
-def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
+def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, test_distro=None):
     network = new_network()
     best_network = network.clone()
     mnumber_of_lr_dim = 0
@@ -229,7 +229,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None):
     actual_lr = learning_rate
 
     elementsperclass = []
-    targetprior = torch.Tensor([1] * 10).to("cuda:0")   # torch.Tensor([1 if x in dataset._test_set.full_classes else .1 for x in range(10)]).to("cuda:0")
+    targetprior = torch.Tensor([1] * 10).to("cuda:0") if test_distro is None else test_distro   # torch.Tensor([1 if x in dataset._test_set.full_classes else .1 for x in range(10)]).to("cuda:0")
     for i in range(num_of_epochs):
         print("\n\t  TRAIN:  {0} - lr: {1:.5f}, chances: {2}".format(i, actual_lr, max_number_of_epochs_before_changing_lr - num_of_no_improvement) )
         if indices is None:
