@@ -205,10 +205,10 @@ def a_single_experiment(esname, esnumber):
 
         write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
 
-        de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
+        #de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
-        # density_estimator = [1 if theclass in dataset._train_val_set.full_classes else .1 for theclass in range(10)]
-        # de_for_normal = density_estimator
+        density_estimator = [1] * 10 # [1 if theclass in dataset._train_val_set.full_classes else .1 for theclass in range(10)]
+        de_for_normal = density_estimator
         print(density_estimator)
 
 
