@@ -66,8 +66,8 @@ test_transform = trans.Compose([
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1, valels=int(200))
-        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=False)  # 10000
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=.1, valels=.1)
+        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=True)  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
         self.train_indices = [x for x in self._train_val_set.indices if x not in self.validation_indices]
@@ -205,7 +205,12 @@ def a_single_experiment(esname, esnumber):
 
         write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
 
-        de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
+        # de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
+
+        density_estimator = [1 if theclass in dataset._train_val_set.full_classes else .1 for theclass in range(10)]
+        de_for_normal = density_estimator
+        print(density_estimator)
+
 
         print("NORMAL:")
         best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,

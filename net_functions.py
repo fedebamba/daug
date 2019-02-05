@@ -17,9 +17,6 @@ import matplotlib.pyplot as plt
 
 
 
-
-
-
 class NetTrainer():
     def __init__(self, net, criterion, optimizer, starting_max_acc=0):
         self.net = net
@@ -53,10 +50,6 @@ class NetTrainer():
             sorlist = sorted(list_of_errors, key=lambda xp: xp[0], reverse=True)
 
             return [el[1] for el in sorlist[:howmany]]
-
-
-
-
 
     def evaluate_density(self, ds, indices, train_indices, n=5, hard=False):
         self.net.eval()
@@ -127,8 +120,8 @@ class NetTrainer():
             return [el[1] for el in sorlist[:howmany]]
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1):
-        varratio_weight = 1
-        entropy_weight = 0
+        varratio_weight = 0
+        entropy_weight = 1
         distance_weight = 1
         hard=True
 
