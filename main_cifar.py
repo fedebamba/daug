@@ -212,7 +212,7 @@ def a_single_experiment(esname, esnumber):
                                                         dataset=dataset, indices=el_for_normal,
                                                         name="res/results_{0}_{1}_nor".format(esname, esnumber), test_distro=de_for_normal)
         print("ACTIVE:")
-        
+
         best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
         print("Iter: {0} | Active: {1:.2f}  -  Normal: {2:.2f}".format(i, best_act_acc, best_nor_acc))
 
