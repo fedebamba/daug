@@ -205,12 +205,15 @@ def a_single_experiment(esname, esnumber):
 
         write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
 
+        de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
+
         print("NORMAL:")
         best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,
                                                         dataset=dataset, indices=el_for_normal,
-                                                        name="res/results_{0}_{1}_nor".format(esname, esnumber), test_distro=density_estimator)
+                                                        name="res/results_{0}_{1}_nor".format(esname, esnumber), test_distro=de_for_normal)
         print("ACTIVE:")
-        best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber))
+        
+        best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
         print("Iter: {0} | Active: {1:.2f}  -  Normal: {2:.2f}".format(i, best_act_acc, best_nor_acc))
 
         active_net = best_act_net

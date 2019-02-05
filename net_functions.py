@@ -16,6 +16,10 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 
+
+
+
+
 class NetTrainer():
     def __init__(self, net, criterion, optimizer, starting_max_acc=0):
         self.net = net
@@ -49,6 +53,51 @@ class NetTrainer():
             sorlist = sorted(list_of_errors, key=lambda xp: xp[0], reverse=True)
 
             return [el[1] for el in sorlist[:howmany]]
+
+
+
+
+
+    def evaluate_density(self, ds, indices, train_indices, n=5, hard=False):
+        self.net.eval()
+        density_estimation = [0] * 10
+
+        randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
+
+        trainloaders = [tud.DataLoader(ds._train_val_set, batch_size=500, shuffle=False, num_workers=4,
+                                       sampler=customcifar.CustomRandomSampler(train_indices)) for i in range(n)]
+        dataloaders = [tud.DataLoader(ds._train_val_set, batch_size=500, shuffle=False, num_workers=4,
+                                      sampler=customcifar.CustomSampler(randomized_list)) for i in range(n)]
+
+        with torch.no_grad():
+            # these are the labelled elements
+            for batch_index, element in enumerate(zip(*trainloaders)):  # labelled samples
+                els = [x for x in element]
+                for input in els:
+                    for i in input[1]:
+                        density_estimation[i.item()] += 1
+            # these aren't
+            for batch_index, element in enumerate(zip(*dataloaders)):  # unlabelled samples
+                els = [x for x in element]
+                predictions = torch.Tensor().long()
+
+                for input in els:
+                    input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
+                    output = self.net(input[0])
+                    predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
+                conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
+
+                if hard:
+                    for el in conf[0]:
+                        for e in range(len(el)):
+                            density_estimation[e] += (el[e] /n )
+                else:
+                    mostprobableel = torch.max(torch.Tensor(conf[0]), 1)[1]
+                    print(len(mostprobableel))
+                    for x in range(len(mostprobableel)):
+                        density_estimation[mostprobableel[x]] += 1
+        return density_estimation
+
 
     def entropy(self, ds, indices, howmany):
         tots = len(indices)
