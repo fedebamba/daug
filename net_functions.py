@@ -190,7 +190,6 @@ class NetTrainer():
                 else:
                     ps = torch.mean(ps, 2).reshape(len(ps), 10)
                     normalized_entropy = torch.cat((normalized_entropy, acquisition_functions.entropy(ps)), 0)
-                    print(normalized_entropy.size())
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
 
                 S = torch.cat((S, o), 0)
@@ -224,8 +223,11 @@ class NetTrainer():
             mindist_confidence += normalized_entropy
 
             normalized_confidence *= varratio_weight
-            mindist_confidence += normalized_confidence[0].to("cuda:0")  # devo calcolare la confidenza ancora
 
+            print(mindist_confidence.size())
+            print(len(normalized_confidence))
+
+            mindist_confidence += (normalized_confidence[0].to("cuda:0"))  # devo calcolare la confidenza ancora
 
 
             erlist_indexes = normalized_confidence[1]

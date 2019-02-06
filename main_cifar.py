@@ -27,8 +27,8 @@ learning_rate = 0.005
 max_number_of_epochs_before_changing_lr = 5
 lr_factor = 3
 
-epochs_first_step = 50  # 50
-epochs_second_step = 5
+epochs_first_step = 100 # 50
+epochs_second_step = 100
 
 train_batch_size = 32
 
@@ -275,13 +275,6 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, 
 if len(sys.argv) > 1:
     print("Starting " + str(sys.argv[1]))
     esname = "3_" + str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
-
-if not just100:
-    for i in range(3):
-        a_single_experiment(esname + "_" + str(epochs_first_step), i)
-
-epochs_first_step = 5
-epochs_second_step = 5
 
 for i in range(3):
     a_single_experiment(esname + "_" + str(epochs_first_step), i)
