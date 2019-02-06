@@ -207,8 +207,9 @@ def a_single_experiment(esname, esnumber):
 
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
-        # density_estimator = [1] * 10
-        # de_for_normal = density_estimator
+        density_estimator = [1] * 10
+        de_for_normal = density_estimator
+        
         print(density_estimator)
 
 
