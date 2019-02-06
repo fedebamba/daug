@@ -123,7 +123,7 @@ class NetTrainer():
         varratio_weight = config["varratio_weight"] if config is not None and config["varratio_weight"] is not None else 0
         entropy_weight = config["entropy_weight"] if config is not None and config["entropy_weight"] is not None else 1
         distance_weight = config["distance_weight"] if config is not None and config["distance_weight"] is not None else 1
-        using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and config["using_ensemble_entropy"] is not None else False
+        using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and config["using_ensemble_entropy"] is not None else True
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
         self.net.eval()
