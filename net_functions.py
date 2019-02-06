@@ -222,7 +222,7 @@ class NetTrainer():
             normalized_entropy *= entropy_weight
             mindist_confidence += normalized_entropy
 
-            normalized_confidence *= varratio_weight
+            normalized_confidence[0] *= varratio_weight
 
             print(mindist_confidence.size())
             print(len(normalized_confidence))
