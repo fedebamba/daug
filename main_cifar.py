@@ -28,7 +28,7 @@ max_number_of_epochs_before_changing_lr = 5
 lr_factor = 3
 
 epochs_first_step = 50  # 50
-epochs_second_step = 100
+epochs_second_step = 5
 
 train_batch_size = 32
 
