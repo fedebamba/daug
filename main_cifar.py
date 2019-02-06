@@ -280,8 +280,8 @@ if not just100:
     for i in range(3):
         a_single_experiment(esname + "_" + str(epochs_first_step), i)
 
-epochs_first_step = 100
-epochs_second_step = 100
+epochs_first_step = 5
+epochs_second_step = 5
 
 for i in range(3):
     a_single_experiment(esname + "_" + str(epochs_first_step), i)
