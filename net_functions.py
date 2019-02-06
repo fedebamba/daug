@@ -131,6 +131,7 @@ class NetTrainer():
         S = torch.Tensor().to("cuda:0")  # unlabelled
         density_estimation = [0] * 10
         normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
+        normalized_entropy = torch.Tensor().to("cuda:0")
 
         randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
 
@@ -151,7 +152,6 @@ class NetTrainer():
                 print("\r N: {0} ".format(N.size()), end="")
             print("Estimated density: " + str(density_estimation))
 
-            normalized_entropy = torch.Tensor().to("cuda:0")
             for batch_index, element in enumerate(zip(*dataloaders)):  # unlabelled samples
                 normalized_confidence[1] = torch.cat((normalized_confidence[1], element[0][2]), 0)
 
@@ -184,7 +184,6 @@ class NetTrainer():
                     for x in range(len(mostprobableel)):
                         density_estimation[mostprobableel[x]] += 1
 
-                print("Estimated Density: " + str(density_estimation))
                 varratio = (1 - (torch.Tensor(conf[1]).cpu() / n))
                 if not using_ensemble_entropy:
                     normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
@@ -192,7 +191,6 @@ class NetTrainer():
                     ps = torch.mean(ps, 2).reshape(len(ps), 10)
                     normalized_entropy = torch.cat((normalized_entropy, acquisition_functions.entropy(ps)), 0)
                     print(normalized_entropy.size())
-
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
 
                 S = torch.cat((S, o), 0)
