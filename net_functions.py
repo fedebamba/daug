@@ -170,7 +170,7 @@ class NetTrainer():
                     if not using_ensemble_entropy:
                         ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
                     else:
-                        ps = torch.cat((ps, output[0]).reshape(len(output[0]), 10, 1), 2)
+                        ps = torch.cat((ps, output[0].reshape(len(output[0]), 10, 1)), 2)
                         print(ps.size())
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
