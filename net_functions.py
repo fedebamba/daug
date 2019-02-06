@@ -120,10 +120,10 @@ class NetTrainer():
             return [el[1] for el in sorlist[:howmany]]
 
     def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1, hard=False, config=None):
-        varratio_weight = config["varratio_weight"] if config is not None and config["varratio_weight"] is not None else 0
-        entropy_weight = config["entropy_weight"] if config is not None and config["entropy_weight"] is not None else 1
-        distance_weight = config["distance_weight"] if config is not None and config["distance_weight"] is not None else 1
-        using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and config["using_ensemble_entropy"] is not None else True
+        varratio_weight = config["varratio_weight"] if config is not None and "varratio_weight" in config else 0
+        entropy_weight = config["entropy_weight"] if config is not None and "entropy_weight" in config else 1
+        distance_weight = config["distance_weight"] if config is not None and "distance_weight" in config else 1
+        using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and "using_ensemble_entropy" in config else True
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
         self.net.eval()
