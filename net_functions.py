@@ -80,7 +80,7 @@ class NetTrainer():
                     predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
 
-                if hard:
+                if not hard:
                     for el in conf[0]:
                         for e in range(len(el)):
                             density_estimation[e] += (el[e] /n )
@@ -119,14 +119,13 @@ class NetTrainer():
 
             return [el[1] for el in sorlist[:howmany]]
 
-    def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1):
-        varratio_weight = 0
-        entropy_weight = 1
-        distance_weight = 1
-        hard=True
+    def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1, hard=False, config=None):
+        varratio_weight = config["varratio_weight"] if config is not None and config["varratio_weight"] is not None else 0
+        entropy_weight = config["entropy_weight"] if config is not None and config["entropy_weight"] is not None else 1
+        distance_weight = config["distance_weight"] if config is not None and config["distance_weight"] is not None else 1
+        using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and config["using_ensemble_entropy"] is not None else False
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
-
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
         S = torch.Tensor().to("cuda:0")  # unlabelled
@@ -168,11 +167,15 @@ class NetTrainer():
 
                     o = torch.cat((o, out), 2)
                     predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
-                    ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
+                    if not using_ensemble_entropy:
+                        ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
+                    else:
+                        ps = torch.cat((ps, output[0]).reshape(len(output[0]), 10, 1), 2)
+                        print(ps.size())
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
 
-                if hard:
+                if not hard:
                     for el in conf[0]:
                         for e in range(len(el)):
                             density_estimation[e] += (el[e] /n )
@@ -184,7 +187,11 @@ class NetTrainer():
 
                 print("Estimated Density: " + str(density_estimation))
                 varratio = (1 - (torch.Tensor(conf[1]).cpu() / n))
-                normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
+                if not using_ensemble_entropy:
+                    normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
+                else:
+                    normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
+
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
 
                 S = torch.cat((S, o), 0)

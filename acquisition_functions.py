@@ -9,7 +9,6 @@ def entropy(net_out):
     logsm = T.log(sm)
     return -T.sum(sm * logsm, 1)
 
-
 def avg_entropy(net_out):
     e = numpy.zeros(shape=len(net_out[0]))
     for el in net_out:
