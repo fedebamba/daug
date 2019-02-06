@@ -189,7 +189,8 @@ class NetTrainer():
                 if not using_ensemble_entropy:
                     normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 1)), 0)
                 else:
-                    normalized_entropy = torch.cat((normalized_entropy, torch.mean(ps, 2)), 0)
+                    ps = torch.mean(ps, 2).reshape(len(ps), 10)
+                    normalized_entropy = torch.cat((normalized_entropy, acquisition_functions.entropy(ps)), 0)
                     print(normalized_entropy.size())
 
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
