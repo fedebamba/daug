@@ -217,18 +217,7 @@ class NetTrainer():
             # b_term = (distance_weight * (mindist / normalizing_factor)) + ((normalized_confidence[0].to("cuda:0") * varratio_weight))
             # mindist_confidence = torch.max(a_term, b_term)
 
-            mindist_confidence = distance_weight*(mindist / normalizing_factor)
-
-            normalized_entropy *= entropy_weight
-            mindist_confidence += normalized_entropy
-
-            normalized_confidence[0] *= varratio_weight
-
-            print(mindist_confidence.size())
-            print(len(normalized_confidence))
-
-            mindist_confidence += (normalized_confidence[0].to("cuda:0"))  # devo calcolare la confidenza ancora
-
+            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy)
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
@@ -248,7 +237,7 @@ class NetTrainer():
                 newdists = torch.sum(newdists * newdists, -1)
                 newdists = torch.sqrt(newdists)
                 mindist = torch.min(mindist, newdists)
-                mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0"))
+                mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy)
             return new_N, [x / sum(density_estimation) for x in density_estimation]
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
