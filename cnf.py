@@ -47,5 +47,53 @@ stuff = {
         "prior_baseline": True,
         "balanced:": "uuu",
         "el_for_validation": .1
+    },
+
+    "uuu-estimation-entro+dist": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": True,
+        "prior_baseline": False,
+        "balanced:": "uuu",
+        "el_for_validation": .1
+    },
+
+    "uuu-estimation-max-of-both": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 1,
+            "using_max": True
+        },
+        "using_prior": True,
+        "prior_baseline": False,
+        "balanced:": "uuu",
+        "el_for_validation": .1
+    },
+
+    "uuu-none-entro+dist": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uuu",
+        "el_for_validation": .1
+    },
+
+    "uuu-none-max-of-both": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 1,
+            "using_max": True
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uuu",
+        "el_for_validation": .1
     }
 }
