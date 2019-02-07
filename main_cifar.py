@@ -20,6 +20,13 @@ import utils
 
 # PARAMETER PART................
 
+af_config= {
+    "using_ensemble_entropy": False,
+    "varratio_weight": 0,
+    "using_max": False
+}
+
+
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 just100 = True
 
@@ -193,7 +200,7 @@ def a_single_experiment(esname, esnumber):
     for i in range(first_time_multiplier, until_slice_number):
         active_indices, density_estimator = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=5, config={"using_ensemble_entropy": False, "varratio_weight": 0, "using_max": False})
+                                                     el_for_active, n=5, config=af_config)
 
         normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
         if len(active_indices) < tslp :
@@ -207,8 +214,8 @@ def a_single_experiment(esname, esnumber):
 
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
-        density_estimator = [1] * 10
-        de_for_normal = density_estimator
+        # density_estimator = [1] * 10
+        # de_for_normal = density_estimator
 
         print(density_estimator)
 
@@ -218,7 +225,6 @@ def a_single_experiment(esname, esnumber):
                                                         dataset=dataset, indices=el_for_normal,
                                                         name="res/results_{0}_{1}_nor".format(esname, esnumber), test_distro=de_for_normal)
         print("ACTIVE:")
-
         best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
         print("Iter: {0} | Active: {1:.2f}  -  Normal: {2:.2f}".format(i, best_act_acc, best_nor_acc))
 
