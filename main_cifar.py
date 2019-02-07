@@ -22,8 +22,8 @@ import utils
 
 af_config= {
     "using_ensemble_entropy": False,
-    "varratio_weight": 0,
-    "using_max": False
+    "varratio_weight": 1,
+    "using_max": True
 }
 
 
