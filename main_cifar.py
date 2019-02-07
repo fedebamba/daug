@@ -47,7 +47,9 @@ epochs_second_step = 100
 
 train_batch_size = 32
 
-total_train_data = 50000 if utils.checkconf(conf_file, "balanced", "bbb")[0] == "b" else 27500
+
+difficult_classes_percentage = 1 if utils.checkconf(conf_file, "balanced", "bbb")[1] == "b" else utils.checkconf(conf_file, "difficult_classes_percentage", .1)
+total_train_data = int(25000 * (1 + difficult_classes_percentage))
 train_val_ratio = .9
 train_set_percentage = utils.checkconf(conf_file, "train_set_percentage_at_each_iter", 5)
 
@@ -56,7 +58,7 @@ until_slice_number = 8
 
 
 train_set_length = int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
-if utils.checkconf(conf_file, "balanced", "bbb")[0] == "u" and utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
+if utils.checkconf(conf_file, "balanced", "bbb")[1] == "u" and utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
     train_set_length = int(total_train_data - (utils.checkconf(conf_file, "el_for_validation", 200)*10))
 el_for_validation = utils.checkconf(conf_file, "el_for_validation", 200)
 balanced_test_set = (utils.checkconf(conf_file, "balanced", "bbb")[2] == "b")
