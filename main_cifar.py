@@ -209,7 +209,7 @@ def a_single_experiment(esname, esnumber):
 
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
-    # dataset_for_active = dataset.clone(traintrans_02)
+
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
