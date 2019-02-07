@@ -10,6 +10,6 @@ stuff = {
         "using_prior": False,
         "prior_baseline": True,
         "balanced:": "bbb",
-        "el_for_validation": .1
+        "el_for_validation": 400
     }
 }
