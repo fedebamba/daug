@@ -630,7 +630,7 @@ class NetTrainer():
         if prior is not None:
             prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))]).to("cuda:0")
             if targetprior is not None:
-                print("Prior : {0}".format(["{0:.2f}  ({1:.2f} / {2:.2f})".format(prior[i] / targetprior[i], prior[i], targetprior[i]) for i in range(len(prior))]))
+                print("Prior : {0}".format(["{0:.2f}({1:.2f}/{2:.2f})".format(prior[i] / targetprior[i], prior[i], targetprior[i]) for i in range(len(prior))]))
                 prior /= targetprior
         with torch.no_grad():
             for batch_index, (inputs, targets, index) in enumerate(_validation_loader):

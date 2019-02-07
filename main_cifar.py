@@ -25,6 +25,7 @@ af_config= {
     "varratio_weight": 0,
     "using_max": False
 }
+using_prior = False
 prior_baseline = True
 
 
@@ -215,10 +216,12 @@ def a_single_experiment(esname, esnumber):
 
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
-        if prior_baseline:
+        if prior_baseline or not using_prior:
             density_estimator = [1] * 10
             de_for_normal = density_estimator
         print(density_estimator)
+
+
 
         print("NORMAL:")
         best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,
@@ -245,6 +248,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, 
 
     elementsperclass = []
     targetprior = torch.Tensor([1] * 10).to("cuda:0") if test_distro is None else torch.Tensor(test_distro).to("cuda:0")   # torch.Tensor([1 if x in dataset._test_set.full_classes else .1 for x in range(10)]).to("cuda:0")
+
     for i in range(num_of_epochs):
         print("\n\t  TRAIN:  {0} - lr: {1:.5f}, chances: {2}".format(i, actual_lr, max_number_of_epochs_before_changing_lr - num_of_no_improvement) )
         if indices is None:
@@ -252,7 +256,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, 
         else:
             elementsperclass = network.train(i, dataset.select_for_train(indices))
         print("\t  VALIDATION:   " + str(i))
-        isbest, acc = network.validate(i, dataset.validate(), prior=elementsperclass, targetprior=targetprior)
+        isbest, acc = network.validate(i, dataset.validate(), prior=elementsperclass if using_prior else None, targetprior=targetprior if using_prior else None)
         # print("Accuracy so far: {0:.2f}".format(acc))
         if isbest:
             best_network = network.clone()
@@ -271,7 +275,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, 
                     print("LR After: " + str(param_group['lr']))
 
     print("\n\t  TEST:")
-    best_acc = network.test(0, dataset.test(), name, prior=elementsperclass, targetprior=targetprior)
+    best_acc = network.test(0, dataset.test(), name, prior=elementsperclass if using_prior else None, targetprior=targetprior if using_prior else None)
     print("Test accuracy: {0:.2f}".format(best_acc))
 
     return best_network, best_acc
