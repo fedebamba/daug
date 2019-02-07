@@ -110,4 +110,69 @@ stuff = {
         "el_for_validation": .1,
         "daug": False
     },
+    "test-ensemble-entropy": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uuu",
+        "el_for_validation": .1,
+        "daug": False
+    },
+    "uub-ee-distance-daug": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uub",
+        "el_for_validation": 200,
+        "daug": True
+    },
+
+    "uub-ee-distance": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uub",
+        "el_for_validation": 200,
+        "daug": False
+    },
+
+    "uub-ee-daug": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "distance_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uub",
+        "el_for_validation": 200,
+        "daug": True
+    },
+
+    "uub-ee": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "distance_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uub",
+        "el_for_validation": 200,
+        "daug": False
+    },
 }

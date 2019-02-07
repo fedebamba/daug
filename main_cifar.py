@@ -46,6 +46,7 @@ af_conf = utils.checkconf(conf_file, "af_config", None)
 af_config= {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
     "varratio_weight": utils.checkconf(af_conf, "varratio_weight", 0) if af_conf is not None else 0,
+    "distance_weight": utils.checkconf(af_conf, "distance_weight", 1) if af_conf is not None else 1,
     "using_max": utils.checkconf(af_conf, "using_max", False) if af_conf is not None else False,
 }
 using_prior = utils.checkconf(conf_file, "using_prior", True)
@@ -85,9 +86,6 @@ balanced_test_set = (utils.checkconf(conf_file, "balanced", "bbb")[2] == "b")
 
 
 tslp = int((train_set_length * train_set_percentage) / 100)
-
-
-
 
 
 
