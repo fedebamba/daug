@@ -209,7 +209,7 @@ def a_single_experiment(esname, esnumber):
 
         density_estimator = [1] * 10
         de_for_normal = density_estimator
-        
+
         print(density_estimator)
 
 

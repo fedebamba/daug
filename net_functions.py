@@ -89,7 +89,7 @@ class NetTrainer():
                     print(len(mostprobableel))
                     for x in range(len(mostprobableel)):
                         density_estimation[mostprobableel[x]] += 1
-        return density_estimation
+        return [x / sum(density_estimation) for x in density_estimation]
 
 
     def entropy(self, ds, indices, howmany):
