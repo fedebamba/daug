@@ -25,6 +25,7 @@ af_config= {
     "varratio_weight": 1,
     "using_max": True
 }
+prior_baseline=True
 
 
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
@@ -214,11 +215,10 @@ def a_single_experiment(esname, esnumber):
 
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
-        # density_estimator = [1] * 10
-        # de_for_normal = density_estimator
-
+        if prior_baseline:
+            density_estimator = [1] * 10
+            de_for_normal = density_estimator
         print(density_estimator)
-
 
         print("NORMAL:")
         best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,
