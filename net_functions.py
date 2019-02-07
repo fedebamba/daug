@@ -124,6 +124,7 @@ class NetTrainer():
         entropy_weight = config["entropy_weight"] if config is not None and "entropy_weight" in config else 1
         distance_weight = config["distance_weight"] if config is not None and "distance_weight" in config else 1
         using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and "using_ensemble_entropy" in config else True
+        usingmax = config["using_max"] if config is not None and "using_max" in config else False
 
         print("Choosing els... {0}".format(" " if iter == 1 else "iter: {0}".format(iter)))
         self.net.eval()
@@ -213,11 +214,15 @@ class NetTrainer():
 
             normalized_entropy = (normalized_entropy / torch.max(normalized_entropy, -1)[0])
 
-            # a_term = (distance_weight * (mindist / normalizing_factor)) + (normalized_entropy * entropy_weight)
-            # b_term = (distance_weight * (mindist / normalizing_factor)) + ((normalized_confidence[0].to("cuda:0") * varratio_weight))
-            # mindist_confidence = torch.max(a_term, b_term)
+            normalized_confidence[0] = normalized_confidence[0].to("cuda:0")
+            # normalized_confidence[0] *= varratio_weight
+            # normalized_entropy += entropy_weight
 
-            mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy)
+
+            if usingmax:
+                mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + torch.max(normalized_confidence[0] * varratio_weight, normalized_entropy * entropy_weight, )
+            else:
+                mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy)
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
@@ -237,7 +242,13 @@ class NetTrainer():
                 newdists = torch.sum(newdists * newdists, -1)
                 newdists = torch.sqrt(newdists)
                 mindist = torch.min(mindist, newdists)
-                mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy)
+                if usingmax:
+                    mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + torch.max(
+                        normalized_confidence[0] * varratio_weight, normalized_entropy * entropy_weight, )
+                else:
+                    mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + (
+                                varratio_weight * normalized_confidence[0].to("cuda:0")) + (
+                                                     entropy_weight * normalized_entropy)
             return new_N, [x / sum(density_estimation) for x in density_estimation]
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):

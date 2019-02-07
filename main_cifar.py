@@ -193,7 +193,7 @@ def a_single_experiment(esname, esnumber):
     for i in range(first_time_multiplier, until_slice_number):
         active_indices, density_estimator = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=5, config={"using_ensemble_entropy": False})
+                                                     el_for_active, n=5, config={"using_ensemble_entropy": False, "varratio_weight": 1, "using_max": True})
 
         normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
         if len(active_indices) < tslp :
