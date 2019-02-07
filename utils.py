@@ -38,7 +38,14 @@ def gaussian_noise_pass(x):
     return Image.fromarray(i )
 
 
-
+def checkconf(config, name, default):
+    if config is None:
+        return default
+    else:
+        if name in config:
+            return config[name]
+        else:
+            return default
 
 
 

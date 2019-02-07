@@ -18,18 +18,24 @@ import utils
 
 
 
+
 # PARAMETER PART................
-
-af_config= {
-    "using_ensemble_entropy": False,
-    "varratio_weight": 1,
-    "using_max": True
-}
-using_prior = False
-prior_baseline = True
-
-
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
+from cnf import stuff
+conf_file = None
+if len(sys.argv) > 2:
+    conf_file = stuff[sys.argv[2]] if sys.argv[2] in stuff else None
+
+
+af_conf = utils.checkconf(conf_file, "af_config", None)
+af_config= {
+    "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
+    "varratio_weight": utils.checkconf(af_conf, "varratio_weight", 0) if af_conf is not None else 0,
+    "using_max": utils.checkconf(af_conf, "using_max", False) if af_conf is not None else False,
+}
+using_prior = utils.checkconf(conf_file, "using_prior", True)
+prior_baseline = utils.checkconf(conf_file, "prior_baseline", False)
+
 just100 = True
 
 learning_rate = 0.005
@@ -41,14 +47,23 @@ epochs_second_step = 100
 
 train_batch_size = 32
 
-total_train_data = 50000
+total_train_data = 50000 if utils.checkconf(conf_file, "balanced", "bbb")[0] == "b" else 27500
 train_val_ratio = .9
-train_set_percentage = 5
+train_set_percentage = utils.checkconf(conf_file, "train_set_percentage_at_each_iter", 5)
 
 first_time_multiplier = 1
 until_slice_number = 8
 
+
 train_set_length = int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
+if utils.checkconf(conf_file, "balanced", "bbb")[0] == "u" and utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
+    train_set_length = int(total_train_data - (utils.checkconf(conf_file, "el_for_validation", 200)*10))
+
+el_for_validation = utils.checkconf(conf_file, "el_for_validation", 200)
+print(type(el_for_validation) )
+if type(el_for_validation) == int:
+    el_for_validation *= 10
+
 tslp = int((train_set_length * train_set_percentage) / 100)
 
 
@@ -75,7 +90,7 @@ test_transform = trans.Compose([
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=1, valels=.1)
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=1, valels=el_for_validation)
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=False)  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
