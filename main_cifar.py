@@ -20,6 +20,21 @@ import utils
 
 
 # PARAMETER PART................
+traintrans_daug = trans.Compose([
+        trans.RandomRotation(5),
+        trans.RandomCrop(26),
+        trans.Resize((32, 32)),
+        utils.Gauss(0, 0.1),
+        trans.ToTensor()
+    ])
+traintrans_nodaug = trans.Compose([
+    trans.ToTensor()
+])
+test_transform = trans.Compose([
+    trans.ToTensor()
+])
+
+
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 from cnf import stuff
 conf_file = None
@@ -56,6 +71,11 @@ train_set_percentage = utils.checkconf(conf_file, "train_set_percentage_at_each_
 first_time_multiplier = 1
 until_slice_number = 8
 
+n = utils.checkconf(conf_file, "n", 5) if utils.checkconf(conf_file, "daug", True) else 1
+traintrans_01 = traintrans_daug if utils.checkconf(conf_file, "daug", True) else traintrans_nodaug
+print(traintrans_01)
+print(n)
+
 
 train_set_length = int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
 if utils.checkconf(conf_file, "balanced", "bbb")[1] == "u" and utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
@@ -67,23 +87,8 @@ balanced_test_set = (utils.checkconf(conf_file, "balanced", "bbb")[2] == "b")
 tslp = int((train_set_length * train_set_percentage) / 100)
 
 
-traintrans_01 = trans.Compose([
-        trans.RandomRotation(5),
-        trans.RandomCrop(26),
-        trans.Resize((32, 32)),
-        utils.Gauss(0, 0.1),
-        trans.ToTensor()
-    ])
-traintrans_02 = trans.Compose([
-    trans.RandomRotation(5),
-    trans.RandomCrop(26),
-    trans.Resize((32, 32)),
-    utils.Gauss(0, 0.1),
-    trans.ToTensor()
-])
-test_transform = trans.Compose([
-    trans.ToTensor()
-])
+
+
 
 
 
@@ -217,7 +222,7 @@ def a_single_experiment(esname, esnumber):
     for i in range(first_time_multiplier, until_slice_number):
         active_indices, density_estimator = active_net.distance_and_varratio(dataset,
                                                      [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=5, config=af_config)
+                                                     el_for_active, n=n, config=af_config)
 
         normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
         if len(active_indices) < tslp :

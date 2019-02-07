@@ -25,6 +25,7 @@ stuff = {
         "el_for_validation": .1
     },
 
+    #############################################################################################################
     "uuu-baseline-entro+dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -95,5 +96,18 @@ stuff = {
         "prior_baseline": False,
         "balanced:": "uuu",
         "el_for_validation": .1
-    }
+    },
+
+    "test-ensemble-entropy": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced:": "uuu",
+        "el_for_validation": .1,
+        "daug": False
+    },
 }
