@@ -25,7 +25,7 @@ af_config= {
     "varratio_weight": 0,
     "using_max": False
 }
-prior_baseline = False
+prior_baseline = True
 
 
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
