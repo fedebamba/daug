@@ -58,11 +58,9 @@ until_slice_number = 8
 train_set_length = int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
 if utils.checkconf(conf_file, "balanced", "bbb")[0] == "u" and utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
     train_set_length = int(total_train_data - (utils.checkconf(conf_file, "el_for_validation", 200)*10))
-
 el_for_validation = utils.checkconf(conf_file, "el_for_validation", 200)
-print(type(el_for_validation) )
-if type(el_for_validation) == int:
-    el_for_validation *= 10
+balanced_test_set = (utils.checkconf(conf_file, "balanced", "bbb")[2] == "b")
+
 
 tslp = int((train_set_length * train_set_percentage) / 100)
 
@@ -91,7 +89,7 @@ test_transform = trans.Compose([
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
         self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=1, valels=el_for_validation)
-        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=False)  # 10000
+        self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=(not balanced_test_set))  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
         self.train_indices = [x for x in self._train_val_set.indices if x not in self.validation_indices]
