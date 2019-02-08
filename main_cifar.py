@@ -234,7 +234,10 @@ def a_single_experiment(esname, esnumber):
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
         if prior_baseline or not using_prior:
-            density_estimator = [1] * 10
+            if utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
+                density_estimator = [1] * 10
+            else:
+                density_estimator = [1 if x in dataset._train_val_set.full_classes else difficult_classes_percentage for x in range(10)]
             de_for_normal = density_estimator
         print(density_estimator)
 
