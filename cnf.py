@@ -10,7 +10,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "bbb",
+        "balanced": "bbb",
         "el_for_validation": .1
     },
     #2
@@ -22,11 +22,10 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "bbb",
+        "balanced": "bbb",
         "el_for_validation": .1
     },
 
-    #############################################################################################################
     #3
     "uuu-baseline-entro+dist": {
         "af_config": {
@@ -36,7 +35,7 @@ stuff = {
         },
         "using_prior": True,
         "prior_baseline": True,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1
     },
     #4
@@ -48,9 +47,10 @@ stuff = {
         },
         "using_prior": True,
         "prior_baseline": True,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1
     },
+    #############################################################################################################
     # 5
     "uuu-estimation-entro+dist": {
         "af_config": {
@@ -60,7 +60,7 @@ stuff = {
         },
         "using_prior": True,
         "prior_baseline": False,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1
     },
     # 6
@@ -72,7 +72,7 @@ stuff = {
         },
         "using_prior": True,
         "prior_baseline": False,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1
     },
     # 7
@@ -84,7 +84,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1
     },
     # 8
@@ -96,7 +96,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1
     },
     # 8 - bis
@@ -108,7 +108,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uuu",
+        "balanced": "uuu",
         "el_for_validation": .1,
         "daug": False
     },
@@ -121,7 +121,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uub",
+        "balanced": "uub",
         "el_for_validation": 200,
         "daug": True
     },
@@ -134,7 +134,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uub",
+        "balanced": "uub",
         "el_for_validation": 200,
         "daug": False
     },
@@ -148,7 +148,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uub",
+        "balanced": "uub",
         "el_for_validation": 200,
         "daug": True
     },
@@ -162,7 +162,7 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced:": "uub",
+        "balanced": "uub",
         "el_for_validation": 200,
         "daug": False
     },
