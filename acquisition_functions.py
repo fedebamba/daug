@@ -18,6 +18,20 @@ def avg_entropy(net_out):
         e = e - T.sum(f.cpu(), 1)
     return e/len(net_out)
 
+def marginals(vector, num_of_classes=10, n=5):
+    # la media per i marginali
+    print(vector.size())
+    ps = T.mean(vector, 2).reshape(len(vector), 10)
+    print(ps.size())
+
+    # il primo ed il secondo elemento più grande
+    maximums = T.topk(ps, k=2, dim=1)[0]
+    print(maximums)
+    print(maximums.size())
+
+    marginals = maximums[:, 0] - maximums[:, 1]
+    print(marginals.size())
+    return marginals
 
 def confidence(vector, num_of_classes=10, details=False):
     if not details:

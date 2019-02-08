@@ -162,20 +162,27 @@ class NetTrainer():
                 o = torch.Tensor().to("cuda:0")
                 predictions = torch.Tensor().long()
                 ps = torch.Tensor().to("cuda:0")
+                outputs_single_nets = torch.Tensor().to("cuda:0")
 
                 for input in els:
                     input[0], input[1] = input[0].to("cuda:0"), input[1].to("cuda:0")
                     output = self.net(input[0])
+
+                    outputs_single_nets = torch.cat((outputs_single_nets, output[0].reshape(len(input[0]), 10, 1)), 2)
+                    print(outputs_single_nets.size())
                     out = output[1].reshape(len(input[0]), 512, 1)
 
                     o = torch.cat((o, out), 2)
                     predictions = torch.cat((predictions, output[0].max(1)[1].reshape(len(output[0]), 1).cpu()), 1)
+
                     if not using_ensemble_entropy:
                         ps = torch.cat((ps, acquisition_functions.entropy(output[0]).reshape(len(output[0]), 1)), 1)
                     else:
                         ps = torch.cat((ps, output[0].reshape(len(output[0]), 10, 1)), 2)
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
+                normalized_marginals = torch.cat(normalized_marginals, acquisition_functions.marginals(outputs_single_nets))
+
 
                 if not hard:
                     for el in conf[0]:
@@ -194,22 +201,6 @@ class NetTrainer():
                     ps = torch.mean(ps, 2).reshape(len(ps), 10)
                     normalized_entropy = torch.cat((normalized_entropy, acquisition_functions.entropy(ps)), 0)
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
-
-
-
-                # la media per i marginali
-                print(ps.size())
-                ps = torch.mean(ps, 2).reshape(len(ps), 10)
-                print(ps.size())
-
-                # il primo ed il secondo elemento più grande
-                maximums = torch.topk(ps, k=2, dim=1)[0]
-                print(maximums)
-                print(maximums.size())
-
-                marginals = maximums[:, 0] - maximums[:, 1]
-                print(marginals)
-                normalized_marginals = torch.cat((normalized_marginals, marginals), 0)
 
                 S = torch.cat((S, o), 0)
                 print("\r S: {0} ".format(S.size()), end="")
