@@ -123,6 +123,7 @@ class NetTrainer():
         varratio_weight = config["varratio_weight"] if config is not None and "varratio_weight" in config else 0
         entropy_weight = config["entropy_weight"] if config is not None and "entropy_weight" in config else 1
         distance_weight = config["distance_weight"] if config is not None and "distance_weight" in config else 1
+        marginals_weight = config["marginals_weight"] if config is not None and "marginals_weight" in config else 0
         using_ensemble_entropy = config["using_ensemble_entropy"] if config is not None and "using_ensemble_entropy" in config else True
         usingmax = config["using_max"] if config is not None and "using_max" in config else False
 
@@ -133,6 +134,7 @@ class NetTrainer():
         density_estimation = [0] * 10
         normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
         normalized_entropy = torch.Tensor().to("cuda:0")
+        normalized_marginals = torch.Tensor().to("cuda:0")
 
         randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
 
@@ -193,6 +195,21 @@ class NetTrainer():
                     normalized_entropy = torch.cat((normalized_entropy, acquisition_functions.entropy(ps)), 0)
                 normalized_confidence[0] = torch.cat((normalized_confidence[0].cpu(), varratio), 0).cpu()
 
+
+
+                # la media per i marginali
+                ps = torch.mean(ps, 2).reshape(len(ps), 10)
+                print(ps.size())
+
+                # il primo ed il secondo elemento più grande
+                maximums = torch.topk(ps, k=2, dim=1)[0]
+                print(maximums)
+                print(maximums.size())
+
+                marginals = maximums[:, 0] - maximums[:, 1]
+                print(marginals)
+                normalized_marginals = torch.cat((normalized_marginals, marginals), 0)
+
                 S = torch.cat((S, o), 0)
                 print("\r S: {0} ".format(S.size()), end="")
             print("")
@@ -213,6 +230,7 @@ class NetTrainer():
             print("NF : " + str(normalizing_factor))
 
             normalized_entropy = (normalized_entropy / torch.max(normalized_entropy, -1)[0])
+            normalized_marginals = (normalized_marginals / torch.max(normalized_marginals, -1)[0])
 
             normalized_confidence[0] = normalized_confidence[0].to("cuda:0")
             # normalized_confidence[0] *= varratio_weight
@@ -222,7 +240,7 @@ class NetTrainer():
             if usingmax:
                 mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + torch.max(normalized_confidence[0] * varratio_weight, normalized_entropy * entropy_weight, )
             else:
-                mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy)
+                mindist_confidence = (distance_weight*(mindist / normalizing_factor)) + (varratio_weight * normalized_confidence[0].to("cuda:0")) + (entropy_weight * normalized_entropy) + (marginals_weight * normalized_marginals)
 
             erlist_indexes = normalized_confidence[1]
             new_N = []
@@ -246,9 +264,7 @@ class NetTrainer():
                     mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + torch.max(
                         normalized_confidence[0] * varratio_weight, normalized_entropy * entropy_weight, )
                 else:
-                    mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + (
-                                varratio_weight * normalized_confidence[0].to("cuda:0")) + (
-                                                     entropy_weight * normalized_entropy)
+                    mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + ( varratio_weight * normalized_confidence[0].to("cuda:0")) + ( entropy_weight * normalized_entropy) + (marginals_weight * normalized_marginals)
             return new_N, [x / sum(density_estimation) for x in density_estimation]
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):
