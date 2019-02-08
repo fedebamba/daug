@@ -131,6 +131,7 @@ class NetTrainer():
         self.net.eval()
         N = torch.Tensor().to("cuda:0")  # labelled
         S = torch.Tensor().to("cuda:0")  # unlabelled
+
         density_estimation = [0] * 10
         normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
         normalized_entropy = torch.Tensor().to("cuda:0")
@@ -181,8 +182,7 @@ class NetTrainer():
                         ps = torch.cat((ps, output[0].reshape(len(output[0]), 10, 1)), 2)
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
-                normalized_marginals = torch.cat(normalized_marginals, acquisition_functions.marginals(outputs_single_nets))
-
+                normalized_marginals = torch.cat((normalized_marginals, acquisition_functions.marginals(outputs_single_nets)), 0)
 
                 if not hard:
                     for el in conf[0]:
