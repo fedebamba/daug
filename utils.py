@@ -50,10 +50,10 @@ def checkconf(config, name, default):
 def prettyprint(conf, level=0):
     for k,v in conf.items():
         if type(v) == dict:
-            print(("\t"*level)+ k +":")
+            print(("\t"*level) + "- " + k + ":")
             prettyprint(v, level+1)
         else:
-            print(("\t"*level)+ k +":\t" + str(v))
+            print(("\t"*level) + "- " + k + ":\t" + str(v))
 
 
 
