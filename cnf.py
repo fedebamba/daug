@@ -166,4 +166,21 @@ stuff = {
         "el_for_validation": 200,
         "daug": False
     },
+
+    # 12
+    "uub-test-using-marginals": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 0,
+            "entropy_weight": 0,
+            "marginals_weight": 1,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "daug": False
+    },
 }
