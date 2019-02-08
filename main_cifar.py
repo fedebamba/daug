@@ -51,14 +51,13 @@ af_config= {
 using_prior = utils.checkconf(conf_file, "using_prior", True)
 prior_baseline = utils.checkconf(conf_file, "prior_baseline", False)
 
-just100 = True
 
 learning_rate = 0.005
 max_number_of_epochs_before_changing_lr = 5
 lr_factor = 3
 
-epochs_first_step = 100 # 50
-epochs_second_step = 100
+epochs_first_step = utils.checkconf(conf_file, "epochs", 100)
+epochs_second_step = utils.checkconf(conf_file, "epochs", 100)
 
 train_batch_size = 32
 
