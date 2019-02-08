@@ -45,7 +45,7 @@ stuff = {
             "varratio_weight": 1,
             "using_max": True
         },
-        "epochs":5,
+        "epochs":100,
         "using_prior": True,
         "prior_baseline": True,
         "balanced": "uuu",
