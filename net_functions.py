@@ -182,7 +182,7 @@ class NetTrainer():
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
                 normalized_marginals = torch.cat((normalized_marginals, acquisition_functions.marginals(outputs_single_nets)), 0)
-                print("NORMALIZED MARGINALS   " + str(normalized_marginals.size()) )
+                print("NORMALIZED MARGINALS   " + str(normalized_marginals))
 
                 if not hard:
                     for el in conf[0]:
