@@ -198,6 +198,7 @@ class NetTrainer():
 
 
                 # la media per i marginali
+                print(ps.size())
                 ps = torch.mean(ps, 2).reshape(len(ps), 10)
                 print(ps.size())
 
