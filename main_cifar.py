@@ -34,13 +34,12 @@ test_transform = trans.Compose([
     trans.ToTensor()
 ])
 
-
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 from cnf import stuff
 conf_file = None
 if len(sys.argv) > 1:
     conf_file = stuff[sys.argv[1]] if sys.argv[1] in stuff else None
-    print(conf_file)
+    utils.prettyprint(conf_file)
 
 af_conf = utils.checkconf(conf_file, "af_config", None)
 af_config= {
