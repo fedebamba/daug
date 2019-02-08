@@ -53,7 +53,8 @@ def prettyprint(conf, level=0):
             print(("\t"*level) + "- " + k + ":")
             prettyprint(v, level+1)
         else:
-            print(("\t"*level) + "- " + k + ":\t" + str(v))
+            stri = ("{:25}".format("\t"*level) + "- " + k + ":\t")
+            print( stri + str(v))
 
 
 
