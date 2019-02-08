@@ -170,7 +170,6 @@ class NetTrainer():
                     output = self.net(input[0])
 
                     outputs_single_nets = torch.cat((outputs_single_nets, output[0].reshape(len(input[0]), 10, 1)), 2)
-                    print(outputs_single_nets.size())
                     out = output[1].reshape(len(input[0]), 512, 1)
 
                     o = torch.cat((o, out), 2)
@@ -183,6 +182,7 @@ class NetTrainer():
 
                 conf = acquisition_functions.confidence(predictions.transpose(0,1), details=True)
                 normalized_marginals = torch.cat((normalized_marginals, acquisition_functions.marginals(outputs_single_nets)), 0)
+                print("NORMALIZED MARGINALS   " + str(normalized_marginals.size()) )
 
                 if not hard:
                     for el in conf[0]:
