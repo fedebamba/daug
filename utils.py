@@ -54,7 +54,7 @@ def prettyprint(conf, level=0):
             prettyprint(v, level+1)
         else:
 
-            vv = "{:<40}".format(("\t"*level) + "- \033[94m" + k )
+            vv = "{:<40}".format(("{:>"+str(2*level)+"}").format("- \033[94m" + k))
             print( vv + "\033[0m : \033[92m" + str(v) + "\033[0m ")
 
 
