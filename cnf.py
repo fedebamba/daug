@@ -26,7 +26,7 @@ stuff = {
         "el_for_validation": .1
     },
 
-    #3
+    #3 - fine
     "uuu-baseline-entro+dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -38,7 +38,7 @@ stuff = {
         "balanced": "uuu",
         "el_for_validation": .1
     },
-    #4
+    #4 - fine
     "uuu-baseline-max-of-both": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -52,7 +52,7 @@ stuff = {
         "el_for_validation": .1
     },
     #############################################################################################################
-    # 5
+    # 5 - fine
     "uuu-estimation-entro+dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -64,7 +64,7 @@ stuff = {
         "balanced": "uuu",
         "el_for_validation": .1
     },
-    # 6
+    # 6 - fine
     "uuu-estimation-max-of-both": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -76,7 +76,7 @@ stuff = {
         "balanced": "uuu",
         "el_for_validation": .1
     },
-    # 7
+    # 7 - fine
     "uuu-none-entro+dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -88,7 +88,7 @@ stuff = {
         "balanced": "uuu",
         "el_for_validation": .1
     },
-    # 8
+    # 8- fine
     "uuu-none-max-of-both": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -100,7 +100,7 @@ stuff = {
         "balanced": "uuu",
         "el_for_validation": .1
     },
-    # 8 - bis
+    # 8 - bis - partito
     "test-ensemble-entropy": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -113,7 +113,7 @@ stuff = {
         "el_for_validation": .1,
         "daug": False
     },
-    # 9
+    # 9 -partito
     "uub-ee-distance-daug": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -126,7 +126,7 @@ stuff = {
         "el_for_validation": 200,
         "daug": True
     },
-    # 10
+    # 10 - partito
     "uub-ee-distance": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -139,7 +139,7 @@ stuff = {
         "el_for_validation": 200,
         "daug": False
     },
-    # 11
+    # 11 - partito
     "uub-ee-daug": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -153,7 +153,7 @@ stuff = {
         "el_for_validation": 200,
         "daug": True
     },
-    # 12
+    # 12 - partito
     "uub-ee": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -168,7 +168,7 @@ stuff = {
         "daug": False
     },
 
-    # 12
+    # 13 - partito
     "uub-test-using-marginals": {
         "af_config": {
             "using_ensemble_entropy": False,
