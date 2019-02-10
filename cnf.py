@@ -182,6 +182,6 @@ stuff = {
         "prior_baseline": False,
         "balanced": "uub",
         "el_for_validation": 200,
-        "daug": False
+        "daug": True
     },
 }
