@@ -27,6 +27,8 @@ def marginals(vector, num_of_classes=10, n=5):
     # il primo ed il secondo elemento più grande
     maximums = T.topk(ps, k=2, dim=1)[0]
     marginals = maximums[:, 0] - maximums[:, 1]
+
+    marginals = 1 - marginals
     return marginals
 
 def confidence(vector, num_of_classes=10, details=False):
