@@ -144,7 +144,7 @@ stuff = {
         "af_config": {
             "using_ensemble_entropy": True,
             "varratio_weight": 0,
-            "distance_weight": 0,
+            "distance_weight": 1e-6,
             "using_max": False
         },
         "using_prior": False,
@@ -158,7 +158,7 @@ stuff = {
         "af_config": {
             "using_ensemble_entropy": True,
             "varratio_weight": 0,
-            "distance_weight": 0,
+            "distance_weight": 1e-6,
             "using_max": False
         },
         "using_prior": False,
