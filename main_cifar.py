@@ -54,7 +54,7 @@ prior_baseline = utils.checkconf(conf_file, "prior_baseline", False)
 
 learning_rate = 0.005
 max_number_of_epochs_before_changing_lr = 5
-lr_factor = 3
+lr_factor = utils.checkconf(conf_file, "lr_factor", 5)
 
 epochs_first_step = utils.checkconf(conf_file, "epochs", 100)
 epochs_second_step = utils.checkconf(conf_file, "epochs", 100)
@@ -232,7 +232,7 @@ def a_single_experiment(esname, esnumber):
 
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
-        if prior_baseline or not using_prior:
+        if prior_baseline:
             if utils.checkconf(conf_file, "balanced", "bbb")[2] == "b":
                 density_estimator = [1] * 10
             else:
