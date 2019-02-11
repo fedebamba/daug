@@ -173,7 +173,7 @@ stuff = {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
-            "distance_weight": 0,
+            "distance_weight": 1e-6,
             "entropy_weight": 0,
             "marginals_weight": 1,
             "using_max": False
