@@ -284,7 +284,7 @@ def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, 
             num_of_no_improvement += 1
             if num_of_no_improvement == max_number_of_epochs_before_changing_lr:
                 mnumber_of_lr_dim += 1
-                num_of_no_improvement = -mnumber_of_lr_dim
+                num_of_no_improvement = 0
                 actual_lr /= lr_factor
 
                 for param_group in network.optimizer.param_groups :
