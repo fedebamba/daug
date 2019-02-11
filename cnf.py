@@ -184,4 +184,29 @@ stuff = {
         "el_for_validation": 200,
         "daug": True
     },
+
+    "uub-estimation-entro+dist": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": True,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200
+    },
+    # 6 - fine
+    "uub-estimation-max-of-both": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 1,
+            "using_max": True
+        },
+        "using_prior": True,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200
+    },
+
 }
