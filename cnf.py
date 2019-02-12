@@ -247,7 +247,7 @@ stuff = {
         "el_for_validation": 200,
         "trans_config": {
             "rotation_degree": 7,
-            "crop_amount": 38,
+            "crop_amount": 28,
             "gauss_mean": 0,
             "gauss_var": 0.15
         },
