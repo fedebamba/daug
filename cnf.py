@@ -253,5 +253,26 @@ stuff = {
         },
     },
 
+    # 18
+    "uub-dist": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "entropy_weight": 0,
+            "distance_weight": 1,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "trans_config": {
+            "rotation_degree": 5,
+            "crop_amount": 28,
+            "gauss_mean": 0,
+            "gauss_var": 0.1
+        },
+    },
+
 
 }
