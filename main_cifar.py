@@ -20,20 +20,6 @@ import utils
 
 
 # PARAMETER PART................
-traintrans_daug = trans.Compose([
-        trans.RandomRotation(5),
-        trans.RandomCrop(26),
-        trans.Resize((32, 32)),
-        utils.Gauss(0, 0.1),
-        trans.ToTensor()
-    ])
-traintrans_nodaug = trans.Compose([
-    trans.ToTensor()
-])
-test_transform = trans.Compose([
-    trans.ToTensor()
-])
-
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 from cnf import stuff
 conf_file = None
@@ -48,6 +34,24 @@ af_config= {
     "distance_weight": utils.checkconf(af_conf, "distance_weight", 1) if af_conf is not None else 1,
     "using_max": utils.checkconf(af_conf, "using_max", False) if af_conf is not None else False,
 }
+
+trans_conf = utils.checkconf(conf_file, "trans_config", None)
+
+traintrans_daug = trans.Compose([
+        trans.RandomRotation(utils.checkconf(trans_conf, "rotation_degree", 5)) if utils.checkconf(trans_conf, "rotation", True) else None,
+        trans.RandomCrop(utils.checkconf(trans_conf, "crop_amount", 26)) if utils.checkconf(trans_conf, "crop", True) else None,
+        trans.Resize((32, 32)),
+        utils.Gauss(utils.checkconf(trans_conf, "gauss_mean", 0), utils.checkconf(trans_conf, "gauss_var", 0.1))if utils.checkconf(trans_conf, "gauss", True) else None,
+        trans.ToTensor()
+    ])
+traintrans_nodaug = trans.Compose([
+    trans.ToTensor()
+])
+test_transform = trans.Compose([
+    trans.ToTensor()
+])
+
+
 using_prior = utils.checkconf(conf_file, "using_prior", True)
 prior_baseline = utils.checkconf(conf_file, "prior_baseline", False)
 

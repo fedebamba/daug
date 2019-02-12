@@ -234,6 +234,24 @@ stuff = {
         "balanced": "uub",
         "el_for_validation": 200
     },
+    "uub-entro+dist-more-daug": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 38,
+            "gauss_mean": 0,
+            "gauss_var": 0.15
+        },
+    },
 
 
 }
