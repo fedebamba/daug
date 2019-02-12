@@ -185,6 +185,7 @@ stuff = {
         "daug": True
     },
 
+    # 14 - partito
     "uub-estimation-entro+dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -196,7 +197,7 @@ stuff = {
         "balanced": "uub",
         "el_for_validation": 200
     },
-    # 6 - fine
+    # 15 - partito
     "uub-estimation-max-of-both": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -208,5 +209,31 @@ stuff = {
         "balanced": "uub",
         "el_for_validation": 200
     },
+    # 17
+    "uub-entro+dist": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200
+    },
+    # 17
+    "uub-entro": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-6,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200
+    },
+
 
 }
