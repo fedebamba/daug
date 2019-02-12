@@ -47,7 +47,7 @@ if utils.checkconf(trans_conf, "gauss", True):
     pass
     # trans_list.append(utils.Gauss(utils.checkconf(trans_conf, "gauss_mean", 0), utils.checkconf(trans_conf, "gauss_var", 0.1)))
 trans_list.append(trans.Resize((32, 32)))
-trans.ToTensor()
+trans_list.append(trans.ToTensor())
 
 traintrans_daug = trans.Compose(trans_list)
 traintrans_nodaug = trans.Compose([
