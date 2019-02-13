@@ -273,6 +273,61 @@ stuff = {
             "gauss_var": 0.1
         },
     },
+    # 20
+    "uub-entro+dist-more-daug-no-rotation": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "distance_weight": 1e-6,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "trans_config": {
+            "rotation": False,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.15
+        },
+    },
+    # 21
+    "uub-entro+dist-more-daug-no-gauss": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "distance_weight": 1e-6,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss": False,
+        },
+    },
+    # 21
+    "uub-entro+dist-more-daug-2": {
+        "af_config": {
+            "using_ensemble_entropy": True,
+            "varratio_weight": 0,
+            "distance_weight": 1e-6,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.15
+        },
 
-
+    },
 }
