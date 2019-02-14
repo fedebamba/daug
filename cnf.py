@@ -293,7 +293,7 @@ stuff = {
         },
     },
     # 21
-    "uub-entro+dist-more-daug-no-gauss": {
+    "uub-ee+dist-more-daug-no-gauss": {
         "af_config": {
             "using_ensemble_entropy": True,
             "varratio_weight": 0,
