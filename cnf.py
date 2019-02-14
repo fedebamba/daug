@@ -309,6 +309,7 @@ stuff = {
             "crop_amount": 24,
             "gauss": False,
         },
+        "num_of_runs": 6,
     },
     # 22
     "uub-entro+dist-more-daug-2": {
@@ -344,6 +345,5 @@ stuff = {
         "el_for_validation": 200,
         "daug": False,
         "num_of_runs": 6
-
     },
 }
