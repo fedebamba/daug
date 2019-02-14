@@ -295,7 +295,7 @@ stuff = {
     # 21
     "uub-entro+dist-more-daug-no-gauss": {
         "af_config": {
-            "using_ensemble_entropy": False,
+            "using_ensemble_entropy": True,
             "varratio_weight": 0,
             "distance_weight": 1,
             "using_max": False
