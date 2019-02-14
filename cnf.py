@@ -276,9 +276,9 @@ stuff = {
     # 20
     "uub-entro+dist-more-daug-no-rotation": {
         "af_config": {
-            "using_ensemble_entropy": True,
+            "using_ensemble_entropy": False,
             "varratio_weight": 0,
-            "distance_weight": 1e-6,
+            "distance_weight": 1,
             "using_max": False
         },
         "using_prior": False,
@@ -295,9 +295,9 @@ stuff = {
     # 21
     "uub-entro+dist-more-daug-no-gauss": {
         "af_config": {
-            "using_ensemble_entropy": True,
+            "using_ensemble_entropy": False,
             "varratio_weight": 0,
-            "distance_weight": 1e-6,
+            "distance_weight": 1,
             "using_max": False
         },
         "using_prior": False,
@@ -310,12 +310,12 @@ stuff = {
             "gauss": False,
         },
     },
-    # 21
+    # 22
     "uub-entro+dist-more-daug-2": {
         "af_config": {
-            "using_ensemble_entropy": True,
+            "using_ensemble_entropy": False,
             "varratio_weight": 0,
-            "distance_weight": 1e-6,
+            "distance_weight": 1,
             "using_max": False
         },
         "using_prior": False,
@@ -328,6 +328,22 @@ stuff = {
             "gauss_mean": 0,
             "gauss_var": 0.15
         },
+
+    },
+
+    "uub-entro+dist-baseline-without-daug": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": 200,
+        "daug": False,
+        "num_of_runs": 6
 
     },
 }
