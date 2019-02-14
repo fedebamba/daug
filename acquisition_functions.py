@@ -20,9 +20,10 @@ def avg_entropy(net_out):
 
 def marginals(vector, num_of_classes=10, n=5):
     # la media per i marginali
-    ps = T.mean(vector, 2).reshape(len(vector), 10)
-    ps = T.nn.Softmax(1)(ps)
-    print(ps)
+    ps = T.nn.Softmax(1)(vector)
+    for i in range(10):
+        print(ps[i])
+    ps = T.mean(ps, 2).reshape(len(ps), 10)
 
     # il primo ed il secondo elemento più grande
     maximums = T.topk(ps, k=2, dim=1)[0]
