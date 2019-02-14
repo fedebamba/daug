@@ -28,6 +28,9 @@ if len(sys.argv) > 1:
     utils.prettyprint(conf_file)
 
 af_conf = utils.checkconf(conf_file, "af_config", None)
+
+num_of_runs = utils.checkconf(conf_file, "num_of_runs", 3)
+
 af_config= {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
     "varratio_weight": utils.checkconf(af_conf, "varratio_weight", 0) if af_conf is not None else 0,
@@ -315,5 +318,5 @@ if len(sys.argv) > 1:
     print("Starting " + str(sys.argv[1]))
     esname = "3_" + str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 
-for i in range(3):
+for i in range(num_of_runs):
     a_single_experiment(esname + "_" + str(epochs_first_step), i)
