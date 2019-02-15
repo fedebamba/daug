@@ -349,7 +349,6 @@ stuff = {
 
 
 # NEW TESTS
-
     "uub-entropy-new-active-baseline": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -359,8 +358,8 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced": "uub",
-        "el_for_validation": 200,
+        "balanced": "uuu",
+        "el_for_validation": .1,
         "execute_random": False,
         "daug": False,
         "num_of_runs": 6,
@@ -381,8 +380,8 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced": "uub",
-        "el_for_validation": 200,
+        "balanced": "uuu",
+        "el_for_validation": .1,
         "execute_active": False,
         "daug": False,
         "num_of_runs": 6,
@@ -403,8 +402,8 @@ stuff = {
         },
         "using_prior": False,
         "prior_baseline": False,
-        "balanced": "uub",
-        "el_for_validation": 200,
+        "balanced": "uuu",
+        "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
         "num_of_runs": 6,
