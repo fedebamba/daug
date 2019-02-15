@@ -102,9 +102,11 @@ n = utils.checkconf(conf_file, "n", 5) if utils.checkconf(conf_file, "daug", Tru
 traintrans_01 = traintrans_daug
 selectiontrans = selectiontrans_daug if utils.checkconf(conf_file, "daug", True) else selectiontrans_nodaug
 
+print("Transformations used in traning phase: ")
 print(traintrans_01)
+print("Transformations used in selection phase: ")
 print(selectiontrans)
-print(n)
+print("Number of different images at selection phase: " + str(n))
 
 
 train_set_length = int(train_val_ratio * total_train_data) # int(total_train_data-2000)  # total length of training set data
