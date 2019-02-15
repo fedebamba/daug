@@ -30,8 +30,10 @@ if len(sys.argv) > 1:
 af_conf = utils.checkconf(conf_file, "af_config", None)
 
 num_of_runs = utils.checkconf(conf_file, "num_of_runs", 3)
+execute_active = utils.checkconf(conf_file, "execute_active", True)
+execute_normal = utils.checkconf(conf_file, "execute_normal", True)
 
-af_config= {
+af_config = {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
     "varratio_weight": utils.checkconf(af_conf, "varratio_weight", 0) if af_conf is not None else 0,
     "distance_weight": utils.checkconf(af_conf, "distance_weight", 1) if af_conf is not None else 1,
@@ -59,10 +61,8 @@ test_transform = trans.Compose([
     trans.ToTensor()
 ])
 
-
 using_prior = utils.checkconf(conf_file, "using_prior", True)
 prior_baseline = utils.checkconf(conf_file, "prior_baseline", False)
-
 
 learning_rate = 0.005
 max_number_of_epochs_before_changing_lr = 5
@@ -72,7 +72,6 @@ epochs_first_step = utils.checkconf(conf_file, "epochs", 100)
 epochs_second_step = utils.checkconf(conf_file, "epochs", 100)
 
 train_batch_size = 32
-
 
 difficult_classes_percentage = 1 if utils.checkconf(conf_file, "balanced", "bbb")[1] == "b" else utils.checkconf(conf_file, "difficult_classes_percentage", .1)
 total_train_data = int(25000 * (1 + difficult_classes_percentage))
@@ -96,10 +95,6 @@ balanced_test_set = (utils.checkconf(conf_file, "balanced", "bbb")[2] == "b")
 
 
 tslp = int((train_set_length * train_set_percentage) / 100)
-
-
-
-
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
@@ -198,6 +193,7 @@ def write_dataset_info(ds, active_indices, normal_indices, filename):
         writer.writerow([active_els[i] for i in range(len(active_els))] + [""] + [normal_els[i] for i in range(len(normal_els))])
 
 
+
 def a_single_experiment(esname, esnumber):
     with open("res/results_{0}_{1}.csv".format(esname, esnumber), "w") as csvfile:
         writer = csv.writer(csvfile)
@@ -218,6 +214,11 @@ def a_single_experiment(esname, esnumber):
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
 
+    dataset._train_val_set.use_selection_transforms()
+
+    dataset._train_val_set.use_train_transformation()
+
+
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
@@ -228,20 +229,26 @@ def a_single_experiment(esname, esnumber):
     active_net = best_net.clone()
     normal_net = best_net.clone()
     for i in range(first_time_multiplier, until_slice_number):
-        active_indices, density_estimator = active_net.distance_and_varratio(dataset,
-                                                     [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                     el_for_active, n=n, config=af_config)
+        active_indices, density_estimator, normal_indices = None, None, None
 
-        normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
-        if len(active_indices) < tslp :
+        if execute_active:
+            active_indices, density_estimator = active_net.distance_and_varratio(dataset,
+                                                         [x for x in dataset.train_indices if x not in el_for_active], tslp,
+                                                         el_for_active, n=n, config=af_config)
+
+        if execute_normal:
+            normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
+        if active_indices is not None and normal_indices is not None and len(active_indices) < tslp :
             active_indices.extend([x for x in normal_indices if x not in active_indices and x not in el_for_active and len(active_indices) < tslp])
 
         print("\t\trandom: {0} | loe: {1}".format(len(active_indices), len(normal_indices)))
-        el_for_active.extend(active_indices)
-        el_for_normal.extend(normal_indices)
+
+        if execute_normal:
+            el_for_normal.extend(normal_indices)
+        if execute_active:
+            el_for_active.extend(active_indices)
 
         write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
-
         de_for_normal = normal_net.evaluate_density(dataset, [x for x in dataset.train_indices if x not in el_for_normal], el_for_normal)
 
         if prior_baseline:
@@ -252,22 +259,34 @@ def a_single_experiment(esname, esnumber):
             de_for_normal = density_estimator
         print(density_estimator)
 
-
-
-        print("NORMAL:")
-        best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,
+        best_nor_acc = 0
+        if execute_normal:
+            print("NORMAL:")
+            best_nor_net, best_nor_acc = single_train_batch(num_of_epochs=epochs_second_step,
                                                         dataset=dataset, indices=el_for_normal,
                                                         name="res/results_{0}_{1}_nor".format(esname, esnumber), test_distro=de_for_normal)
-        print("ACTIVE:")
-        best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
-        print("Iter: {0} | Active: {1:.2f}  -  Normal: {2:.2f}".format(i, best_act_acc, best_nor_acc))
+            normal_net = best_nor_net
 
-        active_net = best_act_net
-        normal_net = best_nor_net
+        best_act_acc = 0
+        if execute_active:
+            print("ACTIVE:")
+            best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
+            active_net = best_act_net
+
+        if execute_active and execute_normal:
+            print("Iter: {0} | Active: {1:.2f}  -  Normal: {2:.2f}".format(i, best_act_acc, best_nor_acc))
+
+        # active_net = best_act_net
+        # normal_net = best_nor_net
 
         with open("res/results_{0}_{1}.csv".format(esname, esnumber), "a") as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow([i+1, best_act_acc, best_nor_acc, best_act_acc-best_nor_acc])
+            if execute_active and execute_normal:
+                writer.writerow([i+1, best_act_acc, best_nor_acc, best_act_acc-best_nor_acc])
+            elif execute_active:
+                writer.writerow([i + 1, best_act_acc, "---", "---"])
+            elif execute_normal:
+                writer.writerow([i + 1, "---", best_nor_acc, "---"])
 
 
 def single_train_batch(num_of_epochs=10, dataset=None, indices=None, name=None, test_distro=None):

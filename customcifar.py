@@ -29,12 +29,14 @@ class CustomCIFAR10(torchvision.datasets.CIFAR10):
 
 
 class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
-    def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False):
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False, selection_transformations=None):
         super().__init__(root=root,
                          train=train,
                          transform=transform,
                          target_transform=target_transform,
                          download=download)
+        self.train_trans = transform
+        self.sel_trans = selection_transformations
         self.indices=None
         if train:
             if provided_indices is not None:
@@ -92,6 +94,15 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                     el_for_class[i] = el_for_class[i][:int(len(el_for_class[i]) * percentage)]
             print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
             self.indices = [x for el in el_for_class for x in el]
+
+    def use_selection_transforms(self):
+        print("Using selection-time image transformations....")
+        self.transform = self.sel_trans
+        print(self.transform)
+    def use_train_transformation(self):
+        print("Using training-time image transformations....")
+        self.transform = self.train_trans
+        print(self.transform)
 
 
     def clone(self, t):
