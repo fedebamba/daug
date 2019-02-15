@@ -571,8 +571,6 @@ class NetTrainer():
                 prior /= targetprior
             print("Prior : {0}".format(prior) )
 
-
-
         total = 0
         printiter = 0
         b_i = 0

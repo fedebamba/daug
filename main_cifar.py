@@ -31,7 +31,7 @@ af_conf = utils.checkconf(conf_file, "af_config", None)
 
 num_of_runs = utils.checkconf(conf_file, "num_of_runs", 3)
 execute_active = utils.checkconf(conf_file, "execute_active", True)
-execute_normal = utils.checkconf(conf_file, "execute_normal", True)
+execute_normal = utils.checkconf(conf_file, "execute_random", True)
 
 af_config = {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
@@ -53,8 +53,25 @@ if utils.checkconf(trans_conf, "flip", True):
 trans_list.append(trans.Resize((32, 32)))
 trans_list.append(trans.ToTensor())
 
+trans_selection_conf = utils.checkconf(conf_file, "selection_trans_config", None)
+trans_selection_list = []
+if utils.checkconf(trans_selection_conf, "rotation", True):
+    trans_selection_list.append(trans.RandomRotation(utils.checkconf(trans_selection_conf, "rotation_degree", 5)))
+if utils.checkconf(trans_selection_conf, "crop", True):
+    trans_selection_list.append(trans.RandomCrop(utils.checkconf(trans_selection_conf, "crop_amount", 26)))
+if utils.checkconf(trans_selection_conf, "gauss", True):
+    trans_selection_list.append(utils.Gauss(utils.checkconf(trans_selection_conf, "gauss_mean", 0), utils.checkconf(trans_selection_conf, "gauss_var", 0.1)))
+if utils.checkconf(trans_selection_conf, "flip", True):
+    trans_selection_list.append(trans.RandomHorizontalFlip())
+trans_selection_list.append(trans.Resize((32, 32)))
+trans_selection_list.append(trans.ToTensor())
+
 traintrans_daug = trans.Compose(trans_list)
 traintrans_nodaug = trans.Compose([
+    trans.ToTensor()
+])
+selectiontrans_daug = trans.Compose(trans_selection_list)
+selectiontrans_nodaug =  trans.Compose([
     trans.ToTensor()
 ])
 test_transform = trans.Compose([
@@ -82,8 +99,11 @@ first_time_multiplier = 1
 until_slice_number = 8
 
 n = utils.checkconf(conf_file, "n", 5) if utils.checkconf(conf_file, "daug", True) else 1
-traintrans_01 = traintrans_daug if utils.checkconf(conf_file, "daug", True) else traintrans_nodaug
+traintrans_01 = traintrans_daug
+selectiontrans = selectiontrans_daug if utils.checkconf(conf_file, "daug", True) else selectiontrans_nodaug
+
 print(traintrans_01)
+print(selectiontrans)
 print(n)
 
 
@@ -97,8 +117,8 @@ balanced_test_set = (utils.checkconf(conf_file, "balanced", "bbb")[2] == "b")
 tslp = int((train_set_length * train_set_percentage) / 100)
 
 class CifarLoader():
-    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=difficult_classes_percentage, valels=el_for_validation)
+    def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None, selection_transform=None):
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=difficult_classes_percentage, valels=el_for_validation, selection_transformations=selection_transform)
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=(not balanced_test_set))  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
@@ -113,7 +133,6 @@ class CifarLoader():
                 self.already_selected_indices = [x for i in range(10) for x in numpy.random.choice([xx for xx in self._train_val_set.el_for_class[i] if xx not in self.validation_indices], size=lenel[i], replace=False).tolist()]
 
         print("Selected: {}".format([len([x for x in self.already_selected_indices if x in self._train_val_set.el_for_class[i]]) for i in range(10)]))
-
 
         self._train = tud.DataLoader(self._train_val_set, batch_size=train_batch_size, shuffle=False, num_workers=2,
                                   sampler=customcifar.CustomRandomSampler(self.already_selected_indices))
@@ -212,7 +231,7 @@ def a_single_experiment(esname, esnumber):
     net_trainer = new_network()
 
     # Dataset def
-    dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+    dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, selection_transform=selectiontrans , first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
 
     dataset._train_val_set.use_selection_transforms()
 
@@ -232,9 +251,11 @@ def a_single_experiment(esname, esnumber):
         active_indices, density_estimator, normal_indices = None, None, None
 
         if execute_active:
+            dataset._train_val_set.use_selection_transforms()
             active_indices, density_estimator = active_net.distance_and_varratio(dataset,
                                                          [x for x in dataset.train_indices if x not in el_for_active], tslp,
                                                          el_for_active, n=n, config=af_config)
+            dataset._train_val_set.use_train_transformation()
 
         if execute_normal:
             normal_indices = numpy.random.choice([x for x in dataset.train_indices if x not in el_for_normal], size=tslp, replace=False)
