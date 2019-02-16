@@ -264,7 +264,7 @@ def a_single_experiment(esname, esnumber):
         if active_indices is not None and normal_indices is not None:
             if len(active_indices) < tslp :
                 active_indices.extend([x for x in normal_indices if x not in active_indices and x not in el_for_active and len(active_indices) < tslp])
-        print("\t\trandom: {0} | loe: {1}".format(len(active_indices), len(normal_indices)))
+            print("\t\trandom: {0} | loe: {1}".format(len(active_indices), len(normal_indices)))
 
         if execute_normal:
             el_for_normal.extend(normal_indices)
