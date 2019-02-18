@@ -504,6 +504,122 @@ stuff = {
             "gauss": False
         }
     },
+    # ............................................................................
+    "uuu-entropy-new-crop_daug-more-tries": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 9,
+        "num_of_runs": 6,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.05
+        },
+        "selection_trans_config": {
+            "rotation": False,
+            "crop_amount": 22,
+            "flip": False,
+            "gauss": False
+        }
+    },
+
+    "uuu-entropy-new-rotation_daug-more-tries": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 9,
+        "num_of_runs": 6,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.05
+        },
+        "selection_trans_config": {
+            "rotation_degree": 9,
+            "crop": False,
+            "flip": False,
+            "gauss": False
+        }
+    },
+
+    "uuu-entropy-new-rotation_daug-crop_daug": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 5,
+        "num_of_runs": 6,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.05
+        },
+        "selection_trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "flip": False,
+            "gauss": False
+        }
+    },
+    "uuu-entropy-new-gauss_daug-more-tries": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 9,
+        "num_of_runs": 6,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.05
+        },
+        "selection_trans_config": {
+            "rotation": False,
+            "crop": False,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.1
+        }
+    },
 }
 
 
