@@ -791,6 +791,35 @@ stuff = {
         }
     },
 
+    "uuu-ee-new-gauss_daug-less-noise": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 7,
+        "num_of_runs": 6,
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.05
+        },
+        "selection_trans_config": {
+            "rotation": False,
+            "crop":False,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        }
+    },
 }
 
 
