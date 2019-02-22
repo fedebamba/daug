@@ -242,7 +242,13 @@ def a_single_experiment(esname, esnumber):
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, selection_transform=selectiontrans , first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
 
-    dataset._train_val_set.use_selection_transforms()
+    dataset._train_val_set.use_selection_transforms(2)
+
+    dataset._train_val_set.use_selection_transforms(1)
+
+    dataset._train_val_set.use_selection_transforms(0)
+
+
 
     dataset._train_val_set.use_train_transformation()
 
