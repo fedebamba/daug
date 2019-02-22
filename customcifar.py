@@ -95,10 +95,14 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
             print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
             self.indices = [x for el in el_for_class for x in el]
 
-    def use_selection_transforms(self):
+    def use_selection_transforms(self, number=0):
         print("Using selection-time image transformations....")
-        self.transform = self.sel_trans
+        if type(self.sel_trans == type([])):
+            self.transform = self.sel_trans[number]
+        else:
+            self.transform = self.sel_trans
         print(self.transform)
+
     def use_train_transformation(self):
         print("Using training-time image transformations....")
         self.transform = self.train_trans

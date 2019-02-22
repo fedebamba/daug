@@ -63,14 +63,21 @@ if utils.checkconf(trans_selection_conf, "gauss", True):
     trans_selection_list.append(utils.Gauss(utils.checkconf(trans_selection_conf, "gauss_mean", 0), utils.checkconf(trans_selection_conf, "gauss_var", 0.1)))
 if utils.checkconf(trans_selection_conf, "flip", True):
     trans_selection_list.append(trans.RandomHorizontalFlip())
-trans_selection_list.append(trans.Resize((32, 32)))
-trans_selection_list.append(trans.ToTensor())
+
+if not utils.checkconf(trans_selection_conf, "exclusive_transformations", False):
+    trans_selection_list.append(trans.Resize((32, 32)))
+    trans_selection_list.append(trans.ToTensor())
 
 traintrans_daug = trans.Compose(trans_list)
 traintrans_nodaug = trans.Compose([
     trans.ToTensor()
 ])
+
 selectiontrans_daug = trans.Compose(trans_selection_list)
+if utils.checkconf(trans_selection_conf, "exclusive_transformations", False):
+    selectiontrans_daug = [trans.Compose([x, trans.Resize(32, 32), trans.ToTensor() ]) for x in trans_selection_list]
+print(selectiontrans_daug)
+
 selectiontrans_nodaug =  trans.Compose([
     trans.ToTensor()
 ])
