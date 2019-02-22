@@ -119,7 +119,7 @@ class NetTrainer():
 
             return [el[1] for el in sorlist[:howmany]]
 
-    def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1, hard=False, config=None):
+    def distance_and_varratio(self, ds, indices, howmany, train_indices, n=5, iter=1, hard=False, config=None, execute_active=True, exclusive_transformations=False):
         varratio_weight = config["varratio_weight"] if config is not None and "varratio_weight" in config else 0
         entropy_weight = config["entropy_weight"] if config is not None and "entropy_weight" in config else 1
         distance_weight = config["distance_weight"] if config is not None and "distance_weight" in config else 1
@@ -155,6 +155,9 @@ class NetTrainer():
                 N = torch.cat((N, o), 0)
                 print("\r N: {0} ".format(N.size()), end="")
             print("Estimated density: " + str(density_estimation))
+
+            if exclusive_transformations:
+                ds._train_val_set.have_to_cycle = True
 
             for batch_index, element in enumerate(zip(*dataloaders)):  # unlabelled samples
                 normalized_confidence[1] = torch.cat((normalized_confidence[1], element[0][2]), 0)
@@ -256,6 +259,7 @@ class NetTrainer():
                         normalized_confidence[0] * varratio_weight, normalized_entropy * entropy_weight, )
                 else:
                     mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + ( varratio_weight * normalized_confidence[0].to("cuda:0")) + ( entropy_weight * normalized_entropy) + (marginals_weight * normalized_marginals)
+            ds._train_val_set.have_to_cycle = False
             return new_N, [x / sum(density_estimation) for x in density_estimation]
 
     def distance_and_entropy(self, ds, indices, howmany, train_indices, n=1):

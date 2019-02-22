@@ -38,6 +38,9 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         self.train_trans = transform
         self.sel_trans = selection_transformations
         self.indices=None
+        self.have_to_cycle=False
+        self.transformation_index=0
+
         if train:
             if provided_indices is not None:
                 self._val_indices = provided_indices[1]
@@ -108,7 +111,6 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         self.transform = self.train_trans
         print(self.transform)
 
-
     def clone(self, t):
         other = UnbalancedCIFAR10(root=self.root, train=self.train, transform=t, target_transform=self.target_transform, download=False)
         other._val_indices= self._val_indices
@@ -117,6 +119,9 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         return other
 
     def __getitem__(self, index):
+        if self.have_to_cycle:
+            self.use_selection_transforms(self.transformation_index)
+            self.transformation_index = (self.transformation_index + 1) % len(self.sel_trans)
         (img, target) = super().__getitem__(index)
         return img, target, index
 

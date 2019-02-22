@@ -54,6 +54,7 @@ trans_list.append(trans.Resize((32, 32)))
 trans_list.append(trans.ToTensor())
 
 trans_selection_conf = utils.checkconf(conf_file, "selection_trans_config", None)
+exclusive_transformations = utils.checkconf(trans_selection_conf, "exclusive_transformations", False)
 trans_selection_list = []
 if utils.checkconf(trans_selection_conf, "rotation", True):
     trans_selection_list.append(trans.RandomRotation(utils.checkconf(trans_selection_conf, "rotation_degree", 5)))
@@ -242,17 +243,8 @@ def a_single_experiment(esname, esnumber):
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, selection_transform=selectiontrans , first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
 
-    dataset._train_val_set.use_selection_transforms(2)
-
-    dataset._train_val_set.use_selection_transforms(1)
-
-    dataset._train_val_set.use_selection_transforms(0)
-
-
-
+    dataset._train_val_set.use_selection_transforms()
     dataset._train_val_set.use_train_transformation()
-
-
 
     el_for_active = [x for x in dataset.already_selected_indices]
     el_for_normal = [x for x in dataset.already_selected_indices]
@@ -266,10 +258,11 @@ def a_single_experiment(esname, esnumber):
         active_indices, density_estimator, normal_indices = None, None, None
 
         if execute_active:
-            dataset._train_val_set.use_selection_transforms()
+            if not exclusive_transformations:
+                dataset._train_val_set.use_selection_transforms()
             active_indices, density_estimator = active_net.distance_and_varratio(dataset,
                                                          [x for x in dataset.train_indices if x not in el_for_active], tslp,
-                                                         el_for_active, n=n, config=af_config)
+                                                         el_for_active, n=n, config=af_config, execute_active=execute_active, exclusive_transformations=exclusive_transformations)
             dataset._train_val_set.use_train_transformation()
 
         if execute_normal:
