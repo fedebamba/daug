@@ -112,7 +112,8 @@ selectiontrans = selectiontrans_daug if utils.checkconf(conf_file, "daug", True)
 print("Transformations used in traning phase: ")
 print(traintrans_01)
 print("Transformations used in selection phase: ")
-print(selectiontrans)
+for x in selectiontrans:
+    print(x)
 print("Number of different images at selection phase: " + str(n))
 
 
