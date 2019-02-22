@@ -75,8 +75,8 @@ traintrans_nodaug = trans.Compose([
 
 selectiontrans_daug = trans.Compose(trans_selection_list)
 if utils.checkconf(trans_selection_conf, "exclusive_transformations", False):
-    selectiontrans_daug = [trans.Compose([x, trans.Resize(32, 32), trans.ToTensor() ]) for x in trans_selection_list]
-print(len(selectiontrans_daug))
+    selectiontrans_daug = [trans.Compose([x, trans.Resize((32, 32)), trans.ToTensor() ]) for x in trans_selection_list]
+print(selectiontrans_daug)
 
 selectiontrans_nodaug =  trans.Compose([
     trans.ToTensor()
