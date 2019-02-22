@@ -892,7 +892,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 9,
+        "num_of_runs": 6,
+        "n":9,
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
