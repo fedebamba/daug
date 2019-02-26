@@ -100,7 +100,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
     def use_selection_transforms(self, number=0):
         print("Using selection-time image transformations....")
-        if isinstance(self.sel_trans, []):
+        if isinstance(self.sel_trans, type([])):
             self.transform = self.sel_trans[number]
         else:
             self.transform = self.sel_trans
