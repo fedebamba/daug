@@ -1119,7 +1119,7 @@ stuff = {
     },
     "uuu-entro-and-dist-and-var-new-rotation_daug-crop_daug-gauss_daug-even-less-distortion": {
         "af_config": {
-            "using_ensemble_entropy": True,
+            "using_ensemble_entropy": False,
             "varratio_weight": 1,
             "distance_weight": 1,
             "using_max": True
