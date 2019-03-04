@@ -1208,10 +1208,6 @@ stuff = {
             "gauss_var": 0.01
         }
     },
-
-
-
-
     "uuu-ee-test-for-exclusive-transformations-more-tests-9-tries": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -1364,6 +1360,9 @@ stuff = {
             "gauss_var": 0.01
         }
     },
+
+
+
 
     "uuu-var-new-rotation_daug-crop_daug-gauss_daug-even-less-distortion": {
         "af_config": {
