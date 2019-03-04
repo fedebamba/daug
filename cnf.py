@@ -1210,7 +1210,7 @@ stuff = {
     },
     "uuu-ee-test-for-exclusive-transformations-more-tests-9-tries": {
         "af_config": {
-            "using_ensemble_entropy": False,
+            "using_ensemble_entropy": True,
             "varratio_weight": 0,
             "distance_weight": 1e-7,
             "using_max": False
