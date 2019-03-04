@@ -33,6 +33,13 @@ num_of_runs = utils.checkconf(conf_file, "num_of_runs", 3)
 execute_active = utils.checkconf(conf_file, "execute_active", True)
 execute_normal = utils.checkconf(conf_file, "execute_random", True)
 
+seeds = utils.checkconf(conf_file, "seeds", [])
+if len(seeds) < num_of_runs:
+    seeds = seeds + [0 for x in range(len(seeds), num_of_runs)]
+
+print(seeds)
+
+
 af_config = {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
     "varratio_weight": utils.checkconf(af_conf, "varratio_weight", 0) if af_conf is not None else 0,
@@ -109,10 +116,10 @@ n = utils.checkconf(conf_file, "n", 5) if utils.checkconf(conf_file, "daug", Tru
 traintrans_01 = traintrans_daug
 selectiontrans = selectiontrans_daug if utils.checkconf(conf_file, "daug", True) else selectiontrans_nodaug
 
-print("Transformations used in traning phase: ")
-print(traintrans_01)
-print("Transformations used in selection phase: ")
-print(selectiontrans)
+#print("Transformations used in traning phase: ")
+#print(traintrans_01)
+#print("Transformations used in selection phase: ")
+#print(selectiontrans)
 
 print("Number of different images at selection phase: " + str(n))
 
@@ -223,7 +230,15 @@ def write_dataset_info(ds, active_indices, normal_indices, filename):
 
 
 
-def a_single_experiment(esname, esnumber):
+def a_single_experiment(esname, esnumber, seed):
+    print("Starting new experiment....")
+    print("Setting seed as {0}".format(seed))
+
+    numpy.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
     with open("res/results_{0}_{1}.csv".format(esname, esnumber), "w") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["Perc", "Active", "Normal", "Delta"])
@@ -367,4 +382,4 @@ if len(sys.argv) > 1:
     esname = "3_" + str(sys.argv[1]) + "_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 
 for i in range(num_of_runs):
-    a_single_experiment(esname + "_" + str(epochs_first_step), i)
+    a_single_experiment(esname + "_" + str(epochs_first_step), i, seed=seeds[i])
