@@ -35,7 +35,7 @@ execute_normal = utils.checkconf(conf_file, "execute_random", True)
 
 seeds = utils.checkconf(conf_file, "seeds", [])
 if len(seeds) < num_of_runs:
-    seeds = seeds + [ numpy.random.randint(0, sys.maxsize ) for x in range(len(seeds), num_of_runs)]
+    seeds = seeds + [ numpy.random.randint(0, 2**32-1 ) for x in range(len(seeds), num_of_runs)]
 
 print(seeds)
 
