@@ -1414,10 +1414,89 @@ stuff = {
             "rotation_degree": 7,
             "crop_amount": 24,
             "gauss_mean": 0,
-            "gauss_var": 0.05
+            "gauss_var": 0.01
+        },
+    },
+    "uuu-entropy-new-al-baseline-set-seed": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": False,
+        "num_of_runs": 10,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
         },
     },
 
+    "uuu-entropy-new-rotation_daug-7-degrees-set-seed": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 10,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "rotation_degree": 7,
+            "crop": False,
+            "flip": False,
+            "gauss": False
+        }
+    },
+
+    "uuu-entropy-new-rotation_daug-5-degrees-set-seed": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 10,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "rotation_degree": 5,
+            "crop": False,
+            "flip": False,
+            "gauss": False
+        }
+    },
 }
 
 
