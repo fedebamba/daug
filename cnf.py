@@ -1408,8 +1408,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_active": False,
         "daug": False,
-        "num_of_runs": 10,
-        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "num_of_runs": 7,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1430,8 +1430,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": False,
-        "num_of_runs": 10,
-        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "num_of_runs": 7,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1453,8 +1453,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 10,
-        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "num_of_runs": 7,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1482,8 +1482,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 10,
-        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657, 3, 388, 2628],
+        "num_of_runs": 7,
+        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
