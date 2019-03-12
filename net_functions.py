@@ -215,9 +215,11 @@ class NetTrainer():
                 partial_dist = el.unsqueeze(1) - N.unsqueeze(0)
                 partial_dist = torch.sum(partial_dist * partial_dist, -1)
                 partial_dist = torch.sqrt(partial_dist)
-                dist_S_N = torch.cat((dist_S_N, partial_dist.cpu()), 0)
+                partial_dist = torch.min(partial_dist, 1)[0]
+                dist_S_N = torch.cat((dist_S_N, partial_dist), 0)
 
-            mindist = torch.min(dist_S_N, 1)[0].to("cuda:0")
+            # mindist = torch.min(dist_S_N, 1)[0].to("cuda:0")
+            mindist = dist_S_N
 
             normalizing_factor = torch.max(mindist, -1)[0]
 
@@ -225,9 +227,6 @@ class NetTrainer():
             normalized_marginals = (normalized_marginals / torch.max(normalized_marginals, -1)[0])
 
             normalized_confidence[0] = normalized_confidence[0].to("cuda:0")
-            # normalized_confidence[0] *= varratio_weight
-            # normalized_entropy += entropy_weight
-
 
             if usingmax:
                 mindist_confidence = (distance_weight * (mindist / normalizing_factor)) + torch.max(normalized_confidence[0] * varratio_weight, normalized_entropy * entropy_weight, )
@@ -237,7 +236,6 @@ class NetTrainer():
             erlist_indexes = normalized_confidence[1]
             new_N = []
             for i in range(howmany):
-                #  maxx = torch.max(mindist, -1)[1]
                 maxx = torch.max(mindist_confidence, -1)[1]
                 print("Max: {0:.3f} = ({1:.3f} * {3}) + ({2:.3f} * {4}) + (({5:.3f} * {6}))".format(mindist_confidence[maxx], mindist[maxx]/normalizing_factor, normalized_confidence[0][maxx], distance_weight, varratio_weight, normalized_entropy[maxx], entropy_weight))
 
