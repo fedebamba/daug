@@ -239,7 +239,7 @@ def a_single_experiment(esname, esnumber, seed):
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = True
-    
+
     with open("res/results_{0}_{1}.csv".format(esname, esnumber), "w") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["Perc", "Active", "Normal", "Delta"])

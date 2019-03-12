@@ -1395,7 +1395,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-random-baseline-set-seed": {
+    "uuu-entropy-new-random-baseline-set-seed": { #todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1417,7 +1417,7 @@ stuff = {
             "gauss_var": 0.01
         },
     },
-    "uuu-entropy-new-al-baseline-set-seed": {
+    "uuu-entropy-new-al-baseline-set-seed": { #todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1440,7 +1440,7 @@ stuff = {
         },
     },
 
-    "uuu-entropy-new-rotation_daug-7-degrees-set-seed": {
+    "uuu-entropy-new-rotation_daug-7-degrees-set-seed": { #todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1469,7 +1469,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-rotation_daug-5-degrees-set-seed": {
+    "uuu-entropy-new-rotation_daug-5-degrees-set-seed": { #todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1498,7 +1498,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-gauss_daug-005-set-seed": {
+    "uuu-entropy-new-gauss_daug-005-set-seed": { # todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1528,7 +1528,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-gauss_daug-01-set-seed": {
+    "uuu-entropy-new-gauss_daug-01-set-seed": { # todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1558,7 +1558,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-crop_daug-26-set-seed": {
+    "uuu-entropy-new-crop_daug-26-set-seed": { # todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1616,7 +1616,7 @@ stuff = {
         }
     },
 
-    "uuu-seed-test-bench-true-deterministic-true": { #todo
+    "uuu-seed-test-bench-true-deterministic-true": {
         "epochs": 5,
         "af_config": {
             "using_ensemble_entropy": False,
@@ -1647,7 +1647,7 @@ stuff = {
     },
 
 
-    "uuu-seed-test-bench-true-deterministic-false": {  # todo
+    "uuu-seed-test-bench-true-deterministic-false": {
         "epochs": 5,
         "af_config": {
             "using_ensemble_entropy": False,
