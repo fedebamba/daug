@@ -85,7 +85,6 @@ def new_net_semisupervised():
 
     return nf.NetTrainerSemiSupervised(net=net, criterion=criterion, optimizer=optimizer, criterion_train= criterion_train)
 
-
 def single_train_pass(cd):
     trainloader = cd.get_train_loader()
     validationloader = cd.get_validation_loader()

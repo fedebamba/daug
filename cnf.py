@@ -1587,7 +1587,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-crop_daug-28-set-seed": {
+    "uuu-entropy-new-crop_daug-28-set-seed": { #todo
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
