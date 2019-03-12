@@ -192,7 +192,6 @@ class NetTrainer():
                             density_estimation[e] += (el[e] /n )
                 else:
                     mostprobableel = torch.max(torch.Tensor(conf[0]), 1)[1]
-                    print(len(mostprobableel))
                     for x in range(len(mostprobableel)):
                         density_estimation[mostprobableel[x]] += 1
 
@@ -221,7 +220,6 @@ class NetTrainer():
             mindist = torch.min(dist_S_N, 1)[0].to("cuda:0")
 
             normalizing_factor = torch.max(mindist, -1)[0]
-            print("NF : " + str(normalizing_factor))
 
             normalized_entropy = (normalized_entropy / torch.max(normalized_entropy, -1)[0])
             normalized_marginals = (normalized_marginals / torch.max(normalized_marginals, -1)[0])

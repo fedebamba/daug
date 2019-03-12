@@ -21,8 +21,6 @@ def avg_entropy(net_out):
 def marginals(vector, num_of_classes=10, n=5):
     # la media per i marginali
     ps = T.nn.Softmax(1)(vector)
-    for i in range(10):
-        print(ps[i])
     ps = T.mean(ps, 2).reshape(len(ps), 10)
 
     # il primo ed il secondo elemento più grande
@@ -53,13 +51,6 @@ def max_variance(net_out):
     return 1 - (confidence(pred)/len(net_out))
 
 
-    #   e = numpy.zeros(shape=(len(net_out[0]), 10))
-    # for el in net_out:
-    #    sm = F.softmax(el)
-    #    e = T.dist(e, sm, 1)
-    #    print(e)
-
-    # return e.max(1)
 
 
 def entropic_distance(net_out):
