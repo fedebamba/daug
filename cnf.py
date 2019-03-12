@@ -1409,7 +1409,7 @@ stuff = {
         "execute_active": False,
         "daug": False,
         "num_of_runs": 7,
-        "seeds":[7257, 537, 125, 259, 3129, 3825, 252657],
+        "seeds":[0,1,2,3,4,5,6],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
