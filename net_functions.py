@@ -216,10 +216,10 @@ class NetTrainer():
                 partial_dist = torch.sum(partial_dist * partial_dist, -1)
                 partial_dist = torch.sqrt(partial_dist)
                 partial_dist = torch.min(partial_dist, 1)[0]
-                dist_S_N = torch.cat((dist_S_N, partial_dist), 0)
+                dist_S_N = torch.cat((dist_S_N, partial_dist.cpu()), 0)
 
             # mindist = torch.min(dist_S_N, 1)[0].to("cuda:0")
-            mindist = dist_S_N
+            mindist = dist_S_N.to("cuda:0")
 
             normalizing_factor = torch.max(mindist, -1)[0]
 
