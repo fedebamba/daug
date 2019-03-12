@@ -1616,7 +1616,7 @@ stuff = {
         }
     },
 
-    "uuu-seed-test": { #todo
+    "uuu-seed-test-bench-true-deterministic-true": { #todo
         "epochs": 5,
         "af_config": {
             "using_ensemble_entropy": False,
