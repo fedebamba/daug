@@ -384,3 +384,15 @@ if len(sys.argv) > 1:
 
 for i in range(num_of_runs):
     a_single_experiment(esname + "_" + str(epochs_first_step), i, seed=seeds[i])
+
+print("Writing res...")
+results = [[] for i in range(num_of_runs)]
+for i in range(num_of_runs):
+    with open("res/results_{0}_{1}.csv".format(esname + "_" + str(epochs_first_step), i), "r+") as csvfile:
+        reader = csv.reader(csvfile)
+        results[i] = [row[1] for row in reader]
+
+with open("res/results_{0}_totals.csv".format(esname + "_" + str(epochs_first_step)), "w+") as csvfile:
+    writer = csv.writer(csvfile)
+    for i in range(len(results[0])):
+        writer.writerow([results[j][i] for j in range(num_of_runs)])

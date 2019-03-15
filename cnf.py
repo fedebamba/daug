@@ -1395,7 +1395,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-random-baseline-set-seed": { #todo
+    "uuu-entropy-new-random-baseline-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1417,7 +1417,7 @@ stuff = {
             "gauss_var": 0.01
         },
     },
-    "uuu-entropy-new-al-baseline-set-seed": { #todo
+    "uuu-entropy-new-al-baseline-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1440,7 +1440,7 @@ stuff = {
         },
     },
 
-    "uuu-entropy-new-rotation_daug-7-degrees-set-seed": { #todo
+    "uuu-entropy-new-rotation_daug-7-degrees-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1469,7 +1469,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-rotation_daug-5-degrees-set-seed": { #todo
+    "uuu-entropy-new-rotation_daug-5-degrees-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1498,7 +1498,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-gauss_daug-005-set-seed": { # todo
+    "uuu-entropy-new-gauss_daug-005-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1575,6 +1575,7 @@ stuff = {
         "seeds": [0,1,2,3,4,5,6],
         "trans_config": {
             "rotation_degree": 7,
+
             "crop_amount": 24,
             "gauss_mean": 0,
             "gauss_var": 0.01
@@ -1587,7 +1588,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-crop_daug-28-set-seed": { #todo
+    "uuu-entropy-new-crop_daug-28-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1676,7 +1677,6 @@ stuff = {
             "gauss": False
         }
     },
-
 }
 
 
