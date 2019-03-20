@@ -1758,12 +1758,42 @@ stuff = {
             "gauss_var": 0.01
         },
         "selection_trans_config": {
-            "exclusive_transformations": True,
+            "exclusive_transformations": False,
             "rotation": False,
             "crop": False,
             "flip": False,
             "gauss_mean": 0,
             "gauss_var": 0.015
+        }
+    },
+
+    "uuu-entropy-new-crop_daug-28-set-seed-with-origin": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 7,
+        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "exclusive_transformations": True,
+            "rotation": False,
+            "crop_amount": 28,
+            "flip": False,
+            "gauss": False
         }
     },
 
