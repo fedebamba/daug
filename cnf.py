@@ -1678,7 +1678,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-rotation_daug-3-degrees-set-seed": { # todo
+    "uuu-entropy-new-rotation_daug-3-degrees-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1707,7 +1707,7 @@ stuff = {
         }
     },
 
-    "uuu-ee-new-rotation_daug-5-degrees-set-seed": {  # todo
+    "uuu-ee-new-rotation_daug-5-degrees-set-seed": {
         "af_config": {
             "using_ensemble_entropy": True,
             "varratio_weight": 0,
@@ -1733,6 +1733,36 @@ stuff = {
             "crop": False,
             "flip": False,
             "gauss": False
+        }
+    },
+
+    "uuu-entropy-new-gauss_daug-015-set-seed": { # todo
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 7,
+        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "rotation": False,
+            "crop": False,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.015
         }
     },
 

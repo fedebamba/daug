@@ -30,6 +30,7 @@ if len(sys.argv) > 1:
 af_conf = utils.checkconf(conf_file, "af_config", None)
 
 num_of_runs = utils.checkconf(conf_file, "num_of_runs", 3)
+n = utils.checkconf(conf_file, "n", 5) if utils.checkconf(conf_file, "daug", True) else 1
 execute_active = utils.checkconf(conf_file, "execute_active", True)
 execute_normal = utils.checkconf(conf_file, "execute_random", True)
 
@@ -81,13 +82,16 @@ traintrans_nodaug = trans.Compose([
     trans.ToTensor()
 ])
 
-selectiontrans_daug = trans.Compose(trans_selection_list)
-if utils.checkconf(trans_selection_conf, "exclusive_transformations", False):
-    selectiontrans_daug = [trans.Compose([x, trans.Resize((32, 32)), trans.ToTensor() ]) for x in trans_selection_list]
-
 selectiontrans_nodaug =  trans.Compose([
     trans.ToTensor()
 ])
+selectiontrans_daug = trans.Compose(trans_selection_list)
+if utils.checkconf(trans_selection_conf, "exclusive_transformations", False):
+    selectiontrans_daug = [trans.Compose([trans_selection_list[x % len(trans_selection_list)], trans.Resize((32, 32)), trans.ToTensor()]) for x in range(n)]
+    selectiontrans_daug = selectiontrans_daug.append(selectiontrans_nodaug)
+
+    # selectiontrans_daug = [trans.Compose([x, trans.Resize((32, 32)), trans.ToTensor() ]) for x in trans_selection_list]
+
 test_transform = trans.Compose([
     trans.ToTensor()
 ])
@@ -112,14 +116,14 @@ train_set_percentage = utils.checkconf(conf_file, "train_set_percentage_at_each_
 first_time_multiplier = 1
 until_slice_number = 8
 
-n = utils.checkconf(conf_file, "n", 5) if utils.checkconf(conf_file, "daug", True) else 1
+
 traintrans_01 = traintrans_daug
 selectiontrans = selectiontrans_daug if utils.checkconf(conf_file, "daug", True) else selectiontrans_nodaug
 
 #print("Transformations used in traning phase: ")
 #print(traintrans_01)
 #print("Transformations used in selection phase: ")
-#print(selectiontrans)
+print(selectiontrans)
 
 print("Number of different images at selection phase: " + str(n))
 
