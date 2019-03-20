@@ -1749,7 +1749,6 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "exclusive_transformations": True,
         "num_of_runs": 7,
         "seeds": [0, 1, 2, 3, 4, 5, 6],
         "trans_config": {
@@ -1759,6 +1758,7 @@ stuff = {
             "gauss_var": 0.01
         },
         "selection_trans_config": {
+            "exclusive_transformations": True,
             "rotation": False,
             "crop": False,
             "flip": False,
