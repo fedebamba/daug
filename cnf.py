@@ -1749,6 +1749,7 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
+        "exclusive_transformations": True,
         "num_of_runs": 7,
         "seeds": [0, 1, 2, 3, 4, 5, 6],
         "trans_config": {
