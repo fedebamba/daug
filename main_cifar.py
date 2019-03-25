@@ -87,12 +87,10 @@ selectiontrans_nodaug =  trans.Compose([
 ])
 selectiontrans_daug = trans.Compose(trans_selection_list)
 if utils.checkconf(trans_selection_conf, "exclusive_transformations", False):
-    print("porco dio")
     selectiontrans_daug = [trans.Compose([trans_selection_list[x % len(trans_selection_list)], trans.Resize((32, 32)), trans.ToTensor()]) for x in range(n)]
-    selectiontrans_daug.append(selectiontrans_nodaug)
-    n = n+1
-
-    # selectiontrans_daug = [trans.Compose([x, trans.Resize((32, 32)), trans.ToTensor() ]) for x in trans_selection_list]
+    if utils.checkconf(trans_selection_conf, "original", False):
+        selectiontrans_daug.append(selectiontrans_nodaug)
+        n = n+1
 
 test_transform = trans.Compose([
     trans.ToTensor()

@@ -1790,6 +1790,7 @@ stuff = {
         },
         "selection_trans_config": {
             "exclusive_transformations": True,
+            "original": True,
             "rotation": False,
             "crop_amount": 28,
             "flip": False,
