@@ -1736,7 +1736,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-gauss_daug-015-set-seed": { # todo
+    "uuu-entropy-new-gauss_daug-015-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1793,6 +1793,68 @@ stuff = {
             "original": True,
             "rotation": False,
             "crop_amount": 28,
+            "flip": False,
+            "gauss": False
+        }
+    },
+
+    "uuu-entropy-new-gauss_daug-005-set-seed-with-origin": { #todo
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 7,
+        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "exclusive_transformations": True,
+            "original": True,
+            "rotation": False,
+            "crop": False,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.005
+        }
+    },
+
+    "uuu-entropy-new-rotation_daug-3-degrees-set-seed-9-dist": { #todo
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "n": 9,
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 7,
+        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "rotation_degree": 3,
+            "crop": False,
             "flip": False,
             "gauss": False
         }
