@@ -1923,6 +1923,37 @@ stuff = {
         }
     },
 
+    "uuu-entropy-new-rotation_daug-2-degrees-set-seed": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "n": 5,
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "num_of_runs": 7,
+        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "rotation_degree": 2,
+            "crop": False,
+            "flip": False,
+            "gauss": False
+        }
+    },
+
+
 }
 
 
