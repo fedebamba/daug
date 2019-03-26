@@ -2054,7 +2054,7 @@ stuff = {
         },
     },
 
-    "uuu-entropy-new-random-baseline-set-seed-bench-false-det": {
+    "uuu-entropy-new-random-baseline-set-seed-bench-true-not-det": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
