@@ -2031,6 +2031,53 @@ stuff = {
         },
     },
 
+    "uuu-entropy-new-random-baseline-set-other-seed-bench-false": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-9,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_active": False,
+        "daug": False,
+        "num_of_runs": 7,
+        "seeds": [45, 90, 135, 180, 225, 270, 315],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+    },
+
+    "uuu-entropy-new-random-baseline-unset-seed-bench-false": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-9,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_active": False,
+        "daug": False,
+        "num_of_runs": 7,
+        "seeds": [],
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+    },
+
+
     "uuu-entropy-new-random-baseline-set-seed-bench-false-not-det": {
         "af_config": {
             "using_ensemble_entropy": False,
