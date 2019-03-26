@@ -241,7 +241,7 @@ def a_single_experiment(esname, esnumber, seed):
     numpy.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.deterministic = False
     torch.backends.cudnn.benchmark = False
 
     with open("res/results_{0}_{1}.csv".format(esname, esnumber), "w") as csvfile:
