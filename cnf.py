@@ -1431,7 +1431,7 @@ stuff = {
         "execute_random": False,
         "daug": False,
         "num_of_runs": 7,
-        "seeds":[0,1,2,3,4,5,6],
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1454,7 +1454,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds":[0,1,2,3,4,5,6],
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1483,7 +1483,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds":[0,1,2,3,4,5,6],
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1512,7 +1512,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds": [0,1,2,3,4,5,6],
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1542,7 +1542,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds": [0,1,2,3,4,5,6],
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1572,7 +1572,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds": [0,1,2,3,4,5,6],
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
 
@@ -1602,7 +1602,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds": [0,1,2,3,4,5,6],
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -2054,6 +2054,7 @@ stuff = {
         },
     },
 
+
     "uuu-entropy-new-random-baseline-unset-seed-bench-false": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -2068,7 +2069,7 @@ stuff = {
         "execute_active": False,
         "daug": False,
         "num_of_runs": 7,
-        "seeds": [],
+        "seeds": [],     # [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159]
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
