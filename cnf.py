@@ -1707,6 +1707,8 @@ stuff = {
         }
     },
 
+
+
     "uuu-ee-new-rotation_daug-5-degrees-set-seed": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -1721,7 +1723,7 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 7,
-        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1735,6 +1737,8 @@ stuff = {
             "gauss": False
         }
     },
+
+
 
     "uuu-entropy-new-gauss_daug-015-set-seed": {
         "af_config": {
