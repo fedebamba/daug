@@ -114,7 +114,8 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
     def define_starting_set(self, el_percentage=.05, forced_distribution=False):
         if forced_distribution:
-            return [item for el in self.el_for_class for item in el[:int(len(el) * el_percentage)]]
+            train_els = [[el for el in self.el_for_class[i] if el not in self._val_indices] for i in range(10)]
+            return [item for el in train_els for item in el[:int(len(el) * el_percentage)]]
 
 
     def clone(self, t):
