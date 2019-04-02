@@ -1830,7 +1830,7 @@ stuff = {
         }
     },
 
-    # todo
+
     "uuu-entropy-new-gauss_daug-002-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
