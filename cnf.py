@@ -1707,8 +1707,6 @@ stuff = {
         }
     },
 
-
-
     "uuu-ee-new-rotation_daug-5-degrees-set-seed": {
         "af_config": {
             "using_ensemble_entropy": True,
@@ -1737,8 +1735,6 @@ stuff = {
             "gauss": False
         }
     },
-
-
 
     "uuu-entropy-new-gauss_daug-015-set-seed": {
         "af_config": {
@@ -1784,8 +1780,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
+        "num_of_runs": 6,
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1866,7 +1862,7 @@ stuff = {
         }
     },
 
-    "uuu-entropy-new-rotation_daug-3-degrees-set-seed-9-dist": {
+    "uuu-entropy-new-rotation_daug-7-degrees-set-seed-9-dist": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -1880,8 +1876,8 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [0, 1, 2, 3, 4, 5, 6],
+        "num_of_runs": 6,
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1889,7 +1885,9 @@ stuff = {
             "gauss_var": 0.01
         },
         "selection_trans_config": {
-            "rotation_degree": 3,
+            "exclusive_transformations": True,
+            "original": True,
+            "rotation_degree": 7,
             "crop": False,
             "flip": False,
             "gauss": False
