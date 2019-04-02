@@ -258,11 +258,12 @@ def a_single_experiment(esname, esnumber, seed):
         writer = csv.writer(csvfile)
         writer.writerow([])
 
-    # Network def
-    net_trainer = new_network()
 
     # Dataset def
     dataset = CifarLoader(transform=traintrans_01,test_transform=test_transform, selection_transform=selectiontrans , first_time_multiplier=first_time_multiplier, name="res/results_{0}_{1}".format(esname, esnumber), unbal=True)
+
+    # Network def
+    net_trainer = new_network()
 
     dataset._train_val_set.use_selection_transforms()
     dataset._train_val_set.use_train_transformation()

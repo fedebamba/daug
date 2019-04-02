@@ -112,8 +112,13 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         self.transform = self.train_trans
         print(self.transform)
 
-    def define_starting_set(self, num_of_els=1000, forced_distribution=None, index_list=None):
-        pass
+    def define_starting_set(self, num_of_els=1000, forced_distribution=None):
+        if forced_distribution is not None:
+
+
+            pass
+        else:
+            pass
 
     def clone(self, t):
         other = UnbalancedCIFAR10(root=self.root, train=self.train, transform=t, target_transform=self.target_transform, download=False)
