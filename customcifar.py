@@ -80,7 +80,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                         writer.writerow(["100 %" if x in full_classes else "{0} %".format(int(percentage * 100)) for x in range(10)])
 
             print('Train data ' + str(len(self.train_data)))
-            print("Train els: {0}".format([el for el in self.el_for_class]) )
+            print("Train els: {0}".format([len(el) for el in self.el_for_class]) )
         elif unbal_test:
             print("Creating unbalanced test set......")
             self.full_classes = full_classes
