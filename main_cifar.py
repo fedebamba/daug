@@ -44,10 +44,6 @@ if starting_indexes_location != "":
         r = csv.reader(file)
         starting_indexes = [x for l in r for x in l]
 
-print(starting_indexes)
-
-
-
 af_config = {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
     "varratio_weight": utils.checkconf(af_conf, "varratio_weight", 0) if af_conf is not None else 0,
