@@ -82,7 +82,7 @@ traintrans_nodaug = trans.Compose([
     trans.ToTensor()
 ])
 
-selectiontrans_nodaug =  trans.Compose([
+selectiontrans_nodaug = trans.Compose([
     trans.ToTensor()
 ])
 selectiontrans_daug = trans.Compose(trans_selection_list)
@@ -148,11 +148,11 @@ class CifarLoader():
         print([len([x for x in self.train_indices if x in self._train_val_set.el_for_class[i] ]) for i in range(10)])
 
         if unbal:
-                 # self.already_selected_indices = numpy.random.choice(self.train_indices, size=tslp*first_time_multiplier, replace=False).tolist()
-                 self.already_selected_indices = self._train_val_set.define_starting_set(forced_distribution=True)
+             # self.already_selected_indices = numpy.random.choice(self.train_indices, size=tslp*first_time_multiplier, replace=False).tolist()
+             self.already_selected_indices = self._train_val_set.define_starting_set(forced_distribution=True)
         else:
-                lenel = [int(tslp/10) + (1 if i < tslp % int(tslp/10) else 0) for i in range(10)]
-                self.already_selected_indices = [x for i in range(10) for x in numpy.random.choice([xx for xx in self._train_val_set.el_for_class[i] if xx not in self.validation_indices], size=lenel[i], replace=False).tolist()]
+             lenel = [int(tslp/10) + (1 if i < tslp % int(tslp/10) else 0) for i in range(10)]
+             self.already_selected_indices = [x for i in range(10) for x in numpy.random.choice([xx for xx in self._train_val_set.el_for_class[i] if xx not in self.validation_indices], size=lenel[i], replace=False).tolist()]
 
         print("Selected: {}".format([len([x for x in self.already_selected_indices if x in self._train_val_set.el_for_class[i]]) for i in range(10)]))
 

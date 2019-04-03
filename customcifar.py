@@ -51,6 +51,8 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                 if full_classes is None:
                     full_classes = numpy.random.choice([x for x in range(10)], size=num_full_classes,replace=False)
                 self.full_classes = full_classes
+                print("Full classes: {0}".format(self.full_classes))
+
                 el_for_class = [[] for x in range(10)]
                 data_loader = tud.DataLoader(self, batch_size=100, shuffle=False, num_workers=2,
                                              sampler=CustomSampler([x for x in range(len(self.train_data))]))
@@ -115,6 +117,10 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
     def define_starting_set(self, el_percentage=.05, forced_distribution=False):
         if forced_distribution:
             train_els = [[el for el in self.el_for_class[i] if el not in self._val_indices] for i in range(10)]
+            with open("staring_indexes.csv", "w+") as file:
+                writer = csv.writer(file)
+                for el in train_els:
+                    writer.writerow(el)
             return [item for el in train_els for item in el[:int(len(el) * el_percentage)]]
 
 
