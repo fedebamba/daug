@@ -17,8 +17,6 @@ import net_functions as nf
 import utils
 
 
-
-
 # PARAMETER PART................
 esname = "exp_Entropy_" + str(datetime.datetime.now().strftime("%B.%d.%Y-%H.%M"))
 from cnf import stuff
@@ -38,7 +36,16 @@ seeds = utils.checkconf(conf_file, "seeds", [])
 if len(seeds) < num_of_runs:
     seeds = seeds + [ numpy.random.randint(0, 2**32-1 ) for x in range(len(seeds), num_of_runs)]
 
-print(seeds)
+full_classes = utils.checkconf(conf_file, "full_classes", None)
+starting_indexes = None
+starting_indexes_location = utils.checkconf(conf_file , "starting_indexes_location", "")
+if starting_indexes_location != "":
+    with open(starting_indexes_location + ".csv", "r") as file:
+        r = csv.reader(file)
+        starting_indexes = [x for l in r for x in l]
+
+print(starting_indexes)
+
 
 
 af_config = {
@@ -139,7 +146,7 @@ tslp = int((train_set_length * train_set_percentage) / 100)
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None, selection_transform=None):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=difficult_classes_percentage, valels=el_for_validation, selection_transformations=selection_transform)
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=difficult_classes_percentage, valels=el_for_validation, selection_transformations=selection_transform, full_classes = full_classes)
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=(not balanced_test_set))  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
@@ -149,7 +156,10 @@ class CifarLoader():
 
         if unbal:
              # self.already_selected_indices = numpy.random.choice(self.train_indices, size=tslp*first_time_multiplier, replace=False).tolist()
-             self.already_selected_indices = self._train_val_set.define_starting_set(forced_distribution=True)
+             if starting_indexes is not None:
+                 self.already_selected_indices = starting_indexes
+             else:
+                self.already_selected_indices = self._train_val_set.define_starting_set(forced_distribution=True)
         else:
              lenel = [int(tslp/10) + (1 if i < tslp % int(tslp/10) else 0) for i in range(10)]
              self.already_selected_indices = [x for i in range(10) for x in numpy.random.choice([xx for xx in self._train_val_set.el_for_class[i] if xx not in self.validation_indices], size=lenel[i], replace=False).tolist()]
