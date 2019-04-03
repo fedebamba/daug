@@ -120,8 +120,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
             with open("starting_indexes.csv", "w+") as file:
                 writer = csv.writer(file)
                 for el in train_els:
-                    writer.writerow(el)
-                    writer.writerow("\n")
+                    writer.writerow(el[:int(len(el) * el_percentage)])
             return [item for el in train_els for item in el[:int(len(el) * el_percentage)]]
 
 
