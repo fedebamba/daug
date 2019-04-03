@@ -1410,6 +1410,8 @@ stuff = {
         "daug": False,
         "num_of_runs": 6,
         "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],
+        "full_classes": [0,2,3,4,5],
+        
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
