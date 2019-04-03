@@ -42,7 +42,9 @@ starting_indexes_location = utils.checkconf(conf_file , "starting_indexes_locati
 if starting_indexes_location != "":
     with open(starting_indexes_location + ".csv", "r") as file:
         r = csv.reader(file)
-        starting_indexes = [x for l in r for x in l]
+        starting_indexes = [int(x) for l in r for x in l]
+
+
 
 af_config = {
     "using_ensemble_entropy": utils.checkconf(af_conf, "using_ensemble_entropy", False) if af_conf is not None else False,
