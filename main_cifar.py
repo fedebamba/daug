@@ -155,6 +155,7 @@ class CifarLoader():
         if unbal:
              # self.already_selected_indices = numpy.random.choice(self.train_indices, size=tslp*first_time_multiplier, replace=False).tolist()
              if starting_indexes is not None:
+                 print(starting_indexes)
                  self.already_selected_indices = starting_indexes
              else:
                 self.already_selected_indices = self._train_val_set.define_starting_set(forced_distribution=True)
