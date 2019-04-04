@@ -1409,7 +1409,7 @@ stuff = {
         "execute_active": False,
         "daug": False,
         "num_of_runs": 6,
-        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],
+        "seeds":[1386890164, 3699572969, 2171801678, 1406464819, 2530787159], # 413853558
         "full_classes": [0,2,3,4,5],
         "starting_indexes_location": "starting_indexes",
         "trans_config": {
