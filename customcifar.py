@@ -29,7 +29,7 @@ class CustomCIFAR10(torchvision.datasets.CIFAR10):
 
 
 class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
-    def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False, selection_transformations=None):
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=False, provided_indices=None, num_full_classes=5, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False, selection_transformations=None, valindexes=None, startingindexes=None):
         super().__init__(root=root,
                          train=train,
                          transform=transform,
@@ -63,14 +63,24 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
                 for i in range(len(el_for_class)):
                     if i not in full_classes:
-                        el_for_class[i] = el_for_class[i][:int(len(el_for_class[i])*percentage)]
+                        el_for_class_tmp = [x for x in el_for_class[i] if (x in valindexes or x in startingindexes)]
+                        print("Already selected for {0}: {1} ".format(i , str(len(el_for_class_tmp))))
+                        el_for_class_tmp.extend(el_for_class[i][:int( (len(el_for_class[i])*percentage) - len(el_for_class_tmp))])
+                        print("Now  : " + str(len(el_for_class_tmp)))
+                        el_for_class[i] = el_for_class_tmp
 
                 print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
 
-                if type(valels) is int:
-                    self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, valels, False)]
-                elif type(valels) is float:
-                    self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, int(len(el) * valels), False)]
+                if valindexes is not None:
+                    self._val_indices = valindexes
+                else:
+                    if type(valels) is int:
+                        self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, valels, False)]
+                    elif type(valels) is float:
+                        self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, int(len(el) * valels), False)]
+                    with open("val_indexes.csv", "w+") as file:
+                        writer = csv.writer(file)
+                        writer.writerow(self._val_indices)
 
                 self.indices = [x for el in el_for_class for x in el]
                 self.el_for_class = el_for_class
