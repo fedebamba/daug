@@ -44,6 +44,15 @@ if starting_indexes_location != "":
         r = csv.reader(file)
         starting_indexes = [int(x) for l in r for x in l]
 
+val_indexes = None
+validation_indexes_location = utils.checkconf(conf_file , "validation_indexes_location", "")
+if validation_indexes_location != "":
+    with open(validation_indexes_location + ".csv", "r+") as file:
+        r = csv.reader(file)
+        validation_indexes = [int(x) for l in r for x in l]
+
+
+
 
 
 af_config = {
@@ -141,7 +150,7 @@ tslp = int((train_set_length * train_set_percentage) / 100)
 
 class CifarLoader():
     def __init__(self, transform=None, first_time_multiplier=1, name=None, unbal=True, test_transform=None, selection_transform=None):
-        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=difficult_classes_percentage, valels=el_for_validation, selection_transformations=selection_transform, full_classes = full_classes, startingindexes=starting_indexes)
+        self._train_val_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=True, download=True, transform=transform, filename=name, percentage=difficult_classes_percentage, valels=el_for_validation, selection_transformations=selection_transform, full_classes=full_classes, startingindexes=starting_indexes, valindexes=validation_indexes)
         self._test_set = customcifar.UnbalancedCIFAR10(root="./cifar", train=False, download=True, transform=test_transform, full_classes=self._train_val_set.full_classes, unbal_test=(not balanced_test_set))  # 10000
 
         self.validation_indices = self._train_val_set._val_indices
