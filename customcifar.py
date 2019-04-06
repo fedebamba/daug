@@ -63,11 +63,15 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
                 for i in range(len(el_for_class)):
                     if i not in full_classes:
-                        el_for_class_tmp = [x for x in el_for_class[i] if (x in valindexes or x in startingindexes)]
-                        print("Already selected for {0}: {1} ".format(i , str(len(el_for_class_tmp))))
-                        el_for_class_tmp.extend(el_for_class[i][:int( (len(el_for_class[i])*percentage) - len(el_for_class_tmp))])
-                        print("Now  : " + str(len(el_for_class_tmp)))
-                        el_for_class[i] = el_for_class_tmp
+                        if valindexes is not None:
+                            el_for_class_tmp = [x for x in el_for_class[i] if (x in valindexes or x in startingindexes)]
+                            print("Already selected for {0}: {1} ".format(i , str(len(el_for_class_tmp))))
+                            el_for_class_tmp.extend(el_for_class[i][:int( (len(el_for_class[i])*percentage) - len(el_for_class_tmp))])
+                            print("Now  : " + str(len(el_for_class_tmp)))
+                            el_for_class[i] = el_for_class_tmp
+                        else:
+                            el_for_class[i] = el_for_class[i][:int((len(el_for_class[i])*percentage))]
+
 
                 print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
 
