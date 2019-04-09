@@ -1867,6 +1867,8 @@ stuff = {
     },
 
 
+
+    #stuff ........................................................
     "uuu-entropy-new-gauss_daug-002-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -1899,7 +1901,7 @@ stuff = {
         }
     },
 
-    # todo
+
     "uuu-entropy-new-rotation_daug-7-degrees-set-seed-9-dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -1932,7 +1934,7 @@ stuff = {
         }
     },
 
-    #todo
+   
     "uuu-entropy-new-flip_daug-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
