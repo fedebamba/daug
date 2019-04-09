@@ -1609,6 +1609,8 @@ stuff = {
         }
     },
 
+
+    # ..................................................
     "uuu-entropy-new-crop_daug-28-set-seed": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -1622,8 +1624,11 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
+        "num_of_runs": 6,
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "full_classes": [0,2,3,4,5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes",
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
@@ -1712,9 +1717,11 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
-        "trans_config": {
+        "num_of_runs": 6,
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "full_classes": [0,2,3,4,5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes","trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
             "gauss_mean": 0,
@@ -1741,9 +1748,11 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
-        "trans_config": {
+        "num_of_runs": 6,
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "full_classes": [0,2,3,4,5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes","trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
             "gauss_mean": 0,
@@ -1770,9 +1779,11 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1561786004, 1406464819, 2530787159],
-        "trans_config": {
+        "num_of_runs": 6,
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "full_classes": [0,2,3,4,5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes","trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
             "gauss_mean": 0,
@@ -1802,8 +1813,10 @@ stuff = {
         "execute_random": False,
         "daug": True,
         "num_of_runs": 6,
-        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],
-        "trans_config": {
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "full_classes": [0,2,3,4,5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes","trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
             "gauss_mean": 0,
@@ -1832,9 +1845,11 @@ stuff = {
         "el_for_validation": .1,
         "execute_random": False,
         "daug": True,
-        "num_of_runs": 7,
-        "seeds": [0, 1, 2, 3, 4, 5, 6],
-        "trans_config": {
+        "num_of_runs": 6,
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "full_classes": [0,2,3,4,5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes","trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
             "gauss_mean": 0,
