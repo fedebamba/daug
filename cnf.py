@@ -1902,11 +1902,6 @@ stuff = {
         }
     },
 
-
-
-
-    # stuff ........................................................
-
     "uuu-entropy-new-rotation_daug-7-degrees-set-seed-9-dist": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -2044,6 +2039,8 @@ stuff = {
             "gauss_var": 0.002
         }
     },
+
+    # stuff ........................................................
 
     "uuu-entropy-new-random-baseline-set-seed-bench-true": {
         "af_config": {
