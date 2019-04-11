@@ -2251,6 +2251,43 @@ stuff = {
             "gauss_var": 0.005
         }
     },
+
+    "uuu-entropy-new-gauss_daug-005-rotation_daug-5-crop_daug-28-set-seed-with-origin": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 15,
+        "num_of_runs": 6,
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],  #
+        "full_classes": [0, 2, 3, 4, 5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes",
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "exclusive_transformations": True,
+            "original": False,
+            "rotation": 5,
+            "crop": 28,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.005
+        }
+    },
+
     "uuu-dist-and-max-of-both-new-gauss_daug-005-set-seed-with-origin-10-dist": {
         "af_config": {
             "using_ensemble_entropy": False,
