@@ -2391,8 +2391,8 @@ stuff = {
         "selection_trans_config": {
             "exclusive_transformations": True,
             "original": True,
-            "rotation": 3,
-            "crop": 28,
+            "rotation_degree": 3,
+            "crop_amount": 28,
             "flip": False,
             "gauss_mean": 0,
             "gauss_var": 0.005
@@ -2427,8 +2427,8 @@ stuff = {
         "selection_trans_config": {
             "exclusive_transformations": True,
             "original": True,
-            "rotation": 3,
-            "crop": 28,
+            "rotation_degree": 3,
+            "crop_amount": 28,
             "flip": False,
             "gauss_mean": 0,
             "gauss_var": 0.005
