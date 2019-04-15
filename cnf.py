@@ -2291,6 +2291,8 @@ stuff = {
         }
     },
 
+
+    # todo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     "uuu-entropy-new-gauss_daug-005-rotation_daug-5-crop_daug-28_flip_daug-set-seed-with-origin": {
         "af_config": {
             "using_ensemble_entropy": False,
@@ -2319,8 +2321,8 @@ stuff = {
         "selection_trans_config": {
             "exclusive_transformations": True,
             "original": False,
-            "rotation": 5,
-            "crop": 28,
+            "rotation_degree": 5,
+            "crop_amount": 28,
             "flip": True,
             "gauss_mean": 0,
             "gauss_var": 0.005
