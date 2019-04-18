@@ -86,7 +86,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                         self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, valels, False)]
                     elif type(valels) is float:
                         self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, int(len(el) * valels), False)]
-                    with open("val_indexes_bbb.csv", "w+") as file:
+                    with open("val_indexes_uub.csv", "w+") as file:
                         writer = csv.writer(file)
                         for i in range(10):
                             writer.writerow([x for x in el_for_class[i] if x in self._val_indices])
@@ -138,7 +138,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         if forced_distribution:
             train_els = [[el for el in self.el_for_class[i] if el not in self._val_indices] for i in range(10)]
 
-            with open("starting_indexes_bbb.csv", "w+") as file:
+            with open("starting_indexes_uub.csv", "w+") as file:
                 writer = csv.writer(file)
                 for el in train_els:
                     writer.writerow(el[:int(len(el) * el_percentage)])
