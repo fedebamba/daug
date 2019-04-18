@@ -2488,7 +2488,11 @@ stuff = {
         "execute_active": False,
         "daug": False,
         "num_of_runs": 6,
-        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+        "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],
+
+        "starting_indexes_location": "starting_indexes_bbb",
+        "validation_indexes_location": "val_indexes_bbb",
+
         "full_classes": [0, 1,2,3,4,5,6,7,8,9],
         "trans_config": {
             "rotation_degree": 7,
@@ -2514,6 +2518,10 @@ stuff = {
         "daug": False,
         "num_of_runs": 6,
         "seeds":[413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159], #
+
+        "starting_indexes_location": "starting_indexes_bbb",
+        "validation_indexes_location": "val_indexes_bbb",
+
         "full_classes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         "trans_config": {
             "rotation_degree": 7,
@@ -2541,11 +2549,11 @@ stuff = {
         "n": 15,
         "num_of_runs": 6,
         "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],  #
+
+        "starting_indexes_location": "starting_indexes_bbb",
+        "validation_indexes_location": "val_indexes_bbb",
+
         "full_classes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-
-        "starting_indexes_location": "starting_indexes",
-        "validation_indexes_location": "val_indexes",
-
         "trans_config": {
             "rotation_degree": 7,
             "crop_amount": 24,
