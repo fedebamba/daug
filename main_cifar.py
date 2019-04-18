@@ -322,7 +322,7 @@ def a_single_experiment(esname, esnumber, seed):
             else:
                 density_estimator = [1 if x in dataset._train_val_set.full_classes else difficult_classes_percentage for x in range(10)]
             de_for_normal = density_estimator
-        print(density_estimator)
+        print("Estimated Pool Set Density: " + str(density_estimator))
 
         best_nor_acc = 0
         if execute_normal:
@@ -335,7 +335,9 @@ def a_single_experiment(esname, esnumber, seed):
         best_act_acc = 0
         if execute_active:
             print("ACTIVE:")
-            best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step, dataset=dataset, indices=el_for_active, name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
+            best_act_net, best_act_acc = single_train_batch(num_of_epochs=epochs_second_step,
+                                                            dataset=dataset, indices=el_for_active,
+                                                            name="res/results_{0}_{1}_act".format(esname, esnumber), test_distro=density_estimator)
             active_net = best_act_net
 
         if execute_active and execute_normal:
