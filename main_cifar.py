@@ -44,7 +44,7 @@ if starting_indexes_location != "":
         r = csv.reader(file)
         starting_indexes = [int(x) for l in r for x in l]
 
-val_indexes = None
+validation_indexes = None
 validation_indexes_location = utils.checkconf(conf_file , "validation_indexes_location", "")
 if validation_indexes_location != "":
     with open(validation_indexes_location + ".csv", "r+") as file:
