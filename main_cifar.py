@@ -286,7 +286,8 @@ def a_single_experiment(esname, esnumber, seed):
     el_for_normal = [x for x in dataset.already_selected_indices]
     write_dataset_info(dataset, el_for_active, el_for_normal, "res/results_{0}_{1}".format(esname, esnumber))
     best_net, best_acc = single_train_batch(num_of_epochs=epochs_first_step, dataset=dataset,
-                                            name="res/results_{0}_{1}".format(esname, esnumber))
+                                            name="res/results_{0}_{1}".format(esname, esnumber),
+                                            test_distro=[1 if x in dataset._train_val_set.full_classes else difficult_classes_percentage for x in range(10)])
 
     active_net = best_net.clone()
     normal_net = best_net.clone()
