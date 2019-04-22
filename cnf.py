@@ -2473,7 +2473,7 @@ stuff = {
         }
     },
 
-    "uuu-dist-and-entro-new-gauss_daug-005-rotation_daug-5-crop_daug-28-set-seed-with-origin-and-prior-compensation": {
+    "uuu-dist-and-entro-new-gauss_daug-005-rotation_daug-5-crop_daug-28-set-seed-with-origin-and-prior-baseline": {
         "af_config": {
             "using_ensemble_entropy": False,
             "varratio_weight": 0,
@@ -2509,6 +2509,41 @@ stuff = {
         }
     },
 
+    "uuu-dist-and-entro-new-gauss_daug-005-rotation_daug-5-crop_daug-28-set-seed-with-origin-and-prior-compensation": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1,
+            "using_max": False
+        },
+        "using_prior": True,
+        "prior_baseline": False,
+        "balanced": "uuu",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 15,
+        "num_of_runs": 6,
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],  #
+        "full_classes": [0, 2, 3, 4, 5],
+        "starting_indexes_location": "starting_indexes",
+        "validation_indexes_location": "val_indexes",
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "exclusive_transformations": True,
+            "original": True,
+            "rotation_degree": 5,
+            "crop_amount": 28,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.005
+        }
+    },
 
     "uub-entropy-new-random-baseline-set-seed": {
         "af_config": {
@@ -2564,6 +2599,42 @@ stuff = {
             "gauss_mean": 0,
             "gauss_var": 0.01
         },
+    },
+
+    "uub-entropy-new-gauss_daug-005-rotation_daug-5-crop_daug-28-set-seed-with-origin-5-each": {
+        "af_config": {
+            "using_ensemble_entropy": False,
+            "varratio_weight": 0,
+            "distance_weight": 1e-7,
+            "using_max": False
+        },
+        "using_prior": False,
+        "prior_baseline": False,
+        "balanced": "uub",
+        "el_for_validation": .1,
+        "execute_random": False,
+        "daug": True,
+        "n": 15,
+        "num_of_runs": 6,
+        "seeds": [413853558, 1386890164, 3699572969, 2171801678, 1406464819, 2530787159],  #
+        "full_classes": [0, 2, 3, 4, 5],
+        "starting_indexes_location": "starting_indexes_uub",
+        "validation_indexes_location": "val_indexes_uub",
+        "trans_config": {
+            "rotation_degree": 7,
+            "crop_amount": 24,
+            "gauss_mean": 0,
+            "gauss_var": 0.01
+        },
+        "selection_trans_config": {
+            "exclusive_transformations": True,
+            "original": False,
+            "rotation_degree": 5,
+            "crop_amount": 28,
+            "flip": False,
+            "gauss_mean": 0,
+            "gauss_var": 0.005
+        }
     },
 
     "uuu-entropy-new-gauss_daug-005-rotation_daug-5-crop_daug-28_flip_daug-set-seed-with-origin-5-each": {
