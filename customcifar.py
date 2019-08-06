@@ -11,7 +11,6 @@ import sys
 
 
 class CustomCIFAR10(torchvision.datasets.CIFAR10):
-
     def __init__(self, root, train=True, transform=None, target_transform=None, download=False, indices=None, percentage=0.0, other=False):
         super().__init__(root=root,
                          train=train,
@@ -39,6 +38,8 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
                          transform=transform,
                          target_transform=target_transform,
                          download=download)
+
+
         self.train_trans = transform
         self.sel_trans = selection_transformations
         self.indices=None
@@ -166,9 +167,99 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         return super().__repr__()
 
 
+class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=True, provided_indices=None, num_full_classes=50, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False, selection_transformations=None, valindexes=None, startingindexes=None):
+        super().__init__(root=root,
+                         train=train,
+                         transform=transform,
+                         target_transform=target_transform,
+                         download=download)
+        self.train_trans = transform
+        self.sel_trans = selection_transformations
+        self.indices=None
+        self.have_to_cycle=False
+        self.transformation_index=0
+
+        if train:
+            if provided_indices is not None:
+                self._val_indices = provided_indices[1]
+                self.indices = provided_indices[0]
+                self.el_for_class = None
+
+            else:
+                if full_classes is None:
+                    full_classes = numpy.random.choice([x for x in range(100)], size=num_full_classes,replace=False)
+                self.full_classes = full_classes
+                print("Full classes: {0}".format(self.full_classes))
+
+                el_for_class = [[] for x in range(100)]
+                data_loader = tud.DataLoader(self, batch_size=100, shuffle=False, num_workers=2,
+                                             sampler=CustomSampler([x for x in range(len(self.train_data))]))
+
+                for batch_index, (input, target, i) in enumerate(data_loader):
+                    for x in range(len(input)):
+                        el_for_class[target[x].item()].append(i[x].item())
+
+                for i in range(len(el_for_class)):
+                    if i not in full_classes:
+                        if valindexes is not None:
+                            el_for_class_tmp = [x for x in el_for_class[i] if (x in valindexes or x in startingindexes)]
+                            print("Already selected for {0}: {1} ".format(i , str(len(el_for_class_tmp))))
+                            el_for_class_tmp.extend(el_for_class[i][:int( (len(el_for_class[i])*percentage) - len(el_for_class_tmp))])
+                            print("Now  : " + str(len(el_for_class_tmp)))
+                            el_for_class[i] = el_for_class_tmp
+                        else:
+                            el_for_class[i] = el_for_class[i][:int((len(el_for_class[i])*percentage))]
+
+
+                print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
+
+                if valindexes is not None:
+                    self._val_indices = valindexes
+                else:
+                    if type(valels) is int:
+                        self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, valels, False)]
+                    elif type(valels) is float:
+                        self._val_indices = [x for el in el_for_class for x in numpy.random.choice(el, int(len(el) * valels), False)]
+                    with open("val_indexes_uub.csv", "w+") as file:
+                        writer = csv.writer(file)
+                        for i in range(10):
+                            writer.writerow([x for x in el_for_class[i] if x in self._val_indices])
+
+
+                self.indices = [x for el in el_for_class for x in el]
+                self.el_for_class = el_for_class
+
+                # self.train_data = self.train_data[self.indices]
+                if filename is not None:
+                    with open(filename + "_per_class.csv", "w") as csvfile:
+                        writer = csv.writer(csvfile)
+                        writer.writerow(["100 %" if x in full_classes else "{0} %".format(int(percentage * 100)) for x in range(100)])
+
+            print('Train data ' + str(len(self.train_data)))
+            print("Train els: {0}".format([len(el) for el in self.el_for_class]) )
+        elif unbal_test:
+            print("Creating unbalanced test set......")
+            self.full_classes = full_classes
+
+            el_for_class = [[] for x in range(100)]
+            data_loader = tud.DataLoader(self, batch_size=100, shuffle=False, num_workers=2,
+                                         sampler=CustomSampler([x for x in range(len(self.test_data))]))
+
+            for batch_index, (input, target, i) in enumerate(data_loader):
+                for x in range(len(input)):
+                    el_for_class[target[x].item()].append(i[x].item())
+
+            for i in range(len(el_for_class)):
+                if i not in full_classes:
+                    el_for_class[i] = el_for_class[i][:int(len(el_for_class[i]) * percentage)]
+            print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
+            self.indices = [x for el in el_for_class for x in el]
+
 
 class CustomSampler(tud.Sampler):
     def __init__(self, data_source):
+        super().__init__(data_source)
         self.data_source = data_source
 
     def __iter__(self):
@@ -180,6 +271,7 @@ class CustomSampler(tud.Sampler):
 
 class CustomRandomSampler(tud.Sampler):
     def __init__(self, data_source):
+        super().__init__(data_source)
         arr = numpy.random.choice(data_source, len(data_source), False)
         self.data_source = arr
 
@@ -191,3 +283,4 @@ class CustomRandomSampler(tud.Sampler):
 
     def refresh(self):
         self.data_source = numpy.random.choice(self.data_source, len(self.data_source), False)
+
