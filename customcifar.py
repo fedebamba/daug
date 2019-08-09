@@ -168,7 +168,7 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
 
 
 class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
-    def __init__(self, root, train=True, transform=None, target_transform=None, download=True, provided_indices=None, num_full_classes=50, percentage=.1, valels=200, filename=None, full_classes=None, unbal_test=False, selection_transformations=None, valindexes=None, startingindexes=None):
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=True, provided_indices=None, num_full_classes=50, percentage=.1, valels=20, filename=None, full_classes=None, unbal_test=False, selection_transformations=None, valindexes=None, startingindexes=None):
         super().__init__(root=root,
                          train=train,
                          transform=transform,
@@ -196,9 +196,14 @@ class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
                 data_loader = tud.DataLoader(self, batch_size=100, shuffle=False, num_workers=2,
                                              sampler=CustomSampler([x for x in range(len(self.train_data))]))
 
+
                 for batch_index, (input, target, i) in enumerate(data_loader):
                     for x in range(len(input)):
                         el_for_class[target[x].item()].append(i[x].item())
+
+                for x in range(len(el_for_class)):
+                    print("{0} {1}".format(x, len(el_for_class[x])))
+
 
                 for i in range(len(el_for_class)):
                     if i not in full_classes:
@@ -210,9 +215,8 @@ class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
                             el_for_class[i] = el_for_class_tmp
                         else:
                             el_for_class[i] = el_for_class[i][:int((len(el_for_class[i])*percentage))]
+                print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(100)])
 
-
-                print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
 
                 if valindexes is not None:
                     self._val_indices = valindexes
@@ -253,8 +257,28 @@ class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
             for i in range(len(el_for_class)):
                 if i not in full_classes:
                     el_for_class[i] = el_for_class[i][:int(len(el_for_class[i]) * percentage)]
-            print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(10)])
+            print(["{0}:{1}".format(i, len(el_for_class[i])) for i in range(100)])
             self.indices = [x for el in el_for_class for x in el]
+
+    def use_selection_transforms(self, number=0):
+        print("Using selection-time image transformations....")
+        if isinstance(self.sel_trans, type([])):
+            self.transform = self.sel_trans[number]
+        else:
+            self.transform = self.sel_trans
+        print(self.transform)
+
+    def use_train_transformation(self):
+        print("Using training-time image transformations....")
+        self.transform = self.train_trans
+        print(self.transform)
+
+    def __getitem__(self, index):
+        if self.have_to_cycle:
+            self.use_selection_transforms(self.transformation_index)
+            self.transformation_index = (self.transformation_index + 1) % len(self.sel_trans)
+        (img, target) = super().__getitem__(index)
+        return img, target, index
 
 
 class CustomSampler(tud.Sampler):
