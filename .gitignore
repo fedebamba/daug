@@ -5,3 +5,10 @@
 /.idea
 
 *.csv
+__pycache__/acquisition_functions.cpython-37.pyc
+*.pyc
+*.txt~
+*.gz
+cifar100/cifar-100-python/meta
+cifar100/cifar-100-python/test
+cifar100/cifar-100-python/train
