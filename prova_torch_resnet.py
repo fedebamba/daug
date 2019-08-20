@@ -151,8 +151,8 @@ class CustomResNet(nn.Module):
 
 
 
-def CustomResNet18():
-    return CustomResNet(BasicBlock, [2,2,2,2])
+def CustomResNet18(num_classes=10):
+    return CustomResNet(BasicBlock, [2,2,2,2], num_classes=num_classes )
 
 def ResNet18():
     return ResNet(BasicBlock, [2,2,2,2])

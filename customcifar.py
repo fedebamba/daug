@@ -182,7 +182,7 @@ class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
         self.have_to_cycle=False
         self.transformation_index=0
 
-        self.train_data = self.data
+        #self.train_data = self.data
 
         if train:
             if provided_indices is not None:

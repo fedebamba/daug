@@ -223,7 +223,7 @@ if __name__ == "__main__":
     # ============================================================================
     def new_network():
         # net = netter.ResNet18()
-        net = netter.CustomResNet18()
+        net = netter.CustomResNet18(num_classes=num_of_classes)
         net = net.to("cuda:0")
 
         criterion = nn.CrossEntropyLoss()  # probabilmente la dovremo cambiare
@@ -233,8 +233,8 @@ if __name__ == "__main__":
 
 
     def write_dataset_info(ds, active_indices, normal_indices, filename):
-        active_els = [0] * 100
-        normal_els = [0] * 100
+        active_els = [0] * num_of_classes
+        normal_els = [0] * num_of_classes
 
         dataloader_1 = tud.DataLoader(ds._train_val_set, batch_size=1, shuffle=False,
                                       num_workers=2, sampler=customcifar.CustomSampler([x for x in active_indices]))
