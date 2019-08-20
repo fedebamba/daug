@@ -46,6 +46,8 @@ class UnbalancedCIFAR10(torchvision.datasets.CIFAR10):
         self.have_to_cycle=False
         self.transformation_index=0
 
+
+
         if train:
             if provided_indices is not None:
                 self._val_indices = provided_indices[1]
@@ -180,6 +182,8 @@ class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
         self.have_to_cycle=False
         self.transformation_index=0
 
+        self.train_data = self.data
+
         if train:
             if provided_indices is not None:
                 self._val_indices = provided_indices[1]
@@ -272,6 +276,16 @@ class UnbalancedCIFAR100(torchvision.datasets.CIFAR100):
         print("Using training-time image transformations....")
         self.transform = self.train_trans
         print(self.transform)
+
+    def define_starting_set(self, el_percentage=.05, forced_distribution=False):
+        if forced_distribution:
+            train_els = [[el for el in self.el_for_class[i] if el not in self._val_indices] for i in range(100)]
+
+            with open("starting_indexes_uuu.csv", "w+") as file:
+                writer = csv.writer(file)
+                for el in train_els:
+                    writer.writerow(el[:int(len(el) * el_percentage)])
+            return [item for el in train_els for item in el[:int(len(el) * el_percentage)]]
 
     def __getitem__(self, index):
         if self.have_to_cycle:

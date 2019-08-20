@@ -53,7 +53,7 @@ class NetTrainer():
 
     def evaluate_density(self, ds, indices, train_indices, n=5, hard=False):
         self.net.eval()
-        density_estimation = [0] * 10
+        density_estimation = [0] * 100
 
         randomized_list = numpy.random.choice([x for x in indices], len(indices), replace=False)
 
@@ -132,7 +132,7 @@ class NetTrainer():
         N = torch.Tensor().to("cuda:0")  # labelled
         S = torch.Tensor().to("cuda:0")  # unlabelled
 
-        density_estimation = [0] * 10
+        density_estimation = [0] * 100
         normalized_confidence = [torch.Tensor().to("cuda:0"), torch.Tensor().long()]
         normalized_entropy = torch.Tensor().to("cuda:0")
         normalized_marginals = torch.Tensor().to("cuda:0")
@@ -351,19 +351,6 @@ class NetTrainer():
             return new_N
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     def kl_divergence(self, ds, indices, howmany, train_indices, n=5):
         self.net.eval()
         N = torch.Tensor().to("cuda:0") #labelled
@@ -523,14 +510,22 @@ class NetTrainer():
         b_i = 0
 
         # debug
-        elementsperclass = [0] * 10
+        elementsperclass = [0] * 100 # num of classes
 
         for batch_index, (inputs, targets, index) in enumerate(_train_loader):
-            inputs, targets = inputs.to("cuda:0"), targets.to("cuda:0")
+            y_oneshot = torch.nn.functional.one_hot(targets)
+            inputs, targets = inputs.to("cuda:0"), torch.nn.functional.one_hot(targets).to("cuda:0")
 
             self.optimizer.zero_grad()
             outputs = self.net(inputs)[0]
+
+
+            print  (outputs.size())
+
             loss = self.criterion(outputs, targets)
+
+            # print (loss)
+
             loss.backward()
             self.optimizer.step()
 
@@ -631,7 +626,7 @@ class NetTrainer():
         printiter = 0
         b_i = 0
 
-        elementsperclass = [0] * 10
+        elementsperclass = [0] * 100
         if prior is not None:
             prior = torch.Tensor([prior[i] / sum(prior) for i in range(len(prior))]).to("cuda:0")
             if targetprior is not None:
